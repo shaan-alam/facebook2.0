@@ -77,7 +77,7 @@ export const signUp: SignUpType =
  * @description Action creator for signing up with Google Login.
  * @param formData is an object containing name, email, password, confirmPassword of the user trying to sign in.
  * @param successRedirect is a function to to redirect the user to the PostContainer component if the sign up is sucessful!
- * @return {[Promise<void>]} Returns a Promise<void>
+ * @return {[Promise<void>]}
  */
 export const signUpWithGoogle: SignUpWithGoogleType =
   (formData, successRedirect) => async (dispatch) => {
@@ -107,7 +107,7 @@ export const signUpWithGoogle: SignUpWithGoogleType =
  * @description Action creator for signing in with Google Login.
  * @param email is the email of the user returned from Google API.
  * @param successRedirect is a function to to redirect the user to the PostContainer component if the sign up is sucessful!
- * @return {[Promise<void>]} Returns a Promise<void>
+ * @return {[Promise<void>]}
  */
 export const signInWithGoogle: SignInWithGoogleType =
   (email, successRedirect) => async (dispatch: Function) => {

@@ -58,7 +58,7 @@ export const deletePost = (id: string) => API.delete(`/posts/${id}`);
  * @description Function making a PATCH API call to edit a post
  * @param {[string]} id ID of the post
  * @param {[EditPost]} newPost An object containing edited post details
- * @return Promise<AxiosResponse<any>> Returns a promise of AxiosResponse<any
+ * @return {[Promise<AxiosResponse<any>>]} Returns a promise of AxiosResponse<any
  */
 export const editPost = (id: string, newPost: EditPost) =>
   API.patch(`/posts/${id}`, newPost);
@@ -66,6 +66,6 @@ export const editPost = (id: string, newPost: EditPost) =>
 /**
  * @description Function making a PATCH API call to like a post
  * @param {[String]} id ID of the post to be liked
- * @return Promise<AxiosResponse<any>> Returns a promise of AxiosResponse<any>
+ * @return {[Promise<AxiosResponse<any>>]} Returns a promise of AxiosResponse<any>
  */
 export const likePost = (id: string) => API.patch(`/posts/likePost/${id}`);
