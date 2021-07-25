@@ -1,3 +1,5 @@
+import { AUTH, GOOGLE_SIGNIN, GOOGLE_SIGNUP, LOGOUT } from "../constants";
+
 interface Action {
   type: string;
   payload: {
@@ -30,7 +32,7 @@ const initialState: InitialStateInterface = {
 
 const auth = (state = initialState, action: Action) => {
   switch (action.type) {
-    case "AUTH":
+    case AUTH:
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
 
       return {
@@ -40,7 +42,7 @@ const auth = (state = initialState, action: Action) => {
         },
       };
 
-    case "LOGOUT":
+    case LOGOUT:
       localStorage.clear();
       return {
         ...state,
@@ -54,7 +56,7 @@ const auth = (state = initialState, action: Action) => {
         },
       };
 
-    case "GOOGLE_SIGNUP":
+    case GOOGLE_SIGNUP:
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
 
       return {
@@ -69,7 +71,7 @@ const auth = (state = initialState, action: Action) => {
         },
       };
 
-    case "GOOGLE_SIGNIN":
+    case GOOGLE_SIGNIN:
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
 
       return {

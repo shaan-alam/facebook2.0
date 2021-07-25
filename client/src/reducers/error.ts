@@ -1,3 +1,5 @@
+import { ERROR, CLEAR_ERROR } from "../constants";
+
 interface InitialStateInterface {
   ON: string;
   message: string;
@@ -18,10 +20,10 @@ type Action = {
 
 const error = (state = initialState, action: Action) => {
   switch (action.type) {
-    case "ERROR":
+    case ERROR:
       return { ...state, ...action.payload };
 
-    case "CLEAR_ERROR":
+    case CLEAR_ERROR:
       return { ...state, ON: "", message: "" };
 
     default:

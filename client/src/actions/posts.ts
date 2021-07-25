@@ -1,5 +1,5 @@
 import * as api from "../api";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import {
   GET_POSTS,
   UPDATE_POST,
