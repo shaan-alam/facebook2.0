@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import PostContainer from "./components/PostContainer";
 import "./assets/css/styles.css";
@@ -14,18 +14,19 @@ import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 
 import "react-toastify/dist/ReactToastify.css";
-
-interface User {
-  tokenId: string;
-  profileObj: any;
-}
+import { AUTH } from "./constants";
 
 const App = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentID, setCurrentID] = useState<string>("");
-  const [user, setUser] = useState<User>({ tokenId: "", profileObj: {} });
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const profile = JSON.parse(localStorage.getItem("profile") || "{}");
+
+    dispatch({ type: AUTH, payload: profile });
+  }, []);
 
   return (
     <>

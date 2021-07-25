@@ -5,6 +5,7 @@ import {
   UPDATE_POST,
   CREATE_POST,
   DELETE_POSTS,
+  ERROR,
 } from "../constants";
 import {
   GetPostType,
@@ -14,6 +15,7 @@ import {
   LikePostType,
   Post,
 } from "./types";
+import { POST_CONTAINER } from "../constants";
 
 /**
  * @description Action creator to fetch posts and dispatch a GET_POSTS action
@@ -25,7 +27,10 @@ export const getPosts: GetPostType = () => async (dispatch) => {
 
     dispatch({ type: GET_POSTS, payload: result.data });
   } catch (err: any) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: { ON: POST_CONTAINER, message: err.response.data.messagge },
+    });
   }
 };
 
@@ -45,7 +50,10 @@ export const createPost: CreatePostType =
 
       dispatch({ type: CREATE_POST, payload: result.data });
     } catch (err) {
-      console.log(err);
+      dispatch({
+        type: ERROR,
+        payload: { ON: POST_CONTAINER, message: err.response.data },
+      });
     }
   };
 
@@ -60,7 +68,10 @@ export const deletePost: DeletePostType = (id) => async (dispatch) => {
 
     dispatch({ type: DELETE_POSTS, payload: id });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: { ON: POST_CONTAINER, message: err.response.data.message },
+    });
   }
 };
 
@@ -75,7 +86,10 @@ export const editPost: EditPostType = (id, newPost) => async (dispatch) => {
     const result: AxiosResponse<Post> = await api.editPost(id, newPost);
     dispatch({ type: UPDATE_POST, payload: result.data });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: { ON: POST_CONTAINER, message: err.response.data.message },
+    });
   }
 };
 
@@ -89,6 +103,9 @@ export const likePost: LikePostType = (id) => async (dispatch) => {
     const result: AxiosResponse<Post> = await api.likePost(id);
     dispatch({ type: UPDATE_POST, payload: result.data });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ERROR,
+      payload: { ON: POST_CONTAINER, message: err.response.data.message },
+    });
   }
 };

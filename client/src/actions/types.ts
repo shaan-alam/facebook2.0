@@ -4,14 +4,6 @@ import {
 } from "../components/Auth/types";
 import { Dispatch } from "redux";
 
-// Authentication related types and interfaces
-export interface FormDataInterface {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
 export interface AuthResponse {
   user: {
     email: string;
@@ -19,6 +11,13 @@ export interface AuthResponse {
     name: string;
   };
   token: string;
+}
+
+export interface GoogleSignUpFormDataInterface {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export type SignInType = (
@@ -31,15 +30,8 @@ export type SignUpType = (
   successRedirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
-export type Post = {
-  title: string;
-  description: string;
-  imgURL: string;
-  tags: string[];
-};
-
 export type SignUpWithGoogleType = (
-  formData: FormDataInterface,
+  formData: GoogleSignUpFormDataInterface,
   successRedirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
@@ -47,6 +39,13 @@ export type SignInWithGoogleType = (
   email: string,
   successRedirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
+
+export type Post = {
+  title: string;
+  description: string;
+  imgURL: string;
+  tags: string[];
+};
 
 // Post related types and interfaces
 export type GetPostType = () => (dispatch: Dispatch<any>) => Promise<void>;
@@ -81,5 +80,3 @@ export type EditPostType = (
 export type LikePostType = (
   id: string
 ) => (dispatch: Dispatch<any>) => Promise<void>;
-
-

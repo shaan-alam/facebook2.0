@@ -16,6 +16,7 @@ export const SIGN_IN = "SIGN_IN";
 export const SIGN_UP = "SIGN_UP";
 export const SETUP_PROFILE = "SETUP_PROFILE";
 export const CLEAR_ERROR = "CLEAR_ERROR";
+export const POST_CONTAINER = "POST_CONTAINER"
 
 // URLs
 export const BASE_URL = "http://localhost:5000";
