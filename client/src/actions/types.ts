@@ -19,7 +19,6 @@ export interface AuthResponse {
     name: string;
   };
   token: string;
-  message?: string;
 }
 
 export type SignInType = (
@@ -82,3 +81,5 @@ export type EditPostType = (
 export type LikePostType = (
   id: string
 ) => (dispatch: Dispatch<any>) => Promise<void>;
+
+
