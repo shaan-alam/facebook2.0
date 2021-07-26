@@ -119,7 +119,9 @@ const signInWithGoogle = async (req, res) => {
   const existingUser = await User.findOne({ email });
 
   if (!existingUser) {
-    return res.json({ message: "No user registered with that email!" });
+    return res
+      .status(404)
+      .json({ message: "No user registered with that email!" });
   }
 
   const token = await jwt.sign({ id: existingUser._id }, "secret");

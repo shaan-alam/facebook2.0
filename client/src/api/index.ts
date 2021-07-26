@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { EditPost, NewPost } from "../actions/types";
 import { BASE_URL } from "../constants";
-
+import { GoogleSignUpFormDataInterface } from "../actions/types";
 import { SignUpDataType } from "./types";
 
 const API = axios.create({ baseURL: BASE_URL }); // Creating an Axios Instance for API calls.
@@ -35,6 +35,22 @@ export const signUp = (signUpData: SignUpDataType) =>
   API.post("/users/signup", { ...signUpData });
 
 /**
+ * @description Function making a POST API call to sign up the user using Google OAuth.
+ * @param {[GoogleSignUpFormDataInterface]} formData An object containing details to be sent to the backend to save the user
+ * @returns {[Promise<AxiosResponse<any>>]}
+ */
+export const signUpWithGoogle = (formData: GoogleSignUpFormDataInterface) =>
+  API.post("/users/auth/signup/google", { ...formData });
+
+/**
+ * @description Function making a POST API call to sign in the user using Google OAuth.
+ * @param {[string]} email Email of the user which is to be signed in
+ * @returns {[Promise<AxiosResponse<any>>]}
+ */
+export const signInWithGoogle = (email: string) =>
+  API.post("/users/auth/signin/google", { email });
+
+/**
  * @description Function making an GET API call to fetch all the posts from the backend
  * @return {[Promise<AxiosResponse<any>>]} Returns a promise of the type AxiosResponse<any>
  */
@@ -58,7 +74,7 @@ export const deletePost = (id: string) => API.delete(`/posts/${id}`);
  * @description Function making a PATCH API call to edit a post
  * @param {[string]} id ID of the post
  * @param {[EditPost]} newPost An object containing edited post details
- * @return {[Promise<AxiosResponse<any>>]} Returns a promise of AxiosResponse<any
+ * @return {[Promise<AxiosResponse<any>>]} Returns a promise of AxiosResponse<any>
  */
 export const editPost = (id: string, newPost: EditPost) =>
   API.patch(`/posts/${id}`, newPost);

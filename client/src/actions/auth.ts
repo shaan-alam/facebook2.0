@@ -63,7 +63,10 @@ export const signUp: SignUpType =
         confirmPassword,
       });
 
+      // Result here will be an object containing user profile object and the token
       dispatch({ type: AUTH, payload: result.data });
+
+      // Redirecting to the PostContainer component
       successRedirect();
     } catch (err) {
       dispatch({
@@ -81,19 +84,16 @@ export const signUp: SignUpType =
  */
 export const signUpWithGoogle: SignUpWithGoogleType =
   (formData, successRedirect) => async (dispatch) => {
-    const { name, email, password, confirmPassword } = formData;
-
     try {
-      const result = await axios.post(
-        "http://localhost:5000/users/auth/signup/google",
-        { name, email, password, confirmPassword }
-      );
+      const result = await api.signUpWithGoogle(formData);
 
+      // Result here will be an object containing user profile object and the token
       dispatch({
         type: GOOGLE_SIGNUP,
-        payload: { profileObj: result.data.user, token: result.data.token },
+        payload: { profileObj: result.data.user, tokenId: result.data.token },
       });
 
+      // Redirecting to the PostContainer component
       successRedirect();
     } catch (err) {
       dispatch({
@@ -110,18 +110,17 @@ export const signUpWithGoogle: SignUpWithGoogleType =
  * @return {[Promise<void>]}
  */
 export const signInWithGoogle: SignInWithGoogleType =
-  (email, successRedirect) => async (dispatch: Function) => {
+  (email, successRedirect) => async (dispatch) => {
     try {
-      const result = await axios.post(
-        "http://localhost:5000/users/auth/signin/google",
-        { email }
-      );
+      const result = await api.signInWithGoogle(email);
 
+      // Result here will be an object containing user profile object and the token
       dispatch({
         type: GOOGLE_SIGNIN,
         payload: { profileObj: result.data.user, tokenId: result.data.token },
       });
 
+      // Redirecting to the PostContainer component
       successRedirect();
     } catch (err) {
       dispatch({
