@@ -48,7 +48,7 @@ const signin = async (req, res) => {
   // Check if user exists
   const existingUser = await User.findOne({ email });
   if (!existingUser) {
-    return res.json({ message: "User doesn't exists!! " });
+    return res.status(404).json({ message: "User doesn't exists!! " });
   }
 
   try {
