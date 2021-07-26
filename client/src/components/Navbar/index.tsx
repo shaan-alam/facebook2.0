@@ -7,6 +7,7 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import { UserIcon } from "@heroicons/react/solid";
 import { LogoutIcon } from "@heroicons/react/solid";
 import { BellIcon } from "@heroicons/react/solid";
+import { Link } from "react-router-dom";
 
 // Interfaces and types
 import { NavbarProps } from "./types";
@@ -58,7 +59,7 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
               <ChevronDownIcon className="w-6 sm:ml-4" />
             </Menu.Button>
 
-            <Menu.Items className="outline-none shadow-md absolute top-12 right-0 bg-white h-auto flex flex-col w-56 p-1 rounded-md">
+            <Menu.Items className="z-10 outline-none shadow-md absolute top-12 right-0 bg-white h-auto flex flex-col w-56 p-1 rounded-md">
               <Menu.Item>
                 {({ active }) => (
                   <a
@@ -80,21 +81,22 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
               </Menu.Item>
               <Menu.Item>
                 {({ active }) => (
-                  <a
+                  <Link
+                    to="/auth/signin"
                     className={`flex items-center ${
                       active && "bg-fb rounded-lg"
                     } p-2 ${
                       active ? "text-white" : "text-gray-700 "
                     } hover:bg-fb hover:text-white`}
-                    href="/account-settings"
+                    onClick={handleLogout}
                   >
                     <LogoutIcon
                       className={`h-4 w-4 mr-2 ${
                         active ? "text-white" : "text-fb"
                       }`}
-                    />{" "}
-                    Sign out
-                  </a>
+                    />
+                    &nbsp; Sign out
+                  </Link>
                 )}
               </Menu.Item>
             </Menu.Items>
