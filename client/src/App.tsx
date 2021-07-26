@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import PostContainer from "./components/PostContainer";
-import "./assets/css/styles.css";
 
 import { useDispatch } from "react-redux";
 import FormModal from "./components/FormModal";
