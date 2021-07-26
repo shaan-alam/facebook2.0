@@ -93,7 +93,7 @@ const SignIn = () => {
           <form onSubmit={handleFormSubmit}>
             <input
               type="text"
-              className="bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Email"
               name="email"
               value={formData.email}
@@ -101,7 +101,7 @@ const SignIn = () => {
             />
             <input
               type="password"
-              className="bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Password"
               name="password"
               value={formData.password}
@@ -109,7 +109,7 @@ const SignIn = () => {
             />
             <button
               type="submit"
-              className="bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
+              className="outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
             >
               Login
             </button>
@@ -118,7 +118,7 @@ const SignIn = () => {
                 New to Facebook? Create an Account
               </Link>
             </div>
-            <div className="h-1 w-full my-4 bg-gray-100"></div>
+            <div className="h-1 w-full my-4 bg-gray-200"></div>
             <div className="text-center">
               <GoogleLogin
                 theme="dark"

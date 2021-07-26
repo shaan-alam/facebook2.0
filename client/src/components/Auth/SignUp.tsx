@@ -56,7 +56,7 @@ const SignUp = () => {
     }
   }, [error]);
 
-  const onFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const successRedirect = () => history.push("/");
@@ -91,84 +91,84 @@ const SignUp = () => {
   };
 
   return (
-    <div className="auth-section">
-      <Segment style={{ width: "500px" }}>
-        <Header as="h2" icon textAlign="center">
-          <Icon name="signup" /> Sign Up
-        </Header>
-        {error.ON === "SIGN_UP" && error.message && (
-          <Message negative>
-            <Message.Header>{error.message}</Message.Header>
-          </Message>
-        )}
-        <Form onSubmit={onFormSubmit}>
-          <Form.Group widths={2}>
-            <Form.Field>
-              <label>First name</label>
-              <Input
-                fluid
-                placeholder="First name"
+    <div className="h-screen w-screen flex items-center justify-center bg-blue-50">
+      <div className="p-6 rounded-lg flex sm:flex-row flex-col">
+        <div className="hero mb-6 block sm:mr-6">
+          <h1 className="text-fb text-4xl text-center sm:text-left sm:text-7xl font-extrabold">
+            facebook
+          </h1>
+          <p className="text-lg text-center sm:text-left sm:text-xl my-3">
+            Facebook helps you connect and share with people.
+          </p>
+        </div>
+        <div className="login w-full sm:w-1/2 bg-white p-4 rounded-lg shadow-md">
+          <form onSubmit={handleFormSubmit}>
+            <div className="flex">
+              <input
+                type="text"
+                className="bg-gray-200 mb-3 mr-2  w-full rounded-lg px-4 py-3 outline-none"
+                placeholder="First Name"
                 name="firstName"
+                value={formData.firstName}
                 onChange={handleFormDataChange}
               />
-            </Form.Field>
-            <Form.Field>
-              <label>Last name</label>
-              <Input
-                fluid
-                placeholder="Last name"
+              <input
+                type="text"
+                className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+                placeholder="Last Name"
                 name="lastName"
+                value={formData.lastName}
                 onChange={handleFormDataChange}
               />
-            </Form.Field>
-          </Form.Group>
-          <Form.Field>
-            <label>Email</label>
+            </div>
             <input
-              placeholder="Email"
-              type="email"
+              type="text"
+              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              placeholder="Your Email"
               name="email"
+              value={formData.email}
               onChange={handleFormDataChange}
             />
-          </Form.Field>
-          <Form.Field>
-            <label>Password</label>
             <input
-              placeholder="Password"
               type="password"
+              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              placeholder="Your Password"
               name="password"
+              value={formData.password}
               onChange={handleFormDataChange}
             />
-          </Form.Field>
-          <Form.Field>
-            <label>Confirm Password</label>
             <input
-              placeholder="Repeat Password"
               type="password"
+              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              placeholder="Repeat Password"
               name="confirmPassword"
+              value={formData.confirmPassword}
               onChange={handleFormDataChange}
             />
-          </Form.Field>
-          <Button type="submit" primary size="small">
-            Sign Up
-          </Button>
-          <Link
-            to="/auth/signin"
-            style={{ display: "block", marginTop: "1em" }}
-          >
-            Already have an account? Login
-          </Link>
-          <Divider horizontal>Or</Divider>
-          <div style={{ width: "100%", textAlign: "center" }}>
-            <GoogleLogin
-              buttonText="Sign up with Google"
-              clientId={`${process.env.REACT_APP_CLIENT_ID}`}
-              onSuccess={onGoogleSuccess}
-              onFailure={onGoogleFailure}
-            />
-          </div>
-        </Form>
-      </Segment>
+            <button
+              type="submit"
+              className="outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
+            >
+              Sign Up
+            </button>
+            <div className="text-center mt-3">
+              <Link to="/auth/signin" className="text-fb">
+                Already have an account? Login
+              </Link>
+            </div>
+            <div className="h-1 w-full my-4 bg-gray-200"></div>
+            <div className="text-center">
+              <GoogleLogin
+                theme="dark"
+                buttonText="Sign up with Google"
+                clientId={`${process.env.REACT_APP_CLIENT_ID}`}
+                onSuccess={onGoogleSuccess}
+                onFailure={onGoogleFailure}
+              />
+            </div>
+          </form>
+        </div>
+      </div>
       <ToastContainer />
     </div>
   );
