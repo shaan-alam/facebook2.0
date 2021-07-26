@@ -106,7 +106,7 @@ const SignUp = () => {
             <div className="flex">
               <input
                 type="text"
-                className="bg-gray-200 mb-3 mr-2  w-full rounded-lg px-4 py-3 outline-none"
+                className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
                 placeholder="First Name"
                 name="firstName"
                 value={formData.firstName}
@@ -114,7 +114,7 @@ const SignUp = () => {
               />
               <input
                 type="text"
-                className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+                className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
                 placeholder="Last Name"
                 name="lastName"
                 value={formData.lastName}
@@ -123,7 +123,7 @@ const SignUp = () => {
             </div>
             <input
               type="text"
-              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Email"
               name="email"
               value={formData.email}
@@ -131,7 +131,7 @@ const SignUp = () => {
             />
             <input
               type="password"
-              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Password"
               name="password"
               value={formData.password}
@@ -139,7 +139,7 @@ const SignUp = () => {
             />
             <input
               type="password"
-              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Repeat Password"
               name="confirmPassword"
               value={formData.confirmPassword}

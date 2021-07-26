@@ -77,7 +77,6 @@ const SignIn = () => {
     });
   };
 
-
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-blue-50">
       <div className="p-6 rounded-lg flex sm:flex-row flex-col">
@@ -93,7 +92,7 @@ const SignIn = () => {
           <form onSubmit={handleFormSubmit}>
             <input
               type="text"
-              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Email"
               name="email"
               value={formData.email}
@@ -101,7 +100,7 @@ const SignIn = () => {
             />
             <input
               type="password"
-              className="bg-gray-200 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Password"
               name="password"
               value={formData.password}
