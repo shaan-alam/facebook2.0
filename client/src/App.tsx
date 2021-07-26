@@ -32,6 +32,7 @@ const App = (): JSX.Element => {
     <>
       <BrowserRouter>
         <Navbar setIsOpen={setIsOpen} />
+        <button className="bg-red-500">h</button>
         <Switch>
           <PrivateRoute path="/" exact>
             <PostContainer setIsOpen={setIsOpen} setCurrentID={setCurrentID} />
