@@ -37,7 +37,7 @@ const signup = async (req, res) => {
     };
 
     // Create a token
-    const tokenId = jwt.sign({ id: newUser._id }, "secret");
+    const tokenId = jwt.sign({ id: newUser._id }, JWT_SECRET);
 
     res.json({ profileObj, tokenId });
   } catch (err) {
@@ -65,7 +65,7 @@ const signin = async (req, res) => {
     }
 
     // If everything is OK
-    const tokenId = await jwt.sign({ id: existingUser._id }, "secret");
+    const tokenId = await jwt.sign({ id: existingUser._id }, JWT_SECRET);
 
     const profileObj = {
       _id: existingUser._id,
@@ -108,7 +108,7 @@ const signUpWithGoogle = async (req, res) => {
       // Save the user, generate a token and return it to the front-end
       await newUser.save();
 
-      const token = await jwt.sign({ id: newUser._id }, "secret");
+      const token = await jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
 
       res.json({ user: newUser, token });
     } catch (err) {
@@ -133,7 +133,7 @@ const signInWithGoogle = async (req, res) => {
       .json({ message: "No user registered with that email!" });
   }
 
-  const token = await jwt.sign({ id: existingUser._id }, "secret");
+  const token = await jwt.sign({ id: existingUser._id }, JWT_SECRET);
 
   const profileUser = {
     _id: existingUser._id,
