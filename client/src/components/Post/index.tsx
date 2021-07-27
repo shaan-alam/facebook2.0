@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Card, Button, Placeholder, Image, Icon } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
-import { deletePost } from "../../../actions/posts";
+import { deletePost } from "../../actions/posts";
 
 // Interfaces and Types
 import { PostProps, PostType } from "./types";
-import { likePost } from "../../../actions/posts";
+import { likePost } from "../../actions/posts";
 
 const Post = ({ post, setIsOpen, setCurrentID }: PostProps) => {
   const [isLoaded, setLoaded] = useState<boolean>(false);

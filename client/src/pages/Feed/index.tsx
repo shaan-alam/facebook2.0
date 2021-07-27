@@ -3,7 +3,7 @@ import { Grid, Container, Message } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../reducers/index";
-import Post from "./Post";
+import Post from "../../components/Post";
 import { getPosts } from "../../actions/posts";
 
 import { clearError } from "../../actions/error";
