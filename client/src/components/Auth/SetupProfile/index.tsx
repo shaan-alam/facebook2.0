@@ -65,11 +65,13 @@ const SetupProfile = () => {
           <input
             type="text"
             value={formData.name}
+            disabled={true}
             className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
           />
           <input
             type="email"
             value={formData.email}
+            disabled={true}
             className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
           />
           <PasswordField

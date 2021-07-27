@@ -18,6 +18,13 @@ API.interceptors.request.use((req: AxiosRequestConfig) => {
 });
 
 /**
+ * @description Get the user from the backend
+ * @param {[String]} email Email of the user which we have to search from the backend
+ * @returns Promise<AxiosResponse<any>>
+ */
+export const getUser = (email: string) => API.get(`/users/${email}`);
+
+/**
  * @description Function making an API call to sign in the user
  * @param {[String]} email Stores the email of the user trying to signin
  * @param {[String]} password Stores the password of the user trying to signin

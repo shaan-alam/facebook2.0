@@ -10,7 +10,7 @@ const { auth } = require("../middlewares/auth");
 
 const router = express.Router();
 
-router.get("/", auth, getUser);
+router.get("/:email", auth, getUser);
 
 // Sign up
 router.post("/signup", signup);

@@ -3,14 +3,14 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
 const getUser = async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.params;
 
   try {
     const user = await User.findOne({ email });
 
-    res.json({ user });
+    res.json(user);
   } catch (err) {
-    res.status(404).json({ message: "No user found with that email!" });
+    res.status(500).json({ message: "Something went wrong!!" });
   }
 };
 

@@ -1,14 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Header,
-  Form,
-  Button,
-  Input,
-  Divider,
-  Message,
-  Icon,
-  Segment,
-} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { SignUpFormDataType } from "./types";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,8 +8,10 @@ import { RootState } from "../../reducers/index";
 import GoogleLogin from "react-google-login";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
-import { SIGN_UP } from "../../constants";
+import { AUTH, ERROR, GOOGLE_SIGNUP, SIGN_UP } from "../../constants";
 import PasswordField from "./PasswordField";
+import axios, { AxiosResponse } from "axios";
+import { getUser } from "../../api";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -75,11 +67,7 @@ const SignUp = () => {
       profileObj: { name, email },
     } = res;
 
-    dispatch({
-      type: "AUTH",
-      payload: { profileObj: { name, email } },
-    });
-
+    dispatch({ type: AUTH, payload: { profileObj: { name, email } } });
     history.push("/auth/setup-profile");
   };
 
@@ -87,7 +75,7 @@ const SignUp = () => {
     // Dispatch an error action on Sign in component
     dispatch({
       type: "ERROR",
-      payload: { ON: "SIGN_UP", message: "Something went wrong!" },
+      payload: { ON: SIGN_UP, message: "Something went wrong!" },
     });
   };
 
