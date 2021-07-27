@@ -1,12 +1,16 @@
 const express = require("express");
 const {
+  getUser,
   signin,
   signup,
   signUpWithGoogle,
   signInWithGoogle,
 } = require("../controllers/users");
+const { auth } = require("../middlewares/auth");
 
 const router = express.Router();
+
+router.get("/", auth, getUser);
 
 // Sign up
 router.post("/signup", signup);

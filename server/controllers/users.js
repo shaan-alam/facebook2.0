@@ -2,6 +2,18 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
+const getUser = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    res.json({ user });
+  } catch (err) {
+    res.status(404).json({ message: "No user found with that email!" });
+  }
+};
+
 const signup = async (req, res) => {
   const { email, password, confirmPassword, firstName, lastName } = req.body;
 
@@ -130,4 +142,10 @@ const signInWithGoogle = async (req, res) => {
   res.json({ user: existingUser, token });
 };
 
-module.exports = { signin, signup, signUpWithGoogle, signInWithGoogle };
+module.exports = {
+  getUser,
+  signin,
+  signup,
+  signUpWithGoogle,
+  signInWithGoogle,
+};
