@@ -1,25 +1,27 @@
 import React, { useState } from "react";
 import { EyeIcon } from "@heroicons/react/solid";
 import { EyeOffIcon } from "@heroicons/react/solid";
-import { FormDataType } from "../SetupProfile/types";
 
-const PasswordField = ({
+function PasswordField<T>({
   formData,
   name,
+  placeholder,
   handleFormDataChange,
 }: {
-  formData: FormDataType;
-  name: keyof FormDataType;
+  formData: T;
+  name: keyof T;
+  placeholder: string;
   handleFormDataChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => {
+}) {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   return (
     <div className="relative">
       <input
         type={isPasswordVisible ? "text" : "password"}
-        value={formData[name]}
-        name={name}
+        value={formData[name] as any}
+        name={name as string}
+        placeholder={placeholder}
         onChange={handleFormDataChange}
         className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
       />
@@ -36,6 +38,6 @@ const PasswordField = ({
       )}
     </div>
   );
-};
+}
 
 export default PasswordField;

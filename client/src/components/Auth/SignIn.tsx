@@ -9,6 +9,8 @@ import GoogleLogin from "react-google-login";
 import { SIGN_IN } from "../../constants";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
+import PasswordField from "./PasswordField";
+import { FormDataType } from "./SetupProfile/types";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -98,13 +100,11 @@ const SignIn = () => {
               value={formData.email}
               onChange={handleFormDataChange}
             />
-            <input
-              type="password"
-              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+            <PasswordField<SignInFormDataType>
+              formData={formData}
               placeholder="Your Password"
               name="password"
-              value={formData.password}
-              onChange={handleFormDataChange}
+              handleFormDataChange={handleFormDataChange}
             />
             <button
               type="submit"

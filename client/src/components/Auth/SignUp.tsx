@@ -19,6 +19,7 @@ import GoogleLogin from "react-google-login";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
 import { SIGN_UP } from "../../constants";
+import PasswordField from "./PasswordField";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -129,21 +130,17 @@ const SignUp = () => {
               value={formData.email}
               onChange={handleFormDataChange}
             />
-            <input
-              type="password"
-              className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-              placeholder="Your Password"
+            <PasswordField<SignUpFormDataType>
+              formData={formData}
               name="password"
-              value={formData.password}
-              onChange={handleFormDataChange}
+              placeholder="Choose a Password"
+              handleFormDataChange={handleFormDataChange}
             />
-            <input
-              type="password"
-              className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-              placeholder="Repeat Password"
+            <PasswordField<SignUpFormDataType>
+              formData={formData}
               name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleFormDataChange}
+              placeholder="Repeat Password"
+              handleFormDataChange={handleFormDataChange}
             />
             <button
               type="submit"

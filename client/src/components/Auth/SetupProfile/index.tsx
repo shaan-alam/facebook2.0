@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { signUpWithGoogle } from "../../../actions/auth";
 import { useHistory } from "react-router-dom";
@@ -9,11 +9,28 @@ import { Link } from "react-router-dom";
 import PasswordField from "../PasswordField";
 import { UserAddIcon } from "@heroicons/react/solid";
 import { XIcon } from "@heroicons/react/solid";
+import { Flip, toast, ToastContainer } from "react-toastify";
+import { SETUP_PROFILE } from "../../../constants";
+import { clearError } from "../../../actions/error";
 
 const SetupProfile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const error = useSelector((state: RootState) => state.error);
+
+  useEffect(() => {
+    // Show error if error exists for this component in the redux store.
+    const showError = () => {
+      toast.error(error.message, {
+        transition: Flip,
+      });
+    };
+
+    if (error.ON === SETUP_PROFILE && error.message) {
+      showError();
+      dispatch(clearError());
+    }
+  }, [error]);
 
   const profile = useSelector(
     (state: RootState) => state.auth.authData.profileObj
@@ -58,11 +75,13 @@ const SetupProfile = () => {
           <PasswordField
             formData={formData}
             name="password"
+            placeholder="Choose a Password"
             handleFormDataChange={handleFormDataChange}
           />
-          <PasswordField
+          <PasswordField<FormDataType>
             formData={formData}
             name="confirmPassword"
+            placeholder="Repeat Password"
             handleFormDataChange={handleFormDataChange}
           />
           <button
@@ -79,6 +98,7 @@ const SetupProfile = () => {
           </Link>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
