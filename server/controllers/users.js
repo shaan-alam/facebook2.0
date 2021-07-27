@@ -146,7 +146,6 @@ const signInWithGoogle = async (req, res) => {
 };
 
 module.exports = {
-  getUser,
   signin,
   signup,
   signUpWithGoogle,
