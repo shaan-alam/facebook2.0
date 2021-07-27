@@ -71,6 +71,7 @@ const signin = async (req, res) => {
       _id: existingUser._id,
       email: existingUser.email,
       name: existingUser.name,
+      imageUrl: existingUser.imageUrl,
     };
 
     res.json({ profileObj, tokenId });
