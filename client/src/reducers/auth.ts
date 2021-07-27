@@ -3,7 +3,7 @@ import { AUTH, GOOGLE_SIGNIN, GOOGLE_SIGNUP, LOGOUT } from "../constants";
 interface Action {
   type: string;
   payload: {
-    profileObj: { _id: string; name: string; email: string };
+    profileObj: { _id: string; name: string; email: string; imageUrl: string };
     tokenId: string;
   };
 }
@@ -15,6 +15,7 @@ interface InitialStateInterface {
       _id: string;
       name: string;
       email: string;
+      imageUrl: string;
     };
   };
 }
@@ -26,6 +27,7 @@ const initialState: InitialStateInterface = {
       _id: "",
       name: "",
       email: "",
+      imageUrl: "",
     },
   },
 };
@@ -64,9 +66,7 @@ const auth = (state = initialState, action: Action) => {
         authData: {
           tokenId: action.payload.tokenId,
           profileObj: {
-            _id: action.payload.profileObj._id,
-            name: action.payload.profileObj.name,
-            email: action.payload.profileObj.email,
+            ...action.payload,
           },
         },
       };
@@ -79,9 +79,7 @@ const auth = (state = initialState, action: Action) => {
         authData: {
           tokenId: action.payload.tokenId,
           profileObj: {
-            _id: action.payload.profileObj._id,
-            name: action.payload.profileObj.name,
-            email: action.payload.profileObj.email,
+            ...action.payload,
           },
         },
       };

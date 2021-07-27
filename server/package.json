@@ -7,7 +7,8 @@
     "init": "^0.1.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.2",
-    "nodemon": "^2.0.9"
+    "nodemon": "^2.0.9",
+    "random-avatar-generator": "^2.0.0"
   },
   "name": "server",
   "version": "1.0.0",

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const generator = require("random-avatar-generator");
 
 const getUser = async (req, res) => {
   const { email } = req.params;
@@ -35,6 +36,7 @@ const signup = async (req, res) => {
       email,
       name: `${firstName} ${lastName}`,
       password: hashedPassword,
+      imageUrl: new generator.AvatarGenerator().generateRandomAvatar(),
     });
 
     await newUser.save();
@@ -43,6 +45,7 @@ const signup = async (req, res) => {
       _id: newUser._id,
       email: newUser.email,
       name: newUser.name,
+      imageUrl: newUser.imageUrl,
     };
 
     // Create a token
@@ -90,7 +93,7 @@ const signin = async (req, res) => {
 
 const signUpWithGoogle = async (req, res) => {
   // Get the data from the front end
-  const { name, email, password, confirmPassword } = req.body;
+  const { name, email, password, confirmPassword, imageUrl } = req.body;
 
   // Check if already a user exists with that email
   const existingUser = await User.findOne({ email });
@@ -106,7 +109,12 @@ const signUpWithGoogle = async (req, res) => {
 
     try {
       const hashedPassword = await bcrypt.hash(password, 12);
-      const newUser = await new User({ name, email, password: hashedPassword });
+      const newUser = await new User({
+        name,
+        email,
+        password: hashedPassword,
+        imageUrl,
+      });
 
       // Save the user, generate a token and return it to the front-end
       await newUser.save();
@@ -138,8 +146,15 @@ const signInWithGoogle = async (req, res) => {
 
   const token = await jwt.sign({ id: existingUser._id }, "secret");
 
+  const profileUser = {
+    _id: existingUser._id,
+    name: existingUser.name,
+    email: existingUser.email,
+    imageUrl: existingUser.imageUrl,
+  };
+
   // If the user exists, then send the user along with the token
-  res.json({ user: existingUser, token });
+  res.json({ user: profileUser, token });
 };
 
 module.exports = {

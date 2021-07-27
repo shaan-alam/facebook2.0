@@ -110,14 +110,17 @@ export const signUpWithGoogle: SignUpWithGoogleType =
  * @return {[Promise<void>]}
  */
 export const signInWithGoogle: SignInWithGoogleType =
-  (email, successRedirect) => async (dispatch) => {
+  (email, imageUrl, successRedirect) => async (dispatch) => {
     try {
       const result = await api.signInWithGoogle(email);
 
       // Result here will be an object containing user profile object and the token
       dispatch({
         type: GOOGLE_SIGNIN,
-        payload: { profileObj: result.data.user, tokenId: result.data.token },
+        payload: {
+          profileObj: { ...result.data.user, imageUrl },
+          tokenId: result.data.token,
+        },
       });
 
       // Redirecting to the PostContainer component

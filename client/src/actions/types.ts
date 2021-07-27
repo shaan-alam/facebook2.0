@@ -37,6 +37,7 @@ export type SignUpWithGoogleType = (
 
 export type SignInWithGoogleType = (
   email: string,
+  imageUrl: string,
   successRedirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 

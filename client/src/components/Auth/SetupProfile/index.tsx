@@ -34,9 +34,10 @@ const SetupProfile = () => {
 
   const profile = useSelector(
     (state: RootState) => state.auth.authData.profileObj
-  ) as { email: string; name: string };
+  );
 
   const [formData, setFormData] = useState<FormDataType>({
+    imageUrl: profile?.imageUrl,
     name: profile?.name,
     email: profile?.email,
     password: "",

@@ -63,12 +63,12 @@ const SignIn = () => {
   // Google login success handler, to dispatch signInWithGoogle Action
   const onGoogleSuccess = async (res: any) => {
     const {
-      profileObj: { email },
+      profileObj: { email, imageUrl },
     } = res;
 
     const successRedirect = () => history.push("/");
 
-    dispatch(signInWithGoogle(email, successRedirect));
+    dispatch(signInWithGoogle(email, imageUrl, successRedirect));
   };
 
   const onGoogleFailure = () => {

@@ -3,4 +3,5 @@ export interface FormDataType {
   email: string;
   password: string;
   confirmPassword: string;
+  imageUrl: string
 }

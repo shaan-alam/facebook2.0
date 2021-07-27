@@ -12,6 +12,7 @@ import { AUTH, ERROR, GOOGLE_SIGNUP, SIGN_UP } from "../../constants";
 import PasswordField from "./PasswordField";
 import axios, { AxiosResponse } from "axios";
 import { getUser } from "../../api";
+import { isConstructorDeclaration } from "typescript";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -64,10 +65,14 @@ const SignUp = () => {
 
   const onGoogleSuccess = async (res: any) => {
     const {
-      profileObj: { name, email },
+      profileObj: { name, email, imageUrl },
     } = res;
 
-    dispatch({ type: AUTH, payload: { profileObj: { name, email } } });
+    dispatch({
+      type: AUTH,
+      payload: { profileObj: { name, email, imageUrl } },
+    });
+    
     history.push("/auth/setup-profile");
   };
 
