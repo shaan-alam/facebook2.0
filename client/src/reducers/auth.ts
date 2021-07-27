@@ -54,6 +54,7 @@ const auth = (state = initialState, action: Action) => {
             _id: "",
             name: "",
             email: "",
+            imageUrl: "",
           },
         },
       };
@@ -64,10 +65,7 @@ const auth = (state = initialState, action: Action) => {
       return {
         ...state,
         authData: {
-          tokenId: action.payload.tokenId,
-          profileObj: {
-            ...action.payload,
-          },
+          ...action.payload,
         },
       };
 
@@ -77,10 +75,7 @@ const auth = (state = initialState, action: Action) => {
       return {
         ...state,
         authData: {
-          tokenId: action.payload.tokenId,
-          profileObj: {
-            ...action.payload,
-          },
+          ...action.payload,
         },
       };
 

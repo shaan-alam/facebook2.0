@@ -51,7 +51,7 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
           <Menu>
             <Menu.Button className="hover:bg-blue-50 p-2 rounded-lg flex items-center outline-none">
               <img
-                src="https://avatars.githubusercontent.com/u/48273777?v=4"
+                src={user.profileObj.imageUrl}
                 alt="Shaan Alam"
                 className="sm:mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
               />

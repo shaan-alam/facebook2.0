@@ -90,7 +90,10 @@ export const signUpWithGoogle: SignUpWithGoogleType =
       // Result here will be an object containing user profile object and the token
       dispatch({
         type: GOOGLE_SIGNUP,
-        payload: { profileObj: result.data.user, tokenId: result.data.token },
+        payload: {
+          profileObj: { ...result.data.user },
+          tokenId: result.data.token,
+        },
       });
 
       // Redirecting to the PostContainer component
