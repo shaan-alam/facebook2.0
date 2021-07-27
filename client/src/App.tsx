@@ -8,7 +8,7 @@ import FormModal from "./components/FormModal";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
-import SetupProfile from "./components/SetupProfile";
+import SetupProfile from "./components/Auth/SetupProfile";
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
 
