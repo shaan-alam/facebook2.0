@@ -8,16 +8,16 @@ import { RootState } from "../../reducers/index";
 import GoogleLogin from "react-google-login";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
-import { AUTH, ERROR, GOOGLE_SIGNUP, SIGN_UP } from "../../constants";
+import { AUTH, SIGN_UP } from "../../constants";
 import PasswordField from "./PasswordField";
-import axios, { AxiosResponse } from "axios";
-import { getUser } from "../../api";
-import { isConstructorDeclaration } from "typescript";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const error = useSelector((state: RootState) => state.error);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<SignUpFormDataType>({
     firstName: "",
@@ -46,12 +46,15 @@ const SignUp = () => {
 
     if (error.ON === SIGN_UP && error.message) {
       showError();
+      setIsLoading(false);
       dispatch(clearError());
     }
   }, [error]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     const successRedirect = () => history.push("/");
 
@@ -72,7 +75,7 @@ const SignUp = () => {
       type: AUTH,
       payload: { profileObj: { name, email, imageUrl } },
     });
-    
+
     history.push("/auth/setup-profile");
   };
 
@@ -137,9 +140,12 @@ const SignUp = () => {
             />
             <button
               type="submit"
-              className="outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
+              className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
             >
-              Sign Up
+              {isLoading && (
+                <Loader type="Oval" height={20} width={20} color="#fff" />
+              )}
+              &nbsp; Sign up
             </button>
             <div className="text-center mt-3">
               <Link to="/auth/signin" className="text-fb">

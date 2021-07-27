@@ -10,12 +10,15 @@ import { SIGN_IN } from "../../constants";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
 import PasswordField from "./PasswordField";
-import { FormDataType } from "./SetupProfile/types";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const error = useSelector((state: RootState) => state.error);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // Redirect to home if the user is already logged in
@@ -36,6 +39,7 @@ const SignIn = () => {
 
     if (error.ON === SIGN_IN && error.message) {
       showError();
+      setIsLoading(false);
       dispatch(clearError());
     }
   }, [error]);
@@ -54,6 +58,8 @@ const SignIn = () => {
   // On form submit, dispatch a signin event
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     const successRedirect = () => history.push("/");
 
@@ -108,9 +114,12 @@ const SignIn = () => {
             />
             <button
               type="submit"
-              className="outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
+              className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
             >
-              Login
+              {isLoading && (
+                <Loader type="Oval" height={20} width={20} color="#fff" />
+              )}
+              &nbsp; Login
             </button>
             <div className="text-center mt-3">
               <Link to="/auth/signup" className="text-fb">
