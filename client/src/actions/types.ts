@@ -1,7 +1,4 @@
-import {
-  SignInFormDataType,
-  SignUpFormDataType,
-} from "../components/Auth/types";
+import { SignInFormDataType, SignUpFormDataType } from "../pages/Auth/types";
 import { Dispatch } from "redux";
 
 export interface AuthResponse {
