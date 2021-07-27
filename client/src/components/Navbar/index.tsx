@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../actions/auth";
 import { useHistory, useLocation } from "react-router-dom";
-import { Menu } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { UserIcon } from "@heroicons/react/solid";
 import { LogoutIcon } from "@heroicons/react/solid";
@@ -48,7 +48,7 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
         </div>
         <div className="relative flex items-center justify-between flex-2">
           <BellIcon className="h-9 w-9 mr-4 text-gray-400 cursor-pointer p-2 hover:bg-blue-50 rounded-full" />
-          <Menu>
+          <Menu as="div" className="relative inline-block">
             <Menu.Button className="hover:bg-blue-50 p-2 rounded-lg flex items-center outline-none">
               <img
                 src={user.profileObj.imageUrl}
@@ -58,48 +58,56 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
               <p className="hidden sm:block">Shaan Alam</p>
               <ChevronDownIcon className="w-6 sm:ml-4" />
             </Menu.Button>
-
-            <Menu.Items className="z-10 outline-none shadow-md absolute top-12 right-0 bg-white h-auto flex flex-col w-56 p-1 rounded-md">
-              <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={`flex items-center ${
-                      active && "bg-fb rounded-lg"
-                    } p-2 ${
-                      active ? "text-white" : "text-gray-700 "
-                    } hover:bg-fb hover:text-white`}
-                    href="/account-settings"
-                  >
-                    <UserIcon
-                      className={`h-4 w-4 mr-2 ${
-                        active ? "text-white" : "text-fb"
-                      }`}
-                    />
-                    &nbsp; My Profile
-                  </a>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <Link
-                    to="/auth/signin"
-                    className={`flex items-center ${
-                      active && "bg-fb rounded-lg"
-                    } p-2 ${
-                      active ? "text-white" : "text-gray-700 "
-                    } hover:bg-fb hover:text-white`}
-                    onClick={handleLogout}
-                  >
-                    <LogoutIcon
-                      className={`h-4 w-4 mr-2 ${
-                        active ? "text-white" : "text-fb"
-                      }`}
-                    />
-                    &nbsp; Sign out
-                  </Link>
-                )}
-              </Menu.Item>
-            </Menu.Items>
+            <Transition
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-50 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform  scale-100 opacity-100"
+              leaveTo="transform scale-50 opacity-0"
+            >
+              <Menu.Items className="z-10 outline-none shadow-md absolute right-0 bg-white h-auto flex flex-col w-56 p-1 rounded-md">
+                <Menu.Item>
+                  {({ active }) => (
+                    <a
+                      className={`flex items-center ${
+                        active && "bg-fb rounded-lg"
+                      } p-2 ${
+                        active ? "text-white" : "text-gray-700 "
+                      } hover:bg-fb hover:text-white`}
+                      href="/account-settings"
+                    >
+                      <UserIcon
+                        className={`h-4 w-4 mr-2 ${
+                          active ? "text-white" : "text-fb"
+                        }`}
+                      />
+                      &nbsp; My Profile
+                    </a>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      to="/auth/signin"
+                      className={`flex items-center ${
+                        active && "bg-fb rounded-lg"
+                      } p-2 ${
+                        active ? "text-white" : "text-gray-700 "
+                      } hover:bg-fb hover:text-white`}
+                      onClick={handleLogout}
+                    >
+                      <LogoutIcon
+                        className={`h-4 w-4 mr-2 ${
+                          active ? "text-white" : "text-fb"
+                        }`}
+                      />
+                      &nbsp; Sign out
+                    </Link>
+                  )}
+                </Menu.Item>
+              </Menu.Items>
+            </Transition>
           </Menu>
         </div>
       </div>
