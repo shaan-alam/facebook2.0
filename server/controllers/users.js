@@ -3,18 +3,6 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const generator = require("random-avatar-generator");
 
-const getUser = async (req, res) => {
-  const { email } = req.params;
-
-  try {
-    const user = await User.findOne({ email });
-
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: "Something went wrong!!" });
-  }
-};
-
 const signup = async (req, res) => {
   const { email, password, confirmPassword, firstName, lastName } = req.body;
 
