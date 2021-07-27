@@ -16,6 +16,7 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("profile") || "{}")
   );
+  
 
   const history = useHistory();
   const location = useLocation();

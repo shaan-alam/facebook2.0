@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
-import PostContainer from "./components/PostContainer";
+import PostContainer from "./pages/Feed";
 
 import { useDispatch } from "react-redux";
 import FormModal from "./components/FormModal";
@@ -8,9 +8,9 @@ import FormModal from "./components/FormModal";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
-import SetupProfile from "./components/Auth/SetupProfile";
-import SignIn from "./components/Auth/SignIn";
-import SignUp from "./components/Auth/SignUp";
+import SetupProfile from "./pages/Auth/SetupProfile";
+import SignIn from "./pages/Auth/SignIn";
+import SignUp from "./pages/Auth/SignUp";
 
 import "react-toastify/dist/ReactToastify.css";
 import { AUTH } from "./constants";
