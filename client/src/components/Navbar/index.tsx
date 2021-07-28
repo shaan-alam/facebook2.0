@@ -43,7 +43,7 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
         <div className="hidden sm:block flex-grow">
           <input
             type="text"
-            className="bg-gray-50 py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none"
+            className="bg-gray-100 py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none"
             placeholder="Search..."
           />
         </div>
