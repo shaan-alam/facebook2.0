@@ -3,7 +3,7 @@ import { Grid, Container, Message } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../reducers/index";
-import Post from "../../components/Post";
+import Posts from "../../components/Posts";
 import { getPosts } from "../../actions/posts";
 
 import { clearError } from "../../actions/error";
@@ -34,9 +34,7 @@ const Feed = ({ setIsOpen, setCurrentID }: PostContainerProps) => {
         <div className="wall lg:mr-4 w-full md:w-full">
           <NewPost />
           <div className="posts my-4 bg-white rounded-lg p-4">
-            <Post />
-            <Post />
-            <Post />
+            <Posts posts={posts} />
           </div>
         </div>
         <ProfileSuggestion />

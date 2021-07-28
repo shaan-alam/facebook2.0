@@ -11,6 +11,4 @@ export type PostType = {
 
 export type PostProps = {
   post: PostType;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentID: (id: string) => void;
 };

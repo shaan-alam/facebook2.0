@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Card, Button, Placeholder, Image, Icon } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
-import { deletePost } from "../../actions/posts";
+import { deletePost } from "../../../actions/posts";
 
 // Interfaces and Types
 import { PostProps, PostType } from "./types";
-import { likePost } from "../../actions/posts";
+import { likePost } from "../../../actions/posts";
 import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/solid";
 
 // { post, setIsOpen, setCurrentID }: PostProps
 
-const Post = () => {
+const Post = ({ post }: PostProps) => {
   const [isLoaded, setLoaded] = useState<boolean>(false);
   const dispatch = useDispatch();
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
@@ -62,7 +62,8 @@ const Post = () => {
       </div>
       <div className="post">
         <img
-          src="https://avatars.githubusercontent.com/u/48273777?v=4"
+          src={post?.imgURL}
+          alt={post?.title}
           className="my-3 w-full rounded-lg"
         />
         <div className="post-actions flex ">
