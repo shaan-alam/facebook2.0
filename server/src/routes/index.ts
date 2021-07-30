@@ -1,8 +1,8 @@
-import { Express } from "express";
-import postRoutes from "./post.route";
+import { Application } from "express";
+import authRoutes from "./auth.route";
 
-const Routes = (app: Express) => {
-  app.use("/posts", postRoutes);
+const routes = (app: Application) => {
+  app.use("/auth/", authRoutes);
 };
 
-export default Routes;
+export default routes;
