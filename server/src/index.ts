@@ -6,6 +6,7 @@ import routes from "./routes";
 import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
+import path from "path";
 
 dotenv.config();
 
@@ -15,6 +16,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/static", express.static(path.join(__dirname, "assets", "css")));
+
+console.log(path.join(__dirname, "assets", "css"));
 
 const options = {
   definition: {
@@ -35,7 +39,14 @@ const options = {
 
 const specs = swaggerJsDoc(options);
 
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use(
+  "/docs",
+  swaggerUI.serve,
+  swaggerUI.setup(specs, {
+    customSiteTitle: "Facebook 2.0 Documentation",
+    customCssUrl: "http://localhost:5000/static/custom.css",
+  })
+);
 
 // Routing configuration
 routes(app);
