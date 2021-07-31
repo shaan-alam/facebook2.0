@@ -6,7 +6,6 @@ const validateRequest =
   (schema: AnySchema) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.body);
       await schema.validate(req.body);
 
       return next();

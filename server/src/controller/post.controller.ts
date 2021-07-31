@@ -8,12 +8,11 @@ export const createPost = async (req: Request, res: Response) => {
 
   try {
     const image = await cloudinary.v2.uploader.upload(imageURL, {
-      upload_preset: "facebook2.0/posts",
+      folder: "facebook2.0/posts",
     });
-    console.log(image);
 
     const newPost = await new Post({
-      imageURL,
+      imageURL: image.secure_url,
       caption,
       author: res.locals.userId,
     });
