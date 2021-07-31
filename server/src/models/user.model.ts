@@ -5,6 +5,7 @@ export interface UserDocument extends mongoose.Document {
   fullName: string;
   email: string;
   password: string;
+  comparePassword: (c: string) => Promise<boolean>
 }
 
 const UserSchema = new mongoose.Schema(
@@ -27,7 +28,9 @@ const UserSchema = new mongoose.Schema(
 );
 
 // Used for logging in
-UserSchema.methods.comparePasswod = async function (candidatePassword: string) {
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string
+) {
   const user = this as UserDocument;
 
   return bcrypt.compare(candidatePassword, user.password).catch((e) => false);

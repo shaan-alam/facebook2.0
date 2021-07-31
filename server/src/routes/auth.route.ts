@@ -1,8 +1,8 @@
 import express from "express";
-import { signUp } from "../controller/auth.controller";
+import { signUp, signIn } from "../controller/auth.controller";
 import { getUser } from "../middlewares/auth.middleware";
 import validateRequest from "../middlewares/validateRequest.middleware";
-import { createUserSchema } from "../schema/auth.schema";
+import { createUserSchema, loginSchema } from "../schema/auth.schema";
 
 const router = express.Router();
 
@@ -35,9 +35,9 @@ const router = express.Router();
  *                type: string
  *                description: Password of the user
  *            example:
- *                fullName: Shaan Alam
- *                email: shaanalam@test.com
- *                password: ShaanIsCool_3000
+ *                fullName: Your Name
+ *                email: yourname@test.com
+ *                password: YourPassword_4000
  *    responses:
  *      200:
  *        description: OK
@@ -47,5 +47,36 @@ const router = express.Router();
  *
  */
 router.post("/signup/", validateRequest(createUserSchema), getUser, signUp);
+
+/**
+ * @swagger
+ * /auth/signin:
+ *  post:
+ *    summary: Login User
+ *    tags: [Authentication]
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *                description: Email of the user
+ *              password:
+ *                type: string
+ *                description: Password of the user
+ *            example:
+ *                email: yourname@test.com
+ *                password: YourPassword_4000
+ *    responses:
+ *      200:
+ *        description: OK
+ *      404:
+ *        description: User not found
+ *
+ *
+ */
+router.post("/signin/", validateRequest(loginSchema), getUser, signIn);
 
 export default router;

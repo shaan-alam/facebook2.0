@@ -25,3 +25,28 @@ export const signUp = async (req: Request, res: Response) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const signIn = async (req: Request, res: Response) => {
+  if (!res.locals.user) {
+    return res.status(404).json({ message: "No user with that email!" });
+  }
+
+  const { password } = req.body;
+  const user = res.locals.user;
+
+  try {
+    // Verify the password
+    const isValid = await user.comparePassword(password);
+
+    if (!isValid) {
+      return res.status(400).json({ err: "Invalid Password " });
+    }
+
+    const token = signToken(user._id);
+
+    res.json({ user: omit(user.toJSON(), "password"), token });
+  } catch (err) {
+    logger.error(err.message);
+    res.json({ message: err.message });
+  }
+};
