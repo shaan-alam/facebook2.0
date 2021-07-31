@@ -18,8 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static(path.join(__dirname, "assets")));
 
-console.log(path.join(__dirname, "assets", "css"));
-
 const options = {
   definition: {
     openapi: "3.0.0",
