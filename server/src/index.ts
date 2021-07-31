@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/static", express.static(path.join(__dirname, "assets", "css")));
+app.use("/static", express.static(path.join(__dirname, "assets")));
 
 console.log(path.join(__dirname, "assets", "css"));
 
@@ -44,7 +44,7 @@ app.use(
   swaggerUI.serve,
   swaggerUI.setup(specs, {
     customSiteTitle: "Facebook 2.0 Documentation",
-    customCssUrl: "http://localhost:5000/static/custom.css",
+    customCssUrl: "http://localhost:5000/static/css/custom.css",
   })
 );
 

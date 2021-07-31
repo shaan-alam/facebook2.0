@@ -1,3 +1,50 @@
-/* #swagger-ui {
-  background: red !important;
-} */
+#swagger-ui .title {
+  color: #1877f2;
+}
+
+.renderedMarkdown {
+  color: #eee;
+}
+
+#swagger-ui .topbar {
+  background: #fff;
+  box-shadow: 0 1.9px 2.2px rgba(0, 0, 0, 0.006),
+    0 4.6px 5.3px rgba(0, 0, 0, 0.007), 0 8.6px 10px rgba(0, 0, 0, 0.008),
+    0 15.4px 17.9px rgba(0, 0, 0, 0.009), 0 28.8px 33.4px rgba(0, 0, 0, 0.012),
+    0 69px 80px rgba(0, 0, 0, 0.03);
+}
+
+.topbar-wrapper img {
+  content: url("https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg");
+}
+
+/* Dropdown for API routes */
+.opblock-summary.opblock-summary-post {
+  background: #fefcfb;
+  border-color: #4696ff;
+}
+
+.swagger-ui .opblock.opblock-post {
+  border-color: #4696ff;
+}
+
+/* Route METHOD */
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+  background: #034078;
+}
+
+.swagger-ui .opblock.opblock-post .opblock-summary {
+  border-color: #4696ff;
+}
+
+.swagger-ui .opblock.opblock-post .tab-header .tab-item.active h4 span:after {
+  background: #034078;
+}
+
+/* Selects */
+select {
+  outline: none;
+  padding: 1em 2em !important;
+  background-color: transparent !important;
+  border: 1px solid #ddd !important;
+}
