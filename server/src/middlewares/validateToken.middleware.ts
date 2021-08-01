@@ -11,12 +11,14 @@ const validateRequest = async (
     let payload;
 
     const token = req.headers.authorization?.split(" ")[1];
+
     if (token) {
-      payload = verifyToken(token);
+      payload = await verifyToken(token);
+      res.locals.userId = payload;
+      return next();
     }
 
-    res.locals.userId = payload;
-    return next();
+    throw new Error("Unauthorised!");
   } catch (err) {
     logger.error(err.message);
     return res.status(400).json({ message: err.message });
