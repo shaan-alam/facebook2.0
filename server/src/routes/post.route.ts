@@ -69,7 +69,7 @@ router.post("/", validateToken, validateRequest(createPostSchema), createPost);
  *      400:
  *        description: Bad Request
  *      401:
- *        desciption: Unauthorised
+ *        description: Unauthorised
  *
  *
  */
@@ -105,7 +105,7 @@ router.get("/", validateToken, getPosts);
  *      400:
  *        description: Bad Request
  *      401:
- *        desciption: Unauthorised
+ *        description: Unauthorised
  *
  *
  */
