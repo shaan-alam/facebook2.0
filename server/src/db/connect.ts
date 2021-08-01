@@ -6,6 +6,7 @@ const dbConnect = () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  mongoose.set("useFindAndModify", false);
 
   const db = mongoose.connection;
   db.once("open", () => logger.info("Connected to Mongo DB!!"));

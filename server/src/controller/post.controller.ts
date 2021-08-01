@@ -20,7 +20,7 @@ export const createPost = async (req: Request, res: Response) => {
     });
     await newPost.save();
 
-    // Create a newPostLikes Document 
+    // Create a newPostLikes Document
     const newPostLikes = await new PostLikes({
       postId: newPost._id,
       likes: [],
@@ -71,5 +71,25 @@ export const getPosts = async (req: Request, res: Response) => {
   } catch (err) {
     logger.rror(err.message);
     res.status(404).json({ message: err.message });
+  }
+};
+
+export const editPost = async (req: Request, res: Response) => {
+  const { _id } = res.locals.post;
+  const { caption } = req.body;
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      _id,
+      { _id, caption },
+      {
+        new: true,
+      }
+    );
+
+    res.json({ post: updatedPost });
+  } catch (err) {
+    logger.error(err.message);
+    res.status(400).json({ message: err.message });
   }
 };
