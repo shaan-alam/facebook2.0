@@ -77,12 +77,28 @@ router.get("/", validateToken, getPosts);
 
 /**
  * @swagger
- * /posts/:
+ * /posts/{id}:
  *  patch:
  *    security:
  *      - bearerAuth: []
  *    summary: Update the post's caption.
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The mongoose ID of the post to be edited.
  *    tags: [Posts]
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              caption:
+ *                type: string
+ *                description: Caption of the post.
  *    responses:
  *      200:
  *        description: OK
