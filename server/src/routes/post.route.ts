@@ -116,6 +116,31 @@ router.get("/", validateToken, getPosts);
  */
 router.patch("/:id", validateToken, getPost, editPost);
 
-router.delete("/:id", getPost, deletePost);
+/**
+ * @swagger
+ * /posts/{id}:
+ *  delete:
+ *    security:
+ *      - bearerAuth: []
+ *    summary: Delete a post
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The mongoose ID of the post to be deleted.
+ *    tags: [Posts]
+ *    responses:
+ *      200:
+ *        description: OK
+ *      400:
+ *        description: Bad Request
+ *      401:
+ *        description: Unauthorised
+ *
+ *
+ */
+router.delete("/:id", validateToken, getPost, deletePost);
 
 export default router;

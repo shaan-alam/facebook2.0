@@ -10,8 +10,12 @@ export const getPost = async (
   try {
     const post = await Post.findById(req.params.id);
 
-    res.locals.post = post;
-    return next();
+    if (post) {
+      res.locals.post = post;
+      return next();
+    }
+
+    throw new Error();
   } catch (err) {
     logger.error(err.message);
     return res.status(404).json({ message: "No post found!" });
