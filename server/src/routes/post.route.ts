@@ -41,5 +41,20 @@ const router = express.Router();
  */
 router.post("/", validateToken, validateRequest(createPostSchema), createPost);
 
+/**
+ * @swagger
+ * /posts/:
+ *  get:
+ *    summary: Get all the posts along with their author and likes.
+ *    tags: [Posts]
+ *    responses:
+ *      200:
+ *        description: OK
+ *      400:
+ *        description: Bad Request
+ *
+ *
+ */
 router.get("/", getPosts);
+
 export default router;
