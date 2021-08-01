@@ -6,15 +6,18 @@ import cloudinary from "../utils/cloudinary.util";
 
 export const createPost = async (req: Request, res: Response) => {
   const { imageURL, caption } = req.body;
+  let image;
 
   try {
-    const image = await cloudinary.v2.uploader.upload(imageURL, {
-      folder: "facebook2.0/posts",
-    });
+    if (imageURL) {
+      image = await cloudinary.v2.uploader.upload(imageURL, {
+        folder: "facebook2.0/posts",
+      });
+    }
 
     // Create a new Post document
     const newPost = await new Post({
-      imageURL: image.secure_url,
+      imageURL: image?.secure_url ? image?.secure_url : "",
       caption,
       author: res.locals.userId,
     });
