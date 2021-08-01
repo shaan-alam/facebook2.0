@@ -11,7 +11,7 @@ export const createPost = async (req: Request, res: Response) => {
   try {
     if (imageURL) {
       image = await cloudinary.v2.uploader.upload(imageURL, {
-        folder: "facebook2.0/posts",
+        folder: `${process.env.CLOUDINARY_POST_UPLOAD_FOLDER}`,
       });
     }
 
@@ -82,6 +82,13 @@ export const editPost = async (req: Request, res: Response) => {
   const { caption } = req.body;
 
   try {
+    // If the post has empty image URL, that means it is of status type
+    // Do not update a existing status's caption into an empty caption
+    if (res.locals.post.imageURL === "" && (caption === "" || !caption)) {
+      throw new Error("Cannot update a empty status!");
+      return;
+    }
+
     const updatedPost = await Post.findByIdAndUpdate(
       _id,
       { _id, caption },
