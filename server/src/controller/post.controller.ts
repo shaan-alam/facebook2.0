@@ -20,7 +20,7 @@ export const createPost = async (req: Request, res: Response) => {
     });
     await newPost.save();
 
-    // Create a newPostLikes Document
+    // Create a newPostLikes Document 
     const newPostLikes = await new PostLikes({
       postId: newPost._id,
       likes: [],

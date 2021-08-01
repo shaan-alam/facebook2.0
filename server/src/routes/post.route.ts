@@ -8,6 +8,17 @@ const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *  securitySchemes:
+ *    bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *      in: header
+ */
+
+/**
+ * @swagger
  * tags:
  *  name: Posts
  *  description: The Posts managing API
@@ -17,6 +28,8 @@ const router = express.Router();
  * @swagger
  * /posts/:
  *  post:
+ *    security:
+ *    - bearerAuth: []
  *    summary: Create a new Post
  *    tags: [Posts]
  *    requestBody:
@@ -45,6 +58,8 @@ router.post("/", validateToken, validateRequest(createPostSchema), createPost);
  * @swagger
  * /posts/:
  *  get:
+ *    security:
+ *      - bearerAuth: []
  *    summary: Get all the posts along with their author and likes.
  *    tags: [Posts]
  *    responses:
@@ -52,9 +67,11 @@ router.post("/", validateToken, validateRequest(createPostSchema), createPost);
  *        description: OK
  *      400:
  *        description: Bad Request
+ *      401:
+ *        desciption: Unauthorised
  *
  *
  */
-router.get("/", getPosts);
+router.get("/", validateToken, getPosts);
 
 export default router;
