@@ -103,3 +103,16 @@ export const editPost = async (req: Request, res: Response) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+export const deletePost = async (req: Request, res: Response) => {
+  const { _id } = res.locals.post;
+
+  try {
+    await Post.findByIdAndRemove(_id);
+
+    res.json({ message: "Post deleted successfully!!" });
+  } catch (err) {
+    logger.error(err.message);
+    res.status(500).json({ message: err.message });
+  }
+};
