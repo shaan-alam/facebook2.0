@@ -85,7 +85,7 @@ export const editPost = async (req: Request, res: Response) => {
     // If the post has empty image URL, that means it is of status type
     // Do not update a existing status's caption into an empty caption
     if (res.locals.post.imageURL === "" && (caption === "" || !caption)) {
-      throw new Error("Cannot update a empty status!");
+      throw new Error("Cannot update to empty status!");
       return;
     }
 

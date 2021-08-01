@@ -75,6 +75,24 @@ router.post("/", validateToken, validateRequest(createPostSchema), createPost);
  */
 router.get("/", validateToken, getPosts);
 
+/**
+ * @swagger
+ * /posts/:
+ *  patch:
+ *    security:
+ *      - bearerAuth: []
+ *    summary: Update the post's caption.
+ *    tags: [Posts]
+ *    responses:
+ *      200:
+ *        description: OK
+ *      400:
+ *        description: Bad Request
+ *      401:
+ *        desciption: Unauthorised
+ *
+ *
+ */
 router.patch("/:id", validateToken, getPost, editPost);
 
 export default router;
