@@ -9,7 +9,7 @@ import GoogleLogin from "react-google-login";
 import { SIGN_IN } from "../../constants";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
-import PasswordField from "./PasswordField";
+import PasswordField from "../../components/PasswordField";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 

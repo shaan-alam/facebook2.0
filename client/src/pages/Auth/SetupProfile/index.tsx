@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers/index";
 import { FormDataType } from "./types";
 import { Link } from "react-router-dom";
-import PasswordField from "../PasswordField";
+import PasswordField from "../../../components/PasswordField";
 import { UserAddIcon } from "@heroicons/react/solid";
 import { XIcon } from "@heroicons/react/solid";
 import { Flip, toast, ToastContainer } from "react-toastify";
