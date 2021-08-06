@@ -8,6 +8,7 @@ import { UserIcon } from "@heroicons/react/solid";
 import { LogoutIcon } from "@heroicons/react/solid";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
+import User from "../../assets/images/user.svg";
 
 const Navbar = () => {
   const [user, setUser] = useState(
@@ -48,7 +49,7 @@ const Navbar = () => {
           <Menu as="div" className="relative inline-block">
             <Menu.Button className="hover:bg-blue-50 p-2 rounded-lg flex items-center outline-none">
               <img
-                src={user.user.avatar || ""}
+                src={user.user.avatar || User}
                 alt={user.user.fullName}
                 className="sm:mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
               />
