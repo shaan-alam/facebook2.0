@@ -21,7 +21,7 @@ export const signUp = async (req: Request, res: Response) => {
 
     res.json({ user: omit(newUser.toJSON(), "password"), token });
   } catch (err) {
-    logger.error(err.message);
+    logger.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -42,11 +42,11 @@ export const signIn = async (req: Request, res: Response) => {
       return res.status(400).json({ err: "Invalid Password " });
     }
 
-    const token = signToken(user._id);
+    const token = await signToken(user._id);
 
     res.json({ user: omit(user.toJSON(), "password"), token });
   } catch (err) {
-    logger.error(err.message);
+    logger.error(err);
     res.json({ message: err.message });
   }
 };

@@ -10,7 +10,7 @@ const API = axios.create({ baseURL: BASE_URL }); // Creating an Axios Instance f
 API.interceptors.request.use((req: AxiosRequestConfig) => {
   if (localStorage.getItem("profile") || "{}") {
     req.headers.authorization = `Bearer ${
-      JSON.parse(localStorage.getItem("profile") || "{}").tokenId
+      JSON.parse(localStorage.getItem("profile") || "{}").token
     }`;
   }
 
