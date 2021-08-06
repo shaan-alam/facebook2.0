@@ -6,6 +6,7 @@ import {
   getPosts,
   editPost,
   deletePost,
+  likePost,
 } from "../controller/post.controller";
 import validateToken from "../middlewares/validateToken.middleware";
 import { getPost } from "../middlewares/post.middleware";
@@ -142,5 +143,7 @@ router.patch("/:id", validateToken, getPost, editPost);
  *
  */
 router.delete("/:id", validateToken, getPost, deletePost);
+
+router.patch('/:id/likePost', getPost, likePost)
 
 export default router;

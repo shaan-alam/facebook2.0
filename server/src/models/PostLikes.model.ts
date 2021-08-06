@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 interface PostLikesDocument extends mongoose.Document {
   postId: typeof mongoose.Schema.Types.ObjectId;
-  likes: typeof mongoose.Schema.Types.ObjectId[];
+  likes: Array<string>;
 }
 
 const PostLikesSchema = new mongoose.Schema({

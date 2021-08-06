@@ -4,6 +4,11 @@ import Post from "../models/post.model";
 import PostLikes from "../models/PostLikes.model";
 import cloudinary from "../utils/cloudinary.util";
 
+/**
+ * @description Creates a new Post
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
 export const createPost = async (req: Request, res: Response) => {
   const { imageURL, caption } = req.body;
   let image;
@@ -38,6 +43,11 @@ export const createPost = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @description Get all the posts
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
 export const getPosts = async (req: Request, res: Response) => {
   try {
     // Fetch all the posts along with their author and likes
@@ -59,24 +69,36 @@ export const getPosts = async (req: Request, res: Response) => {
           as: "likes",
         },
       },
+      { $unwind: "$likes" },
       {
         $project: {
           _id: 1,
           imageURL: 1,
           caption: 1,
-          "author._id": 1,
-          "author.name": 1,
+          "author.fullName": 1,
+          "likes.likes": 1,
         },
       },
     ]);
 
-    res.status(200).json(posts);
+    const result = await PostLikes.populate(posts, {
+      path: "likes.likes",
+      select: "fullName",
+    });
+
+    res.json(result);
+    // const postsWithLikes = await PostLikes.findOne({ post})
   } catch (err) {
-    logger.rror(err.message);
+    logger.error(err.message);
     res.status(404).json({ message: err.message });
   }
 };
 
+/**
+ * @description Edits a Post
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
 export const editPost = async (req: Request, res: Response) => {
   const { _id } = res.locals.post;
   const { caption } = req.body;
@@ -104,6 +126,11 @@ export const editPost = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @description Deletes a Post
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
 export const deletePost = async (req: Request, res: Response) => {
   const { _id } = res.locals.post;
 
@@ -114,5 +141,44 @@ export const deletePost = async (req: Request, res: Response) => {
   } catch (err) {
     logger.error(err.message);
     res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * @description Likes a post
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
+export const likePost = async (req: Request, res: Response) => {
+  const { userID } = req.body;
+
+  const { _id: postId } = res.locals.post;
+
+  try {
+    const postLikes = await PostLikes.findOne({ postId });
+    let updatedPostLikes: any = {};
+
+    if ((postLikes as any).likes.indexOf(userID) >= 0) {
+      updatedPostLikes = await PostLikes.findOneAndUpdate(
+        { postId },
+        {
+          $pull: { likes: userID },
+        },
+        { new: true }
+      );
+    } else {
+      updatedPostLikes = await PostLikes.findOneAndUpdate(
+        { postId },
+        {
+          $push: { likes: userID },
+        },
+        { new: true }
+      );
+    }
+
+    res.json({ updatedPostLikes });
+  } catch (err) {
+    logger.error(err);
+    res.status(400).json({ message: err.message });
   }
 };
