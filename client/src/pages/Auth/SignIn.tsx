@@ -38,9 +38,7 @@ const SignIn = () => {
       // Redirect to the Feed
       const successRedirect = () => history.push("/");
 
-      const { email, password } = values;
-
-      dispatch(signIn({ email, password }, successRedirect));
+      dispatch(signIn(values, successRedirect));
     },
   });
 

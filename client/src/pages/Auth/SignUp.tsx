@@ -8,7 +8,7 @@ import { RootState } from "../../reducers/index";
 import GoogleLogin from "react-google-login";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
-import { AUTH, SIGN_UP } from "../../constants";
+import { AUTH, ERROR, SIGN_UP } from "../../constants";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useFormik } from "formik";
@@ -67,20 +67,10 @@ const SignUp = () => {
 
     if (error.ON === SIGN_UP && error.message) {
       showError();
-      // setIsLoading(false);
+      formik.setSubmitting(false);
       dispatch(clearError());
     }
   }, [error]);
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // setIsLoading(true);
-
-    const successRedirect = () => history.push("/");
-
-    // dispatch(signUp(formData, successRedirect));
-  };
 
   const onGoogleSuccess = async (res: any) => {
     const {
@@ -98,7 +88,7 @@ const SignUp = () => {
   const onGoogleFailure = () => {
     // Dispatch an error action on Sign in component
     dispatch({
-      type: "ERROR",
+      type: ERROR,
       payload: { ON: SIGN_UP, message: "Something went wrong!" },
     });
   };
