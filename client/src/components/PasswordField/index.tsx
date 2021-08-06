@@ -20,7 +20,8 @@ function PasswordField({
         name={properties.name}
         placeholder={placeholder}
         onChange={properties.onChange}
-        className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+        onBlur={properties.onBlur}
+        className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-5 w-full rounded-lg px-4 py-3 outline-none"
       />
       {isPasswordVisible ? (
         <EyeOffIcon

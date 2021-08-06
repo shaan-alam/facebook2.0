@@ -74,8 +74,8 @@ const SignIn = () => {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-blue-50">
-      <div className="p-6 rounded-lg flex sm:flex-row flex-col">
-        <div className="hero mb-6 block sm:mr-6">
+      <div className="p-6 rounded-lg flex sm:flex-row flex-col sm:w-full md:w-3/4">
+        <div className="hero mb-6 block sm:mr-6 sm:w-full">
           <h1 className="text-fb text-4xl text-center sm:text-left sm:text-7xl font-extrabold">
             facebook
           </h1>
@@ -83,7 +83,7 @@ const SignIn = () => {
             Facebook helps you connect and share with people.
           </p>
         </div>
-        <div className="login w-full sm:w-1/2 bg-white p-4 rounded-lg shadow-md">
+        <div className="login w-full sm:w-3/4 bg-white p-4 sm:p-10 rounded-lg shadow-md">
           <form onSubmit={formik.handleSubmit}>
             {formik.touched.email && formik.errors.email && (
               <div className="text-red-500 font-semibold text-center py-2">
@@ -92,7 +92,7 @@ const SignIn = () => {
             )}
             <input
               type="text"
-              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-5 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Email"
               id="email"
               {...formik.getFieldProps("email")}
@@ -120,7 +120,7 @@ const SignIn = () => {
                 New to Facebook? Create an Account
               </Link>
             </div>
-            <div className="h-1 w-full my-4 bg-gray-200"></div>
+            <div className="h-1 w-full my-8 bg-gray-200"></div>
             <div className="text-center">
               <GoogleLogin
                 theme="dark"
