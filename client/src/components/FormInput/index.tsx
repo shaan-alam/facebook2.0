@@ -31,7 +31,7 @@ const FormInput = ({
         )}
         <div className="relative">
           <input
-            type={isPasswordVisible ? "text" : type}
+            type={isPasswordVisible ? "text" : "password"}
             id={id}
             className={className}
             placeholder={placeholder}
@@ -54,7 +54,7 @@ const FormInput = ({
   }
 
   return (
-    <>
+    <div className="mr-2">
       {formik.touched[name] && formik.errors[name] && (
         <div className="text-red-500 font-semibold text-center py-2">
           {formik.errors[name]}
@@ -67,7 +67,7 @@ const FormInput = ({
         placeholder={placeholder}
         {...formik.getFieldProps(name)}
       />
-    </>
+    </div>
   );
 };
 

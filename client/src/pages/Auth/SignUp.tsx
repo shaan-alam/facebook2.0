@@ -9,22 +9,45 @@ import GoogleLogin from "react-google-login";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
 import { AUTH, SIGN_UP } from "../../constants";
-import PasswordField from "../../components/PasswordField";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import FormInput from "../../components/FormInput";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const error = useSelector((state: RootState) => state.error);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [formData, setFormData] = useState<SignUpFormDataType>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: yup.object({
+      firstName: yup.string().trim().required("First name is required!"),
+      lastName: yup.string().trim().required("Last name is required!"),
+      email: yup
+        .string()
+        .email("You must provide a valid email!")
+        .required("Email is required!"),
+      password: yup.string().min(6, "Password must be 6 characters or more!"),
+      confirmPassword: yup
+        .string()
+        .min(6, "Password must be 6 characters or more!")
+        .oneOf([yup.ref("password")], "The two passwords should match"),
+    }),
+    onSubmit: (values, { setSubmitting }) => {
+      setSubmitting(true);
+
+      const successRedirect = () => history.push("/");
+
+      dispatch(signUp(values, successRedirect));
+    },
   });
 
   useEffect(() => {
@@ -46,7 +69,7 @@ const SignUp = () => {
 
     if (error.ON === SIGN_UP && error.message) {
       showError();
-      setIsLoading(false);
+      // setIsLoading(false);
       dispatch(clearError());
     }
   }, [error]);
@@ -54,16 +77,11 @@ const SignUp = () => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    setIsLoading(true);
+    // setIsLoading(true);
 
     const successRedirect = () => history.push("/");
 
-    dispatch(signUp(formData, successRedirect));
-  };
-
-  // Mutate state on form input change
-  const handleFormDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
+    // dispatch(signUp(formData, successRedirect));
   };
 
   const onGoogleSuccess = async (res: any) => {
@@ -89,8 +107,8 @@ const SignUp = () => {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-blue-50">
-      <div className="p-6 rounded-lg flex sm:flex-row flex-col">
-        <div className="hero mb-6 block sm:mr-6">
+      <div className="p-6 rounded-lg flex sm:flex-row flex-col sm:w-full md:w-3/4">
+        <div className="hero mb-6 block sm:mr-6 sm:w-full">
           <h1 className="text-fb text-4xl text-center sm:text-left sm:text-7xl font-extrabold">
             facebook
           </h1>
@@ -98,51 +116,60 @@ const SignUp = () => {
             Facebook helps you connect and share with people.
           </p>
         </div>
-        <div className="login w-full sm:w-1/2 bg-white p-4 rounded-lg shadow-md">
-          <form onSubmit={handleFormSubmit}>
+        <div className="login w-full sm:w-3/4 bg-white p-4 sm:p-10 rounded-lg shadow-md">
+          <form onSubmit={formik.handleSubmit}>
             <div className="flex">
-              <input
+              <FormInput
+                as="normal"
                 type="text"
                 className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-                placeholder="First Name"
+                id="firstName"
                 name="firstName"
-                value={formData.firstName}
-                onChange={handleFormDataChange}
+                formik={formik}
+                placeholder="First Name"
               />
-              <input
+              <FormInput
+                as="normal"
                 type="text"
-                className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-                placeholder="Last Name"
+                className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+                id="lastName"
                 name="lastName"
-                value={formData.lastName}
-                onChange={handleFormDataChange}
+                formik={formik}
+                placeholder="Last Name"
               />
             </div>
-            <input
+            <FormInput
+              as="normal"
               type="text"
-              className="focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-              placeholder="Your Email"
+              className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              id="email"
               name="email"
-              value={formData.email}
-              onChange={handleFormDataChange}
+              formik={formik}
+              placeholder="Email"
             />
-            {/* <PasswordField<SignUpFormDataType>
-              formData={formData}
+            <FormInput
+              as="password"
+              type="password"
+              className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              id="password"
               name="password"
-              placeholder="Choose a Password"
-              handleFormDataChange={handleFormDataChange}
+              formik={formik}
+              placeholder="Password"
             />
-            <PasswordField<SignUpFormDataType>
-              formData={formData}
+            <FormInput
+              as="password"
+              type="password"
+              className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              id="confirmPassword"
               name="confirmPassword"
+              formik={formik}
               placeholder="Repeat Password"
-              handleFormDataChange={handleFormDataChange}
-            /> */}
+            />
             <button
               type="submit"
               className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
             >
-              {isLoading && (
+              {formik.isSubmitting && (
                 <Loader type="Oval" height={20} width={20} color="#fff" />
               )}
               &nbsp; Sign up

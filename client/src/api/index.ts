@@ -39,7 +39,7 @@ export const signIn = (email: string, password: string) =>
  * @return {[Promise<AxiosResponse<any>>]} Returns a promise of the type AxiosResponse<any>
  */
 export const signUp = (signUpData: SignUpDataType) =>
-  API.post("/users/signup", { ...signUpData });
+  API.post("/auth/signup", { ...signUpData });
 
 /**
  * @description Function making a POST API call to sign up the user using Google OAuth.
