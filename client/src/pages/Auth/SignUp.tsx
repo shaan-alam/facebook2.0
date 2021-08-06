@@ -22,15 +22,13 @@ const SignUp = () => {
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema: yup.object({
-      firstName: yup.string().trim().required("First name is required!"),
-      lastName: yup.string().trim().required("Last name is required!"),
+      fullName: yup.string().trim().required("Full name is required!"),
       email: yup
         .string()
         .email("You must provide a valid email!")
@@ -118,26 +116,15 @@ const SignUp = () => {
         </div>
         <div className="login w-full sm:w-3/4 bg-white p-4 sm:p-10 rounded-lg shadow-md">
           <form onSubmit={formik.handleSubmit}>
-            <div className="flex">
-              <FormInput
-                as="normal"
-                type="text"
-                className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-                id="firstName"
-                name="firstName"
-                formik={formik}
-                placeholder="First Name"
-              />
-              <FormInput
-                as="normal"
-                type="text"
-                className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-                id="lastName"
-                name="lastName"
-                formik={formik}
-                placeholder="Last Name"
-              />
-            </div>
+            <FormInput
+              as="normal"
+              type="text"
+              className="mr-3 focus:ring-2 focus:ring-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
+              id="fullName"
+              name="fullName"
+              formik={formik}
+              placeholder="Full Name"
+            />
             <FormInput
               as="normal"
               type="text"

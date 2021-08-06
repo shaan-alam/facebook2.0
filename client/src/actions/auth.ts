@@ -53,11 +53,9 @@ export const signIn: SignInType =
 export const signUp: SignUpType =
   (formData, successRedirect) => async (dispatch: Function) => {
     try {
-      const { firstName, lastName, email, password, confirmPassword } =
-        formData;
+      const { fullName, email, password, confirmPassword } = formData;
       const result = await api.signUp({
-        firstName,
-        lastName,
+        fullName,
         email,
         password,
         confirmPassword,

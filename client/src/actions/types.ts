@@ -23,7 +23,13 @@ export type SignInType = (
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
 export type SignUpType = (
-  formData: SignUpFormDataType,
+  formData: {
+    fullName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  },
+
   successRedirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
