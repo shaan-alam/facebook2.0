@@ -126,7 +126,7 @@ const SignUp = () => {
               value={formData.email}
               onChange={handleFormDataChange}
             />
-            <PasswordField<SignUpFormDataType>
+            {/* <PasswordField<SignUpFormDataType>
               formData={formData}
               name="password"
               placeholder="Choose a Password"
@@ -137,7 +137,7 @@ const SignUp = () => {
               name="confirmPassword"
               placeholder="Repeat Password"
               handleFormDataChange={handleFormDataChange}
-            />
+            /> */}
             <button
               type="submit"
               className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"

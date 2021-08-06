@@ -75,7 +75,7 @@ const SetupProfile = () => {
             disabled={true}
             className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
           />
-          <PasswordField
+          {/* <PasswordField
             formData={formData}
             name="password"
             placeholder="Choose a Password"
@@ -86,7 +86,7 @@ const SetupProfile = () => {
             name="confirmPassword"
             placeholder="Repeat Password"
             handleFormDataChange={handleFormDataChange}
-          />
+          /> */}
           <button
             type="submit"
             className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"

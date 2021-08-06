@@ -12,13 +12,37 @@ import { clearError } from "../../actions/error";
 import PasswordField from "../../components/PasswordField";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const error = useSelector((state: RootState) => state.error);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // Formik data here
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: yup.object({
+      email: yup
+        .string()
+        .email("You must provide valid email")
+        .required("Email is required!"),
+      password: yup.string().trim().required("Password is required!"),
+    }),
+    onSubmit: (values, { setSubmitting }) => {
+      setSubmitting(true);
+
+      // Redirect to the Feed
+      const successRedirect = () => history.push("/");
+
+      const { email, password } = formik.values;
+
+      dispatch(signIn({ email, password }, successRedirect));
+    },
+  });
 
   useEffect(() => {
     // Redirect to home if the user is already logged in
@@ -28,43 +52,6 @@ const SignIn = () => {
       history.push("/");
     }
   }, []);
-
-  useEffect(() => {
-    // Show error if error exists for this component in the redux store.
-    const showError = () => {
-      toast.error(error.message, {
-        transition: Flip,
-      });
-    };
-
-    if (error.ON === SIGN_IN && error.message) {
-      showError();
-      setIsLoading(false);
-      dispatch(clearError());
-    }
-  }, [error]);
-
-  // Form state data
-  const [formData, setFormData] = useState<SignInFormDataType>({
-    email: "",
-    password: "",
-  });
-
-  // Mutate state on form input change
-  const handleFormDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
-  };
-
-  // On form submit, dispatch a signin event
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setIsLoading(true);
-
-    const successRedirect = () => history.push("/");
-
-    dispatch(signIn(formData, successRedirect));
-  };
 
   // Google login success handler, to dispatch signInWithGoogle Action
   const onGoogleSuccess = async (res: any) => {
@@ -97,26 +84,33 @@ const SignIn = () => {
           </p>
         </div>
         <div className="login w-full sm:w-1/2 bg-white p-4 rounded-lg shadow-md">
-          <form onSubmit={handleFormSubmit}>
+          <form onSubmit={formik.handleSubmit}>
+            {formik.touched.email && formik.errors.email && (
+              <div className="text-red-500 font-semibold text-center py-2">
+                {formik.errors.email}
+              </div>
+            )}
             <input
               type="text"
               className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
               placeholder="Your Email"
-              name="email"
-              value={formData.email}
-              onChange={handleFormDataChange}
+              id="email"
+              {...formik.getFieldProps("email")}
             />
-            <PasswordField<SignInFormDataType>
-              formData={formData}
+            {formik.touched.password && formik.errors.password && (
+              <div className="text-red-500 font-semibold text-center py-2">
+                {formik.errors.password}
+              </div>
+            )}
+            <PasswordField
               placeholder="Your Password"
-              name="password"
-              handleFormDataChange={handleFormDataChange}
+              properties={{ ...formik.getFieldProps("password") }}
             />
             <button
               type="submit"
               className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
             >
-              {isLoading && (
+              {formik.isSubmitting && (
                 <Loader type="Oval" height={20} width={20} color="#fff" />
               )}
               &nbsp; Login
