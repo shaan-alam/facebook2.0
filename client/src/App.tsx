@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
-import PostContainer from "./pages/Feed";
+import Feed from "./pages/Feed";
 
 import { useDispatch } from "react-redux";
 import FormModal from "./components/FormModal";
@@ -33,7 +33,7 @@ const App = (): JSX.Element => {
         <Navbar setIsOpen={setIsOpen} />
         <Switch>
           <PrivateRoute path="/" exact>
-            <PostContainer setIsOpen={setIsOpen} setCurrentID={setCurrentID} />
+            <Feed setIsOpen={setIsOpen} setCurrentID={setCurrentID} />
           </PrivateRoute>
           <Route path="/auth/signin">
             <SignIn />

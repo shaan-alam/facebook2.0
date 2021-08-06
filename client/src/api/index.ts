@@ -31,7 +31,7 @@ export const getUser = (email: string) => API.get(`/users/${email}`);
  * @return {[Promise<AxiosResponse<any>>]} Returns a promise of the type AxiosResponse<any>
  */
 export const signIn = (email: string, password: string) =>
-  API.post("/users/signin", { email, password });
+  API.post("/auth/signin", { email, password });
 
 /**
  * @description Function making an API call to sign in the user

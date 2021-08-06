@@ -16,7 +16,6 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("profile") || "{}")
   );
-  
 
   const history = useHistory();
   const location = useLocation();
@@ -32,7 +31,7 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
     history.push("/auth/signin");
   };
 
-  if (!user.tokenId) return null;
+  // if (!user.tokenId) return null;
 
   return (
     <nav className="border-b-2 border-gray-50">
@@ -51,11 +50,11 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
           <BellIcon className="h-9 w-9 mr-4 text-gray-400 cursor-pointer p-2 hover:bg-blue-50 rounded-full" />
           <Menu as="div" className="relative inline-block">
             <Menu.Button className="hover:bg-blue-50 p-2 rounded-lg flex items-center outline-none">
-              <img
+              {/* <img
                 src={user.profileObj.imageUrl}
                 alt="Shaan Alam"
                 className="sm:mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
-              />
+              /> */}
               <p className="hidden sm:block">Shaan Alam</p>
               <ChevronDownIcon className="w-6 sm:ml-4" />
             </Menu.Button>

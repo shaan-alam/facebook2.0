@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { SignInFormDataType } from "./types";
 import { useSelector, useDispatch } from "react-redux";
 import { signIn, signInWithGoogle } from "../../actions/auth";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../reducers/index";
 import GoogleLogin from "react-google-login";
-import { SIGN_IN } from "../../constants";
+import { ERROR, SIGN_IN } from "../../constants";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
-import PasswordField from "../../components/PasswordField";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import FormInput from "../../components/FormInput";
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const error = useSelector((state: RootState) => state.error);
 
-  // Formik data here
+  // Formik configuration
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -38,7 +38,7 @@ const SignIn = () => {
       // Redirect to the Feed
       const successRedirect = () => history.push("/");
 
-      const { email, password } = formik.values;
+      const { email, password } = values;
 
       dispatch(signIn({ email, password }, successRedirect));
     },
@@ -52,6 +52,21 @@ const SignIn = () => {
       history.push("/");
     }
   }, []);
+
+  useEffect(() => {
+    // Show error if error exists for this component in the redux store.
+    const showError = () => {
+      toast.error(error.message, {
+        transition: Flip,
+      });
+    };
+
+    if (error.ON === SIGN_IN && error.message) {
+      showError();
+      formik.setSubmitting(false);
+      dispatch(clearError());
+    }
+  }, [error]);
 
   // Google login success handler, to dispatch signInWithGoogle Action
   const onGoogleSuccess = async (res: any) => {
@@ -67,8 +82,8 @@ const SignIn = () => {
   const onGoogleFailure = () => {
     // Dispatch an error action on Sign in component
     dispatch({
-      type: "ERROR",
-      payload: { ON: "SIGN_IN", message: "Something went wrong!" },
+      type: ERROR,
+      payload: { ON: SIGN_IN, message: "Something went wrong!" },
     });
   };
 
@@ -85,26 +100,23 @@ const SignIn = () => {
         </div>
         <div className="login w-full sm:w-3/4 bg-white p-4 sm:p-10 rounded-lg shadow-md">
           <form onSubmit={formik.handleSubmit}>
-            {formik.touched.email && formik.errors.email && (
-              <div className="text-red-500 font-semibold text-center py-2">
-                {formik.errors.email}
-              </div>
-            )}
-            <input
-              type="text"
-              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-5 w-full rounded-lg px-4 py-3 outline-none"
+            <FormInput
+              as="normal"
+              type="email"
               placeholder="Your Email"
               id="email"
-              {...formik.getFieldProps("email")}
+              name="email"
+              formik={formik}
+              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-5 w-full rounded-lg px-4 py-3 outline-none"
             />
-            {formik.touched.password && formik.errors.password && (
-              <div className="text-red-500 font-semibold text-center py-2">
-                {formik.errors.password}
-              </div>
-            )}
-            <PasswordField
+            <FormInput
+              as="password"
+              type="psasword"
               placeholder="Your Password"
-              properties={{ ...formik.getFieldProps("password") }}
+              id="password"
+              name="password"
+              formik={formik}
+              className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-5 w-full rounded-lg px-4 py-3 outline-none"
             />
             <button
               type="submit"
