@@ -9,10 +9,7 @@ import { LogoutIcon } from "@heroicons/react/solid";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
 
-// Interfaces and types
-import { NavbarProps } from "./types";
-
-const Navbar = ({ setIsOpen }: NavbarProps) => {
+const Navbar = () => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("profile") || "{}")
   );
@@ -27,11 +24,11 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
 
   const handleLogout = () => {
     dispatch(logout());
-    setUser("");
+    setUser({});
     history.push("/auth/signin");
   };
 
-  // if (!user.tokenId) return null;
+  if (!user.token) return null;
 
   return (
     <nav className="border-b-2 border-gray-50">
@@ -50,12 +47,12 @@ const Navbar = ({ setIsOpen }: NavbarProps) => {
           <BellIcon className="h-9 w-9 mr-4 text-gray-400 cursor-pointer p-2 hover:bg-blue-50 rounded-full" />
           <Menu as="div" className="relative inline-block">
             <Menu.Button className="hover:bg-blue-50 p-2 rounded-lg flex items-center outline-none">
-              {/* <img
-                src={user.profileObj.imageUrl}
-                alt="Shaan Alam"
+              <img
+                src={user.user.avatar || ""}
+                alt={user.user.fullName}
                 className="sm:mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
-              /> */}
-              <p className="hidden sm:block">Shaan Alam</p>
+              />
+              <p className="hidden sm:block">{user.user.fullName}</p>
               <ChevronDownIcon className="w-6 sm:ml-4" />
             </Menu.Button>
             <Transition

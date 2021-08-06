@@ -3,7 +3,6 @@ import Navbar from "./components/Navbar";
 import Feed from "./pages/Feed";
 
 import { useDispatch } from "react-redux";
-import FormModal from "./components/FormModal";
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
@@ -17,7 +16,6 @@ import { AUTH } from "./constants";
 
 const App = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentID, setCurrentID] = useState<string>("");
 
   const dispatch = useDispatch();
 
@@ -30,10 +28,10 @@ const App = (): JSX.Element => {
   return (
     <>
       <BrowserRouter>
-        <Navbar setIsOpen={setIsOpen} />
+        <Navbar />
         <Switch>
           <PrivateRoute path="/" exact>
-            <Feed setIsOpen={setIsOpen} setCurrentID={setCurrentID} />
+            <Feed />
           </PrivateRoute>
           <Route path="/auth/signin">
             <SignIn />
@@ -46,15 +44,6 @@ const App = (): JSX.Element => {
           </Route>
         </Switch>
       </BrowserRouter>
-
-      {isOpen && (
-        <FormModal
-          isOpen={isOpen}
-          setOpen={setIsOpen}
-          currentID={currentID}
-          setCurrentID={setCurrentID}
-        />
-      )}
     </>
   );
 };

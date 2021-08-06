@@ -4,13 +4,13 @@ import { useDispatch } from "react-redux";
 import { deletePost } from "../../../actions/posts";
 
 // Interfaces and Types
-import { PostProps, PostType } from "./types";
+import { PostType } from "./types";
 import { likePost } from "../../../actions/posts";
 import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/solid";
 
 // { post, setIsOpen, setCurrentID }: PostProps
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post }: { post: PostType }) => {
   const [isLoaded, setLoaded] = useState<boolean>(false);
   const dispatch = useDispatch();
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
@@ -55,15 +55,15 @@ const Post = ({ post }: PostProps) => {
       <div className="flex items-center bg-white">
         <img
           src="https://avatars.githubusercontent.com/u/48273777?v=4"
-          alt="Shaan Alam"
+          alt={post?.author?.fullName}
           className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
         />
-        <p className="text-fb font-semibold">Shaan Alam</p>
+        <p className="text-fb font-semibold">{post?.author?.fullName}</p>
       </div>
       <div className="post">
         <img
-          src={post?.imgURL}
-          alt={post?.title}
+          src={post?.imageURL}
+          alt={post?.caption}
           className="my-3 w-full rounded-lg"
         />
         <div className="post-actions flex ">

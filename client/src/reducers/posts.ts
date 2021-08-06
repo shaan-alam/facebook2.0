@@ -7,13 +7,12 @@ import {
 
 export type Post = {
   _id: string;
-  title: string;
-  likes: string[];
-  description: string;
-  imgURL: string;
-  creator: string;
-  createdAt: Date;
-  tags: string[];
+  caption: string;
+  imageURL: string;
+  author: {
+    _id: string;
+    fullName: string;
+  };
 };
 
 export type PostReducer = Post[];

@@ -14,7 +14,7 @@ import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/solid";
 import NewPost from "../../components/NewPost";
 import ProfileSuggestion from "../../components/ProfileSuggestion";
 
-const Feed = ({ setIsOpen, setCurrentID }: PostContainerProps) => {
+const Feed = () => {
   const posts = useSelector((state: RootState) => state.posts);
   const dispatch = useDispatch();
 
