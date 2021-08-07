@@ -1,9 +1,7 @@
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 
-// Interfaces and Types
 import { PostType } from "./types";
-import { likePost } from "../../../actions/posts";
 import PostActions from "./PostActions";
 import TextTruncate from "react-text-truncate";
 import User from "../../../assets/images/user.svg";
@@ -11,19 +9,22 @@ import Skeleton from "react-loading-skeleton";
 import { useEffect } from "react";
 
 const Post = ({ post }: { post: PostType }) => {
-  const [isTruncated, setTruncated] = useState<boolean>(true);
-  const [isLoaded, setLoaded] = useState<boolean>(false);
+  const [isTruncated, setTruncated] = useState<boolean>(true); // To determine whether to show full post caption or truncted text caption
+  const [isLoaded, setLoaded] = useState<boolean>(false); // To determine if the image is completely loaded!
+
   const dispatch = useDispatch();
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
 
+  // CommentBox Ref to focus on the comment Box when clicked on the comment icon
   const commentBox = useRef<HTMLInputElement>(null);
+
+  // postImageRef to determine when the image is loaded and to show skeleton component on the basis of that!
   const postImageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const img = postImageRef.current;
     if (img && img.complete) {
       setLoaded(true);
-      console.log("loaded");
     }
   }, []);
 
@@ -38,9 +39,7 @@ const Post = ({ post }: { post: PostType }) => {
         <p className="text-fb font-semibold">{post?.author?.fullName}</p>
       </div>
       <div className="post">
-        {!isLoaded && (
-          <Skeleton height={400} width="200" style={{ background: "red" }} />
-        )}
+        {!isLoaded && <Skeleton height={400} width="200" />}
         <img
           ref={postImageRef}
           src={post?.imageURL}
@@ -49,11 +48,7 @@ const Post = ({ post }: { post: PostType }) => {
           onLoad={() => setLoaded(true)}
         />
         <div className="post-actions">
-          <PostActions
-            commentBox={commentBox}
-            likes={post?.likes?.likes}
-            profile={profile}
-          />
+          <PostActions commentBox={commentBox} post={post} profile={profile} />
         </div>
         <div className="caption px-4 mt-4">
           {isTruncated ? (
