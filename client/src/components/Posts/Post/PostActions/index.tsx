@@ -1,46 +1,47 @@
 import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/outline";
-import {
-  ChatAltIcon as ChatAltIconSolid,
-  ThumbUpIcon as ThumbUpIconSolid,
-} from "@heroicons/react/solid";
+import { ThumbUpIcon as ThumbUpIconSolid } from "@heroicons/react/solid";
+import { useMutation } from "react-query";
+import { likePost } from "../../../../api";
+import { PostType } from "../types";
 
 const PostActions = ({
   commentBox,
-  likes,
+  post,
   profile,
 }: {
   commentBox: React.RefObject<HTMLInputElement>;
-  likes: Array<{ _id: string; fullName: string }>;
+  post: PostType;
   profile: any;
 }) => {
+  const { likes } = post?.likes;
+
+  // Mutation for liking the post
+  const mutation = useMutation((userID: string) =>
+    likePost(post?._id, profile.user._id)
+  );
+
+  // To determine if the current logged in user has liked the post
   const didCurrentUserLike = likes?.filter(
     ({ _id }: { _id: string }) => _id === profile.user._id
   );
 
+  // To determing how the like button will be displayed in the UI,
+  // depending upon if the user has liked the post or not.
   const LikeComponent = () => {
-    if (likes?.length === 1) {
-      return (
-        <ThumbUpIconSolid className="w-14 mb-2 text-red-600 cursor-pointer px-4 py-2 rounded-lg" />
-      );
-    } else if (didCurrentUserLike !== null && likes?.length > 2) {
-      return (
-        <ThumbUpIconSolid className="w-14 mb-2 text-red-600 cursor-pointer px-4 py-2 rounded-lg" />
-      );
-    } else if (didCurrentUserLike !== null && likes?.length > 2) {
-      return (
-        <ThumbUpIconSolid className="w-14 mb-2 text-red-600 cursor-pointer px-4 py-2 rounded-lg" />
-      );
-    } else {
-      return (
-        <ThumbUpIcon className="w-14 mb-2 text-gray-600  cursor-pointer px-4 py-2 hover:bg-red-100 rounded-lg" />
-      );
-    }
-  };
-
+    return didCurrentUserLike.length !== 0 ? (
+      <ThumbUpIconSolid className="w-14 mb-2 text-red-600 cursor-pointer px-4 py-2 rounded-lg" />
+      ) : (
+        <ThumbUpIcon className="w-14 mb-2 text-gray-600 cursor-pointer px-4 py-2 rounded-lg" />
+        );
+      };
+      
+  // To determing how the like button text will be displayed in the UI,
+  // depending upon if the user has liked the post or not.
+  // For example - 1 Like, 3 Likes, or You and {X} others like this.
   const computeLikeText = () => {
     let content = "";
-    if (likes?.length === 1) {
-      content = "1 Like";
+    if (likes?.length === 1 && didCurrentUserLike !== null) {
+      content = "You Like this";
     } else if (didCurrentUserLike !== null && likes?.length > 2) {
       content = `You and ${likes?.length - 1} others like this`;
     } else {
@@ -53,7 +54,10 @@ const PostActions = ({
   return (
     <>
       <div className="post-actions flex">
-        <LikeComponent />
+        <a href="#!" onClick={() => mutation.mutate(profile._id)}>
+          <LikeComponent />
+        </a>
+
         <ChatAltIcon
           className="w-14 mb-2 text-gray-600  cursor-pointer px-4 py-2 rounded-lg"
           onClick={() => commentBox?.current?.focus()}
