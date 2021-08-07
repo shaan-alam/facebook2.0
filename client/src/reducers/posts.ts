@@ -13,6 +13,12 @@ export type Post = {
     _id: string;
     fullName: string;
   };
+  likes: {
+    likes: Array<{
+      _id: string;
+      fullName: string;
+    }>;
+  };
 };
 
 export type PostReducer = Post[];

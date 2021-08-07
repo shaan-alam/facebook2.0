@@ -15,40 +15,48 @@ const Post = ({ post }: { post: PostType }) => {
   const dispatch = useDispatch();
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
 
-  // const handleShowModal = () => {
-  //   setIsOpen(true);
-  //   setCurrentID(post._id);
-  // };
+  const LikeComponent = () => {
+    let content = "";
+    const didCurrentUserLike = post.likes.likes.filter(
+      ({ fullName }: { fullName: string }) => fullName === profile.user.fullName
+    );
 
-  // const LikeComponent = () => {
-  //   let content = "";
+    console.log(didCurrentUserLike !== null);
+    if (post.likes.likes.length === 1) {
+      console.log(1)
+      return (
+        <span className="flex items-center text-gray-400 font-semibold mr-6">
+          <ThumbUpIcon className="w-14 text-red-300 cursor-pointer px-4 py-2 hover:bg-red-300 rounded-lg" />
+          &nbsp; 1 Like
+        </span>
+      );
+    } else if (didCurrentUserLike !== null && post.likes.likes.length > 2) {
+      console.log(2)
+      return (
+        <span className="flex items-center text-red-600 font-semibold mr-6">
+          <ThumbUpIcon className="w-14 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
+          &nbsp; You and {post.likes.likes.length - 1} others like this
+        </span>
+      );
+    } else if (didCurrentUserLike !== null && post.likes.likes.length > 2) {
+      console.log(3)
+      return (
+        <span className="flex items-center text-red-600 font-semibold mr-6">
+          <ThumbUpIcon className="w-14 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
+          &nbsp; {post.likes.likes.length} like this
+        </span>
+      );
+    } else {
+      return (
+        <span className="flex items-center text-gray-400 font-semibold mr-6">
+          <ThumbUpIcon className="w-14 text-red-300 hover:text-white cursor-pointer px-4 py-2 hover:bg-red-300 rounded-lg" />
+          &nbsp; {post.likes.likes.length} Likes
+        </span>
+      );
+    }
 
-  //   if (post.likes.length === 1) {
-  //     content = "1 Like";
-  //   } else if (
-  //     post.likes.length > 2 &&
-  //     post.likes.includes(profile.profileObj._id)
-  //   ) {
-  //     content = `You and ${post.likes.length - 1} others like this`;
-  //   } else {
-  //     content = `${post.likes.length} likes`;
-  //   }
-
-  //   return (
-  //     <Button
-  //       color={post.likes.includes(profile.profileObj._id) ? "red" : "grey"}
-  //       content="Like"
-  //       icon="heart"
-  //       label={{
-  //         basic: true,
-  //         color: post.likes.includes(profile.profileObj._id) ? "red" : "grey",
-  //         pointing: "left",
-  //         content,
-  //       }}
-  //       onClick={() => dispatch(likePost(post._id))}
-  //     />
-  //   );
-  // };
+    return <div></div>;
+  };
 
   return (
     <div className="post my-8">
@@ -67,7 +75,7 @@ const Post = ({ post }: { post: PostType }) => {
           className="my-3 w-full rounded-lg"
         />
         <div className="post-actions flex ">
-          <ThumbUpIcon className="w-14 text-gray-400 cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-lg" />
+          <LikeComponent />
           <ChatAltIcon className="w-14 text-gray-400 cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-lg" />
         </div>
       </div>

@@ -6,6 +6,12 @@ export type PostType = {
     _id: string;
     fullName: string;
   };
+  likes: {
+    likes: Array<{
+      _id: string;
+      fullName: string;
+    }>;
+  };
 };
 
 export type PostProps = {
