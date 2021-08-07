@@ -6,6 +6,9 @@ import { PostType } from "./types";
 import { likePost } from "../../../actions/posts";
 import PostActions from "./PostActions";
 import TextTruncate from "react-text-truncate";
+import User from "../../../assets/images/user.svg";
+import Skeleton from "react-loading-skeleton";
+import { useEffect } from "react";
 
 const Post = ({ post }: { post: PostType }) => {
   const [isTruncated, setTruncated] = useState<boolean>(true);
@@ -14,22 +17,36 @@ const Post = ({ post }: { post: PostType }) => {
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
 
   const commentBox = useRef<HTMLInputElement>(null);
+  const postImageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const img = postImageRef.current;
+    if (img && img.complete) {
+      setLoaded(true);
+      console.log("loaded");
+    }
+  }, []);
 
   return (
-    <div className="post my-8">
+    <div className="post my-14">
       <div className="flex items-center bg-white">
         <img
-          src="https://avatars.githubusercontent.com/u/48273777?v=4"
+          src={profile.avatar || User}
           alt={post?.author?.fullName}
           className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
         />
         <p className="text-fb font-semibold">{post?.author?.fullName}</p>
       </div>
       <div className="post">
+        {!isLoaded && (
+          <Skeleton height={400} width="200" style={{ background: "red" }} />
+        )}
         <img
+          ref={postImageRef}
           src={post?.imageURL}
           alt={post?.caption}
           className="my-3 w-full rounded-lg"
+          onLoad={() => setLoaded(true)}
         />
         <div className="post-actions">
           <PostActions
