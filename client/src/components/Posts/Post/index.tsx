@@ -4,14 +4,11 @@ import { useDispatch } from "react-redux";
 // Interfaces and Types
 import { PostType } from "./types";
 import { likePost } from "../../../actions/posts";
-import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/outline";
-import {
-  ChatAltIcon as ChatAltIconSolid,
-  ThumbUpIcon as ThumbUpIconSolid,
-} from "@heroicons/react/solid";
 import PostActions from "./PostActions";
+import TextTruncate from "react-text-truncate";
 
 const Post = ({ post }: { post: PostType }) => {
+  const [isTruncated, setTruncated] = useState<boolean>(true);
   const [isLoaded, setLoaded] = useState<boolean>(false);
   const dispatch = useDispatch();
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
@@ -37,9 +34,40 @@ const Post = ({ post }: { post: PostType }) => {
         <div className="post-actions">
           <PostActions
             commentBox={commentBox}
-            likes={post.likes.likes}
+            likes={post?.likes?.likes}
             profile={profile}
           />
+        </div>
+        <div className="caption px-4 mt-4">
+          {isTruncated ? (
+            <TextTruncate
+              containerClassName="leading-7"
+              line={3}
+              element="span"
+              truncateText="…"
+              text={post?.caption}
+              textTruncateChild={
+                <a
+                  href="#!"
+                  onClick={() => setTruncated(false)}
+                  className="text-fb"
+                >
+                  Show more
+                </a>
+              }
+            />
+          ) : (
+            <>
+              <p className="leading-7">{post?.caption}</p>
+              <a
+                href="#!"
+                onClick={() => setTruncated(true)}
+                className="text-fb"
+              >
+                Show less
+              </a>
+            </>
+          )}
         </div>
         <div className="add-comment ">
           <input
