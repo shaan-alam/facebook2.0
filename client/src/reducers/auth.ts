@@ -3,31 +3,40 @@ import { AUTH, GOOGLE_SIGNIN, GOOGLE_SIGNUP, LOGOUT } from "../constants";
 interface Action {
   type: string;
   payload: {
-    profileObj: { _id: string; name: string; email: string; imageUrl: string };
-    tokenId: string;
+    user: {
+      _id: string;
+      fullName: string;
+      email: string;
+      imageURL: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+    token: string;
   };
 }
 
 interface InitialStateInterface {
   authData: {
-    tokenId: string;
-    profileObj: {
+    token: string;
+    user: {
       _id: string;
-      name: string;
+      fullName: string;
       email: string;
-      imageUrl: string;
+      createdAt: string;
+      updatedAt: string;
     };
   };
 }
 
 const initialState: InitialStateInterface = {
   authData: {
-    tokenId: "",
-    profileObj: {
+    token: "",
+    user: {
       _id: "",
-      name: "",
+      fullName: "",
       email: "",
-      imageUrl: "",
+      createdAt: "",
+      updatedAt: "",
     },
   },
 };
@@ -49,33 +58,15 @@ const auth = (state = initialState, action: Action) => {
       return {
         ...state,
         authData: {
-          tokenId: "",
-          profileObj: {
+          token: "",
+          user: {
             _id: "",
-            name: "",
+            fullName: "",
             email: "",
-            imageUrl: "",
+            createdAt: "",
+            updatedAt: "",
+            imageURL: "",
           },
-        },
-      };
-
-    case GOOGLE_SIGNUP:
-      localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
-
-      return {
-        ...state,
-        authData: {
-          ...action.payload,
-        },
-      };
-
-    case GOOGLE_SIGNIN:
-      localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
-
-      return {
-        ...state,
-        authData: {
-          ...action.payload,
         },
       };
 
