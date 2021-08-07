@@ -6,7 +6,8 @@ import { deletePost } from "../../../actions/posts";
 // Interfaces and Types
 import { PostType } from "./types";
 import { likePost } from "../../../actions/posts";
-import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/solid";
+import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/outline";
+import { ChatAltIcon as ChatAltIconSolid, ThumbUpIcon as ThumbUpIconSolid } from "@heroicons/react/solid";
 
 // { post, setIsOpen, setCurrentID }: PostProps
 
@@ -23,39 +24,47 @@ const Post = ({ post }: { post: PostType }) => {
 
     console.log(didCurrentUserLike !== null);
     if (post.likes.likes.length === 1) {
-      console.log(1)
+      console.log(1);
       return (
-        <span className="flex items-center text-gray-400 font-semibold mr-6">
-          <ThumbUpIcon className="w-14 text-red-300 cursor-pointer px-4 py-2 hover:bg-red-300 rounded-lg" />
+        <span className="flex flex-col items-center text-red-600 font-semibold mr-6">
+          <ThumbUpIconSolid className="w-14 text-red-300 cursor-pointer px-4 py-2 hover:bg-red-300 rounded-lg" />
           &nbsp; 1 Like
         </span>
       );
     } else if (didCurrentUserLike !== null && post.likes.likes.length > 2) {
-      console.log(2)
+      console.log(2);
       return (
-        <span className="flex items-center text-red-600 font-semibold mr-6">
-          <ThumbUpIcon className="w-14 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
+        <span className="flex flex-col items-center text-red-600 font-semibold mr-6">
+          <ThumbUpIconSolid className="w-14 mb-2 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
           &nbsp; You and {post.likes.likes.length - 1} others like this
         </span>
       );
     } else if (didCurrentUserLike !== null && post.likes.likes.length > 2) {
-      console.log(3)
+      console.log(3);
       return (
-        <span className="flex items-center text-red-600 font-semibold mr-6">
-          <ThumbUpIcon className="w-14 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
+        <span className="flex flex-col items-center text-red-600 font-semibold mr-6">
+          <ThumbUpIconSolid className="w-14 mb-2 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
           &nbsp; {post.likes.likes.length} like this
         </span>
       );
     } else {
       return (
-        <span className="flex items-center text-gray-400 font-semibold mr-6">
-          <ThumbUpIcon className="w-14 text-red-300 hover:text-white cursor-pointer px-4 py-2 hover:bg-red-300 rounded-lg" />
+        <span className="flex flex-col text-gray-600 font-semibold mr-6">
+          <ThumbUpIcon className="w-14 mb-2 text-gray-600  cursor-pointer px-4 py-2 hover:bg-red-100 rounded-lg" />
           &nbsp; {post.likes.likes.length} Likes
         </span>
       );
     }
+  };
 
-    return <div></div>;
+  const CommentComponent = () => {
+    return (
+      <>
+        <span className="flex items-start font-semibold mr-6">
+          <ChatAltIcon className="w-14 mb-2 text-gray-600  cursor-pointer px-4 py-2 hover:bg-red-100 rounded-lg" />
+        </span>
+      </>
+    );
   };
 
   return (
@@ -74,9 +83,9 @@ const Post = ({ post }: { post: PostType }) => {
           alt={post?.caption}
           className="my-3 w-full rounded-lg"
         />
-        <div className="post-actions flex ">
+        <div className="post-actions flex">
           <LikeComponent />
-          <ChatAltIcon className="w-14 text-gray-400 cursor-pointer px-4 py-2 hover:bg-blue-100 rounded-lg" />
+          <CommentComponent />
         </div>
       </div>
     </div>
