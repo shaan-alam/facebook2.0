@@ -32,27 +32,26 @@ const SetupProfile = () => {
   }, [error]);
 
   const profile = useSelector(
-    (state: RootState) => state.auth.authData.profileObj
+    (state: RootState) => state.auth.authData.user
   );
 
-  const [formData, setFormData] = useState<FormDataType>({
-    imageUrl: profile?.imageUrl,
-    name: profile?.name,
-    email: profile?.email,
-    password: "",
-    confirmPassword: "",
-  });
+  // const [formData, setFormData] = useState<FormDataType>({
+  //   name: profile?.fullname,
+  //   email: profile?.email,
+  //   password: "",
+  //   confirmPassword: "",
+  // });
 
-  const handleFormDataChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
+  // const handleFormDataChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  //   setFormData({ ...formData, [e.currentTarget.name]: e.currentTarget.value });
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleFormSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-    const successRedirect = () => history.push("/");
+  //   const successRedirect = () => history.push("/");
 
-    dispatch(signUpWithGoogle(formData, successRedirect));
-  };
+  //   dispatch(signUpWithGoogle(formData, successRedirect));
+  // };
 
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-blue-50">
@@ -61,19 +60,19 @@ const SetupProfile = () => {
           One more step to go.
         </h1>
         <h5 className="text-gray-500 mb-4">Help us build your profile!</h5>
-        <form onSubmit={handleFormSubmit}>
-          <input
+        <form>
+          {/* <input
             type="text"
             value={formData.name}
             disabled={true}
             className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-          />
-          <input
+          /> */}
+          {/* <input
             type="email"
             value={formData.email}
             disabled={true}
             className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-3 w-full rounded-lg px-4 py-3 outline-none"
-          />
+          /> */}
           {/* <PasswordField
             formData={formData}
             name="password"

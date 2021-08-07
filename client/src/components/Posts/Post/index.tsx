@@ -30,7 +30,7 @@ const Post = ({ post }: { post: PostType }) => {
 
   return (
     <div className="post my-14">
-      <div className="flex items-center bg-white">
+      <div className="flex items-center bg-white mb-6">
         <img
           src={profile.avatar || User}
           alt={post?.author?.fullName}

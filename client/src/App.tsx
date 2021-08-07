@@ -14,6 +14,11 @@ import SignUp from "./pages/Auth/SignUp";
 import "react-toastify/dist/ReactToastify.css";
 import { AUTH } from "./constants";
 
+import { QueryClientProvider, QueryClient } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
+const queryClient = new QueryClient();
+
 const App = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -27,23 +32,26 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        <Switch>
-          <PrivateRoute path="/" exact>
-            <Feed />
-          </PrivateRoute>
-          <Route path="/auth/signin">
-            <SignIn />
-          </Route>
-          <Route path="/auth/signup">
-            <SignUp />
-          </Route>
-          <Route path="/auth/setup-profile">
-            <SetupProfile />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Navbar />
+          <Switch>
+            <PrivateRoute path="/" exact>
+              <Feed />
+            </PrivateRoute>
+            <Route path="/auth/signin">
+              <SignIn />
+            </Route>
+            <Route path="/auth/signup">
+              <SignUp />
+            </Route>
+            <Route path="/auth/setup-profile">
+              <SetupProfile />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </>
   );
 };
