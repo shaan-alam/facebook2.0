@@ -83,7 +83,7 @@ export const getPosts = async (req: Request, res: Response) => {
 
     const result = await PostLikes.populate(posts, {
       path: "likes.likes",
-      select: "fullName",
+      select: "fullName _id",
     });
 
     res.json(result);
