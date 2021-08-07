@@ -91,4 +91,5 @@ export const editPost = (id: string, newPost: EditPost) =>
  * @param {[String]} id ID of the post to be liked
  * @return {[Promise<AxiosResponse<any>>]} Returns a promise of AxiosResponse<any>
  */
-export const likePost = (id: string) => API.patch(`/posts/likePost/${id}`);
+export const likePost = (id: string, userID: string) => 
+  API.patch(`/posts/${id}/likePost`, { userID });
