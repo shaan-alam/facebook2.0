@@ -1,20 +1,21 @@
-import { useState } from "react";
-import { Card, Button, Placeholder, Image, Icon } from "semantic-ui-react";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { deletePost } from "../../../actions/posts";
 
 // Interfaces and Types
 import { PostType } from "./types";
 import { likePost } from "../../../actions/posts";
 import { ChatAltIcon, ThumbUpIcon } from "@heroicons/react/outline";
-import { ChatAltIcon as ChatAltIconSolid, ThumbUpIcon as ThumbUpIconSolid } from "@heroicons/react/solid";
-
-// { post, setIsOpen, setCurrentID }: PostProps
+import {
+  ChatAltIcon as ChatAltIconSolid,
+  ThumbUpIcon as ThumbUpIconSolid,
+} from "@heroicons/react/solid";
 
 const Post = ({ post }: { post: PostType }) => {
   const [isLoaded, setLoaded] = useState<boolean>(false);
   const dispatch = useDispatch();
   const profile = JSON.parse(localStorage.getItem("profile") || "{}");
+
+  const commentBox = useRef<HTMLInputElement>(null);
 
   const LikeComponent = () => {
     let content = "";
@@ -28,15 +29,15 @@ const Post = ({ post }: { post: PostType }) => {
       return (
         <span className="flex flex-col items-center text-red-600 font-semibold mr-6">
           <ThumbUpIconSolid className="w-14 text-red-300 cursor-pointer px-4 py-2 hover:bg-red-300 rounded-lg" />
-          &nbsp; 1 Like
+          1 Like
         </span>
       );
     } else if (didCurrentUserLike !== null && post.likes.likes.length > 2) {
       console.log(2);
       return (
-        <span className="flex flex-col items-center text-red-600 font-semibold mr-6">
+        <span className="flex flex-col  text-red-600 font-semibold mr-6">
           <ThumbUpIconSolid className="w-14 mb-2 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
-          &nbsp; You and {post.likes.likes.length - 1} others like this
+          You and {post.likes.likes.length - 1} others like this
         </span>
       );
     } else if (didCurrentUserLike !== null && post.likes.likes.length > 2) {
@@ -44,7 +45,7 @@ const Post = ({ post }: { post: PostType }) => {
       return (
         <span className="flex flex-col items-center text-red-600 font-semibold mr-6">
           <ThumbUpIconSolid className="w-14 mb-2 text-white cursor-pointer px-4 py-2 bg-red-600 rounded-lg" />
-          &nbsp; {post.likes.likes.length} like this
+          {post.likes.likes.length} like this
         </span>
       );
     } else {
@@ -61,7 +62,10 @@ const Post = ({ post }: { post: PostType }) => {
     return (
       <>
         <span className="flex items-start font-semibold mr-6">
-          <ChatAltIcon className="w-14 mb-2 text-gray-600  cursor-pointer px-4 py-2 hover:bg-red-100 rounded-lg" />
+          <ChatAltIcon
+            className="w-14 mb-2 text-gray-600  cursor-pointer px-4 py-2 hover:bg-red-100 rounded-lg"
+            onClick={() => commentBox?.current?.focus()}
+          />
         </span>
       </>
     );
@@ -86,6 +90,14 @@ const Post = ({ post }: { post: PostType }) => {
         <div className="post-actions flex">
           <LikeComponent />
           <CommentComponent />
+        </div>
+        <div className="add-comment ">
+          <input
+            ref={commentBox}
+            type="text"
+            className="w-full p-2 outline-none mt-6 border-b-2 focus:bg-gray-100 rounded-lg"
+            placeholder="Comment..."
+          />
         </div>
       </div>
     </div>
