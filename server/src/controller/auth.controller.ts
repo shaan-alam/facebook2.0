@@ -4,6 +4,11 @@ import { signToken } from "../service/jwt.service";
 import { omit } from "lodash";
 import logger from "../logger";
 
+/**
+ * @description Sign Up controller to create a new user and save it in the database
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
 export const signUp = async (req: Request, res: Response) => {
   if (res.locals.user) {
     return res
@@ -26,6 +31,11 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @description Sign In controller to login the user
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
 export const signIn = async (req: Request, res: Response) => {
   if (!res.locals.user) {
     return res.status(404).json({ message: "No user with that email!" });
@@ -48,5 +58,49 @@ export const signIn = async (req: Request, res: Response) => {
   } catch (err) {
     logger.error(err);
     res.json({ message: err.message });
+  }
+};
+
+/**
+ * @description To get the user from the database along with token.
+ * @param req Express Request Object.
+ * @param res Express Response Object
+ */
+export const getUserFromDB = async (req: Request, res: Response) => {
+  if (res.locals.user) {
+    const token = await signToken(res.locals.user._id);
+    return res.json({ user: res.locals.user, token });
+  } else {
+    return res.status(404).json({ message: "No user found with that email" });
+  }
+};
+
+/**
+ * @description Google Authentication controller to signin/signup.
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
+export const googleAuthentication = async (req: Request, res: Response) => {
+  const { fullName, email, password, confirmPassword } = req.body;
+
+  if (res.locals.user) {
+    return res
+      .status(400)
+      .json({ message: "A user already exists with that email!" });
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: "The two password do not match! " });
+  }
+
+  try {
+    const newUser = await new User({ fullName, email, password });
+    await newUser.save();
+
+    const token = await signToken(newUser._id); // Sign a new JWT Token
+    res.json({ user: omit(newUser.toJSON(), "password"), token });
+  } catch (err) {
+    logger.error(err);
+    res.status(400).json({ message: "Something went wrong!" });
   }
 };
