@@ -1,7 +1,7 @@
 // AUTH related constants
 export const AUTH = "AUTH";
-export const GOOGLE_SIGNIN = "GOOGLE_SIGNIN";
-export const GOOGLE_SIGNUP = "GOOGLE_SIGNUP";
+export const GOOGLE_AUTH_SUCCESS = "GOOGLE_AUTH_SUCCESS";
+export const GOOGLE_AUTH_FAILURE = "GOOGLE_AUTH_FAILURE";
 export const LOGOUT = "LOGOUT";
 
 // Post related constants
@@ -16,7 +16,7 @@ export const SIGN_IN = "SIGN_IN";
 export const SIGN_UP = "SIGN_UP";
 export const SETUP_PROFILE = "SETUP_PROFILE";
 export const CLEAR_ERROR = "CLEAR_ERROR";
-export const POST_CONTAINER = "POST_CONTAINER"
+export const POST_CONTAINER = "POST_CONTAINER";
 
 // URLs
 export const BASE_URL = "http://localhost:5000";
