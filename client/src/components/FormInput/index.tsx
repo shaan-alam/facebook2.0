@@ -10,14 +10,16 @@ const FormInput = ({
   name,
   formik,
   as,
+  disabled,
 }: {
   type: string;
-  className: string;
-  placeholder: string;
   id: string;
   name: string;
   formik: any;
   as: "normal" | "password";
+  placeholder?: string;
+  className?: string;
+  disabled?: boolean;
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
@@ -35,6 +37,7 @@ const FormInput = ({
             id={id}
             className={className}
             placeholder={placeholder}
+            disabled={disabled}
             {...formik.getFieldProps(name)}
           />
           {isPasswordVisible ? (
@@ -65,6 +68,7 @@ const FormInput = ({
         id={id}
         className={className}
         placeholder={placeholder}
+        disabled={disabled}
         {...formik.getFieldProps(name)}
       />
     </div>
