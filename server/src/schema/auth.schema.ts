@@ -7,6 +7,14 @@ export const createUserSchema = yup.object({
 });
 
 export const loginSchema = yup.object({
-  email: yup.string().email().required(),
+  email: yup.string().trim().email().required(),
   password: yup.string().required(),
 });
+
+
+export const googleAuthSchema = yup.object({
+  fullName: yup.string().trim().required(),
+  email: yup.string().trim().email().required(),
+  password: yup.string().trim().required(),
+  confirmPassword: yup.string().trim().required()
+})
