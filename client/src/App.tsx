@@ -5,7 +5,7 @@ import Feed from "./pages/Feed";
 import { useDispatch } from "react-redux";
 
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 import SetupProfile from "./pages/Auth/SetupProfile";
 import SignIn from "./pages/Auth/SignIn";
