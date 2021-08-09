@@ -71,7 +71,7 @@ export const getUserFromDB = async (req: Request, res: Response) => {
     const token = await signToken(res.locals.user._id);
     return res.json({ user: res.locals.user, token });
   } else {
-    return res.status(404).json({ message: "No user found with that email" });
+    return res.json({ message: "No user found with that email" });
   }
 };
 
@@ -81,7 +81,7 @@ export const getUserFromDB = async (req: Request, res: Response) => {
  * @param res Express Response Object
  */
 export const googleAuthentication = async (req: Request, res: Response) => {
-  const { fullName, email, password, confirmPassword } = req.body;
+  const { avatar, fullName, email, password, confirmPassword } = req.body;
 
   if (res.locals.user) {
     return res
@@ -94,7 +94,7 @@ export const googleAuthentication = async (req: Request, res: Response) => {
   }
 
   try {
-    const newUser = await new User({ fullName, email, password });
+    const newUser = await new User({ avatar, fullName, email, password });
     await newUser.save();
 
     const token = await signToken(newUser._id); // Sign a new JWT Token
