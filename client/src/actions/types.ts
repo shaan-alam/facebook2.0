@@ -10,13 +10,6 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface GoogleSignUpFormDataInterface {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
 export type SignInType = (
   formData: SignInFormDataType,
   successRedirect: () => void
@@ -33,15 +26,15 @@ export type SignUpType = (
   successRedirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
-export type SignUpWithGoogleType = (
-  formData: GoogleSignUpFormDataInterface,
-  successRedirect: () => void
-) => (dispatch: Dispatch<any>) => Promise<void>;
-
-export type SignInWithGoogleType = (
-  email: string,
-  imageUrl: string,
-  successRedirect: () => void
+export type GoogleAuthenticationType = (
+  formData: {
+    fullName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    avatar: string;
+  },
+  redirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
 export type Post = {

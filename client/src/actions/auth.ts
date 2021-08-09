@@ -1,18 +1,16 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import {
   AuthResponse,
   SignInType,
   SignUpType,
-  SignUpWithGoogleType,
-  SignInWithGoogleType,
+  GoogleAuthenticationType,
 } from "./types";
 import {
   AUTH,
   ERROR,
-  GOOGLE_SIGNIN,
-  GOOGLE_SIGNUP,
+  GOOGLE_AUTH_FAILURE,
+  GOOGLE_AUTH_SUCCESS,
   LOGOUT,
-  SETUP_PROFILE,
   SIGN_IN,
   SIGN_UP,
 } from "../constants";
@@ -76,62 +74,20 @@ export const signUp: SignUpType =
     }
   };
 
-/**
- * @description Action creator for signing up with Google Login.
- * @param formData is an object containing name, email, password, confirmPassword of the user trying to sign in.
- * @param successRedirect is a function to to redirect the user to the PostContainer component if the sign up is sucessful!
- * @return {[Promise<void>]}
- */
-export const signUpWithGoogle: SignUpWithGoogleType =
-  (formData, successRedirect) => async (dispatch) => {
+export const googleAuthentication: GoogleAuthenticationType =
+  (formData, redirect) => async (dispatch: Function) => {
     try {
-      const result = await api.signUpWithGoogle(formData);
+      const result = await api.googleAuthentication(formData);
 
-      // Result here will be an object containing user profile object and the token
-      dispatch({
-        type: GOOGLE_SIGNUP,
-        payload: {
-          profileObj: { ...result.data.user },
-          tokenId: result.data.token,
-        },
-      });
+      const { user, token } = result.data;
+      dispatch({ type: GOOGLE_AUTH_SUCCESS, payload: { user, token } });
 
-      // Redirecting to the PostContainer component
-      successRedirect();
+      redirect(); // Redirect to the Feed Component after Authentication was successfull!
     } catch (err) {
+      dispatch({ type: GOOGLE_AUTH_FAILURE });
       dispatch({
         type: ERROR,
-        payload: { ON: SETUP_PROFILE, message: err.response.data.message },
-      });
-    }
-  };
-
-/**
- * @description Action creator for signing in with Google Login.
- * @param email is the email of the user returned from Google API.
- * @param successRedirect is a function to to redirect the user to the PostContainer component if the sign up is sucessful!
- * @return {[Promise<void>]}
- */
-export const signInWithGoogle: SignInWithGoogleType =
-  (email, imageUrl, successRedirect) => async (dispatch) => {
-    try {
-      const result = await api.signInWithGoogle(email);
-
-      // Result here will be an object containing user profile object and the token
-      dispatch({
-        type: GOOGLE_SIGNIN,
-        payload: {
-          profileObj: { ...result.data.user, imageUrl },
-          tokenId: result.data.token,
-        },
-      });
-
-      // Redirecting to the PostContainer component
-      successRedirect();
-    } catch (err) {
-      dispatch({
-        type: ERROR,
-        payload: { ON: SIGN_IN, message: err.response.data.message },
+        payload: { ON: SIGN_UP, message: err.response.data.message },
       });
     }
   };
