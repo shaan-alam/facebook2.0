@@ -5,6 +5,7 @@ export interface UserDocument extends mongoose.Document {
   fullName: string;
   email: string;
   password: string;
+  avatar: string;
   comparePassword: (c: string) => Promise<boolean>
 }
 
@@ -23,6 +24,10 @@ const UserSchema = new mongoose.Schema(
       min: 6,
       required: true,
     },
+    avatar: {
+      type: String,
+      default: ''
+    }
   },
   { timestamps: true }
 );
