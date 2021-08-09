@@ -3,15 +3,14 @@ import * as api from "../../api";
 import { useDispatch } from "react-redux";
 import { AUTH } from "../../constants";
 import { useHistory } from "react-router-dom";
+import { ToastContainer, toast, Flip } from "react-toastify";
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const onGoogleSuccess = async (res: any) => {
-    const {
-      profileObj: { email, name, imageUrl },
-    } = res;
+    const { email, name, imageUrl } = res?.profileObj;
 
     try {
       const { data } = await api.getUserFromDB(email);
@@ -34,11 +33,17 @@ const GoogleAuth = () => {
         });
       }
     } catch (err) {
-      console.log(err);
+      toast.error(err.message, {
+        transition: Flip,
+      });
     }
   };
 
-  const onGoogleFailure = () => {};
+  const onGoogleFailure = (err: any) => {
+    toast.error(err, {
+      transition: Flip,
+    });
+  };
 
   return (
     <div className="text-center">
@@ -49,6 +54,7 @@ const GoogleAuth = () => {
         onSuccess={onGoogleSuccess}
         onFailure={onGoogleFailure}
       />
+      <ToastContainer />
     </div>
   );
 };
