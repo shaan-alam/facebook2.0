@@ -27,7 +27,9 @@ const App = (): JSX.Element => {
   useEffect(() => {
     const profile = JSON.parse(localStorage.getItem("profile") || "{}");
 
-    dispatch({ type: AUTH, payload: profile });
+    if (profile.user) {
+      dispatch({ type: AUTH, payload: profile });
+    }
   }, []);
 
   return (
