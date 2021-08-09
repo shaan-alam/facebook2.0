@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { PostType } from "./types";
 import PostActions from "./PostActions";
 import TextTruncate from "react-text-truncate";
-import User from "../../../assets/images/user.svg";
+import User from "../../../assets/svg/user.svg";
 import Skeleton from "react-loading-skeleton";
 import { useEffect } from "react";
 
