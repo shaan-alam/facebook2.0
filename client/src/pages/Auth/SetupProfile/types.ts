@@ -1,7 +1,7 @@
-export interface FormDataType {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  imageUrl: string
+export interface RouteState {
+  state: {
+    name: string;
+    email: string;
+    imageUrl: string;
+  };
 }

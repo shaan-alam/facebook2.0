@@ -1,4 +1,9 @@
-import { AUTH, GOOGLE_SIGNIN, GOOGLE_SIGNUP, LOGOUT } from "../constants";
+import {
+  AUTH,
+  GOOGLE_AUTH_SUCCESS,
+  GOOGLE_AUTH_FAILURE,
+  LOGOUT,
+} from "../constants";
 
 interface Action {
   type: string;
@@ -44,6 +49,7 @@ const initialState: InitialStateInterface = {
 const auth = (state = initialState, action: Action) => {
   switch (action.type) {
     case AUTH:
+    case GOOGLE_AUTH_SUCCESS:
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
 
       return {
@@ -54,6 +60,7 @@ const auth = (state = initialState, action: Action) => {
       };
 
     case LOGOUT:
+    case GOOGLE_AUTH_FAILURE:
       localStorage.clear();
       return {
         ...state,

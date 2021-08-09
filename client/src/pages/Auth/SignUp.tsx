@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { SignUpFormDataType } from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../../actions/auth";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../reducers/index";
-import GoogleLogin from "react-google-login";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
-import { AUTH, ERROR, SIGN_UP } from "../../constants";
-import Loader from "react-loader-spinner";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { SIGN_UP } from "../../constants";
+import Loader from "../../assets/svg/loader.svg";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput";
+import GoogleAuth from "../../components/GoogleAuth";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -72,27 +70,6 @@ const SignUp = () => {
     }
   }, [error]);
 
-  const onGoogleSuccess = async (res: any) => {
-    const {
-      profileObj: { name, email, imageUrl },
-    } = res;
-
-    dispatch({
-      type: AUTH,
-      payload: { profileObj: { name, email, imageUrl } },
-    });
-
-    history.push("/auth/setup-profile");
-  };
-
-  const onGoogleFailure = () => {
-    // Dispatch an error action on Sign in component
-    dispatch({
-      type: ERROR,
-      payload: { ON: SIGN_UP, message: "Something went wrong!" },
-    });
-  };
-
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-blue-50">
       <div className="p-6 rounded-lg flex sm:flex-row flex-col sm:w-full md:w-3/4">
@@ -146,9 +123,7 @@ const SignUp = () => {
               type="submit"
               className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
             >
-              {formik.isSubmitting && (
-                <Loader type="Oval" height={20} width={20} color="#fff" />
-              )}
+              {formik.isSubmitting && <img src={Loader} />}
               &nbsp; Sign up
             </button>
             <div className="text-center mt-3">
@@ -157,15 +132,7 @@ const SignUp = () => {
               </Link>
             </div>
             <div className="h-1 w-full my-4 bg-gray-200"></div>
-            <div className="text-center">
-              <GoogleLogin
-                theme="dark"
-                buttonText="Sign up with Google"
-                clientId={`${process.env.REACT_APP_CLIENT_ID}`}
-                onSuccess={onGoogleSuccess}
-                onFailure={onGoogleFailure}
-              />
-            </div>
+            <GoogleAuth />
           </form>
         </div>
       </div>
