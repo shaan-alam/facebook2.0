@@ -8,7 +8,7 @@ import { UserIcon } from "@heroicons/react/solid";
 import { LogoutIcon } from "@heroicons/react/solid";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
-import User from "../../assets/images/user.svg";
+import User from "../../assets/svg/user.svg";
 
 const Navbar = () => {
   const [user, setUser] = useState(
