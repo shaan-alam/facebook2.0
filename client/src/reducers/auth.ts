@@ -15,6 +15,7 @@ interface Action {
       imageURL: string;
       createdAt: string;
       updatedAt: string;
+      avatar: string;
     };
     token: string;
   };
@@ -29,6 +30,7 @@ interface InitialStateInterface {
       email: string;
       createdAt: string;
       updatedAt: string;
+      avatar: string;
     };
   };
 }
@@ -42,6 +44,7 @@ const initialState: InitialStateInterface = {
       email: "",
       createdAt: "",
       updatedAt: "",
+      avatar: "",
     },
   },
 };
@@ -73,6 +76,7 @@ const auth = (state = initialState, action: Action) => {
             createdAt: "",
             updatedAt: "",
             imageURL: "",
+            avatar: "",
           },
         },
       };
