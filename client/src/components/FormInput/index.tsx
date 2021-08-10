@@ -12,11 +12,11 @@ const FormInput = ({
   as,
   disabled,
 }: {
-  type: string;
   id: string;
   name: string;
   formik: any;
-  as: "normal" | "password";
+  as: "normal" | "password" | "textarea";
+  type?: string;
   placeholder?: string;
   className?: string;
   disabled?: boolean;
@@ -53,6 +53,16 @@ const FormInput = ({
           )}
         </div>
       </>
+    );
+  } else if (as === "textarea") {
+    return (
+      <textarea
+        name={name}
+        id={id}
+        className={className}
+        placeholder={placeholder}
+        {...formik.getFieldProps(name)}
+      ></textarea>
     );
   }
 
