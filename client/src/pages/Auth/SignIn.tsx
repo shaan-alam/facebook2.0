@@ -100,8 +100,7 @@ const SignIn = () => {
               type="submit"
               className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
             >
-              {formik.isSubmitting && <img src={Loader} />}
-              &nbsp; Login
+              {formik.isSubmitting ? <img src={Loader} /> : "Login"}
             </button>
             <div className="text-center mt-3">
               <Link to="/auth/signup" className="text-fb">

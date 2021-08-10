@@ -26,7 +26,7 @@ const Feed = () => {
         </div>
         <div className="wall lg:mr-4 w-full md:w-full">
           <NewPost />
-          <div className="posts my-4 bg-white rounded-lg p-4">
+          <div className="posts my-4 rounded-lg">
             <Posts />
           </div>
         </div>
