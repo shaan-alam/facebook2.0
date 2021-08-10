@@ -31,7 +31,7 @@ const Posts = () => {
       )}
       {!isLoading &&
         isSuccess &&
-        data.map((post: PostType) => <Post post={post} />)}
+        data.map((post: PostType) => <Post post={post} key={post?._id} />)}
     </>
   );
 };

@@ -7,34 +7,34 @@ import { PostType } from "../types";
 const PostActions = ({
   commentBox,
   post,
-  profile,
+  user,
 }: {
   commentBox: React.RefObject<HTMLInputElement>;
   post: PostType;
-  profile: any;
+  user: any;
 }) => {
   const { likes } = post?.likes;
 
   // Mutation for liking the post
   const mutation = useMutation((userID: string) =>
-    likePost(post?._id, profile.user._id)
+    likePost(post?._id, user._id)
   );
 
   // To determine if the current logged in user has liked the post
   const didCurrentUserLike = likes?.filter(
-    ({ _id }: { _id: string }) => _id === profile.user._id
+    ({ _id }: { _id: string }) => _id === user._id
   );
 
   // To determing how the like button will be displayed in the UI,
   // depending upon if the user has liked the post or not.
   const LikeComponent = () => {
     return didCurrentUserLike.length !== 0 ? (
-      <ThumbUpIconSolid className="w-14 mb-2 text-red-600 cursor-pointer px-4 py-2 rounded-lg" />
-      ) : (
-        <ThumbUpIcon className="w-14 mb-2 text-gray-600 cursor-pointer px-4 py-2 rounded-lg" />
-        );
-      };
-      
+      <ThumbUpIconSolid className="h-10 w-10 ml-2 mb-2 text-red-600 cursor-pointer p-2 mt-5 rounded-full hover:bg-red-100" />
+    ) : (
+      <ThumbUpIcon className="h-10 w-10 ml-2 mb-2 text-gray-600 cursor-pointer p-2 mt-5 rounded-full hover:bg-red-100" />
+    );
+  };
+
   // To determing how the like button text will be displayed in the UI,
   // depending upon if the user has liked the post or not.
   // For example - 1 Like, 3 Likes, or You and {X} others like this.
@@ -54,17 +54,17 @@ const PostActions = ({
   return (
     <>
       <div className="post-actions flex">
-        <a href="#!" onClick={() => mutation.mutate(profile._id)}>
+        <a href="#!" onClick={() => mutation.mutate(user._id)}>
           <LikeComponent />
         </a>
 
         <ChatAltIcon
-          className="w-14 mb-2 text-gray-600  cursor-pointer px-4 py-2 rounded-lg"
+          className="h-10 w-10 mb-2 ml-2 text-gray-600 mt-5 cursor-pointer p-2  rounded-full hover:bg-blue-200 "
           onClick={() => commentBox?.current?.focus()}
         />
       </div>
       <div
-        className={`post-actions-description-text px-4 ${
+        className={`post-actions-description-text ml-4 ${
           didCurrentUserLike?.length !== 0 ? "text-red-600 font-semibold" : ""
         }`}
       >
