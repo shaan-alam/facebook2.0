@@ -38,18 +38,15 @@ export type GoogleAuthenticationType = (
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
 export type Post = {
-  title: string;
-  description: string;
-  imgURL: string;
-  tags: string[];
+  image: string;
+  caption: string;
 };
 
 // Post related types and interfaces
 export type GetPostType = () => (dispatch: Dispatch<any>) => Promise<void>;
 
 export type CreatePostType = (
-  post: Post,
-  currentUserId: string
+  post: Post
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
 export type DeletePostType = (
@@ -57,10 +54,8 @@ export type DeletePostType = (
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
 export interface NewPost {
-  title: string;
-  description: string;
-  tags: string[];
-  creator: string;
+  image: string;
+  caption: string;
 }
 
 export interface EditPost {
