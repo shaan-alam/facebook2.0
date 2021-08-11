@@ -13,7 +13,7 @@ const FilterCard = ({
 }) => {
   return (
     <li
-      className={`flex cursor-pointer flex-col mr-1 hover:text-black ${
+      className={`flex cursor-pointer flex-col mr-3 hover:text-black ${
         selected ? "text-black" : "text-gray-500"
       }`}
       onClick={() => setSelectedFilter(filter)}
@@ -22,8 +22,8 @@ const FilterCard = ({
       <img
         src={src as string}
         alt={filter.name}
-        style={{ filter: filter.filter }}
-        className="w-48"
+        style={{ filter: filter.filter, maxWidth: "100px" }}
+        className="w-48 object-scale-down"
       />
     </li>
   );
