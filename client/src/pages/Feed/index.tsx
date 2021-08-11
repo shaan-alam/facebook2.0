@@ -19,12 +19,12 @@ const Feed = () => {
   return (
     <div className="bg-gray-100">
       <div className="container mx-auto flex">
-        <div className="hidden md:block md:w-1/4 mr-4 p-4 my-3 bg-white shadow-sm rounded-lg">
+        <div className="hidden md:block md:w-1/2 mr-2 p-4 my-3 bg-white shadow-sm rounded-lg">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatem
           nam sint necessitatibus magnam! Iure dolore voluptatum ex fugiat fugit
           voluptatem.
         </div>
-        <div className="wall lg:mr-4 w-full md:w-full">
+        <div className="wall lg:mr-2 w-full">
           <NewPost />
           <div className="posts my-4 rounded-lg">
             <Posts />
