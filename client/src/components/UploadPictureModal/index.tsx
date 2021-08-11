@@ -1,9 +1,17 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Modal from "../Modal";
 import { PhotographIcon } from "@heroicons/react/solid";
 import { filters } from "../../utils/filters";
 import FilterCard from "../FilterCard";
-import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { useFormik } from "formik";
+import FormInput from "../FormInput";
+import useUser from "../../hooks/useUser";
+import Loader from "../../assets/svg/loader.svg";
+import * as api from "../../api";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+import domToImage from "dom-to-image";
 
 interface Filter {
   name: string;
@@ -16,74 +24,63 @@ const UploadPictureModal = ({
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const imgRef = useRef<any>();
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
-  const [file, setFile] = useState();
-  const [crop, setCrop] = useState<ReactCrop.Crop | undefined>({
-    unit: "%",
-    width: 30,
-    aspect: 16 / 9,
-  });
-  const [formStep, setFormStep] = useState<number>(0);
-  const [previewFile, setPreviewFile] = useState<string | ArrayBuffer | null>();
-  const [selectedFilter, setSelectedFilter] = useState<Filter>(filters[0]);
-  const [completedCrop, setCompletedCrop] = useState<any>(null);
+  const user = useUser();
 
-  const onFileSelect = (e: any) => {
-    setFile(e.target.files[0]);
+  const filterImageRef = useRef<any>();
+  const [image, setImage] = useState<string>();
+  const [cropData, setCropData] = useState("#");
+  const [cropper, setCropper] = useState<any>();
+  const [formStep, setFormStep] = useState<number>(0);
+  const [selectedFilter, setSelectedFilter] = useState<Filter>(filters[0]);
+
+  const formik = useFormik({
+    initialValues: {
+      caption: "",
+    },
+    onSubmit: async (values: any, { setSubmitting }) => {
+      console.log(values);
+      setSubmitting(true);
+
+      try {
+        await api.createPost({
+          image: image as string,
+          caption: values.caption,
+        });
+
+        setSubmitting(false);
+        formik.resetForm();
+        setOpen(false);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
+  const fileSelect = (e: any) => {
+    e.preventDefault();
+
+    let files;
+
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files;
+    } else if (e.target) {
+      files = e.target.files;
+    }
 
     const reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-
-    reader.onloadend = () => {
-      console.log(reader.result);
-      setPreviewFile(reader.result);
-      setFormStep((formStep) => formStep + 1);
+    reader.onload = () => {
+      setImage(reader.result as any);
     };
+
+    setFormStep((formStep) => formStep + 1);
+    reader.readAsDataURL(files[0]);
   };
 
-  const onLoad = useCallback((img) => {
-    imgRef.current = img;
-  }, []);
-
-  React.useEffect(() => {
-    if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
-      return;
-    }
-
-    const image = imgRef.current;
-    const canvas = previewCanvasRef.current;
-    const crop = completedCrop;
-
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    const ctx = canvas.getContext("2d");
-    const pixelRatio = window.devicePixelRatio;
-
-    canvas.width = crop.width * pixelRatio;
-    canvas.height = crop.height * pixelRatio;
-
-    if (ctx !== null) {
-      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-      ctx.imageSmoothingQuality = "high";
-
-      ctx.drawImage(
-        image,
-        crop.x * scaleX,
-        crop.y * scaleY,
-        crop.width * scaleX,
-        crop.height * scaleY,
-        0,
-        0,
-        crop.width,
-        crop.height
-      );
-    }
-  }, [completedCrop]);
   return (
     <Modal isOpen={isOpen} setOpen={setOpen}>
-      <form>
-        {!file && (
+      {/* To Select the image file */}
+      <>
+        {formStep == 0 && (
           <>
             <label
               htmlFor="file"
@@ -98,48 +95,81 @@ const UploadPictureModal = ({
               id="file"
               className="hidden"
               name="file"
-              onChange={onFileSelect}
               accept="image/*"
+              onChange={fileSelect}
             />
           </>
         )}
-        {formStep === 1 && previewFile && (
+
+        {/* To crop the image in 1 / 1 aspect ratio */}
+        {formStep === 1 && image && (
           <div className="my-4">
-            <ReactCrop
-              src={previewFile as string}
-              onImageLoaded={onLoad}
-              crop={crop}
-              onChange={(c: ReactCrop.Crop) => setCrop(c)}
-              onComplete={(c: ReactCrop.Crop) => setCompletedCrop(c)}
-            />
-            <canvas
-              ref={previewCanvasRef}
-              // Rounding is important so the canvas width and height matches/is a multiple for sharpness.
-              style={{
-                width: Math.round(completedCrop?.width ?? 0),
-                height: Math.round(completedCrop?.height ?? 0),
+            <h2 className="text-center font-semibold text-xl mb-4">
+              Crop your Image
+            </h2>
+            <Cropper
+              style={{ height: "400px", width: "100%" }}
+              zoomTo={1}
+              initialAspectRatio={1 / 1}
+              preview=""
+              src={image}
+              viewMode={1}
+              minCropBoxHeight={10}
+              minCropBoxWidth={10}
+              background={false}
+              responsive={true}
+              autoCropArea={1}
+              checkOrientation={false} 
+              onInitialized={(instance) => {
+                setCropper(instance);
               }}
+              guides={true}
+              aspectRatio={1200 / 630}
             />
+
+            <div className="flex mt-4">
+              <button
+                className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold"
+                onClick={() => setFormStep((formStep) => formStep - 1)}
+              >
+                Back
+              </button>
+              <button
+                className="p-2 bg-fb rounded-lg w-full text-white ml-2 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-semibold"
+                onClick={(e: React.SyntheticEvent) => {
+                  e.preventDefault();
+                  if (typeof cropper !== "undefined") {
+                    setCropData(cropper.getCroppedCanvas().toDataURL());
+                  }
+                  setFormStep((formStep) => formStep + 1);
+                }}
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 
-        {formStep === 2 && previewFile && (
+        {/* To apply filter to the cropped image */}
+        {formStep === 2 && cropData && (
           <div className="mt-4">
-            <h4 className="font-semibold mb-4">Preview: </h4>
+            <h4 className="font-semibold mb-4 text-center w-full">Preview: </h4>
             <div
-              style={{ height: "399px", margin: "auto" }}
+              style={{ height: "auto", margin: "auto" }}
               className="flex justify-center items-center"
             >
               <img
-                src={previewFile as string}
+                ref={filterImageRef}
+                src={cropData}
                 style={{ filter: selectedFilter.filter }}
+                className="w-full"
               />
             </div>
             <div className="w-full filters overflow-x-auto mt-2">
-              <ul className="flex w-full h-full">
+              <ul className="flex mt-4">
                 {filters.map((filter: any) => (
                   <FilterCard
-                    src={previewFile}
+                    src={image as string}
                     filter={filter}
                     key={filter.name}
                     setSelectedFilter={setSelectedFilter}
@@ -149,16 +179,81 @@ const UploadPictureModal = ({
               </ul>
             </div>
             <div className="flex mt-4">
-              <button className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold">
+              <button
+                className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold"
+                onClick={() => setFormStep((formStep) => formStep - 1)}
+              >
                 Cancel
               </button>
-              <button className="p-2 bg-fb rounded-lg w-full text-white ml-2 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-semibold">
+              <button
+                className="p-2 bg-fb rounded-lg w-full text-white ml-2 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-semibold"
+                onClick={(e: React.SyntheticEvent) => {
+                  e.preventDefault();
+                  domToImage
+                    .toPng(filterImageRef.current, {
+                      quality: 1,
+                    })
+                    .then((dataUrl: string) => {
+                      setImage(dataUrl);
+                      setFormStep((formStep) => formStep + 1);
+                    });
+                }}
+              >
                 Next
               </button>
             </div>
           </div>
         )}
-      </form>
+        {/* To type the caption and submit the form... */}
+
+        {formStep === 3 && image && (
+          <form onSubmit={formik.handleSubmit}>
+            <div className="flex flex-col md:flex-row md:justify-evenly p-4 items-start">
+              <img
+                src={image as string}
+                alt="Preview File"
+                className="w-full md:w-72 object-cover self-center"
+              />
+              <div className="md:ml-4">
+                <div className="flex items-center mt-4">
+                  <img
+                    src={user?.avatar}
+                    alt={user?.fullName}
+                    className="rounded-full h-7 w-7 mb-2 mr-1"
+                  />
+                  <h1 className="text-fb font-semibold">{user?.fullName}</h1>
+                </div>
+                <FormInput
+                  as="textarea"
+                  cols={60}
+                  rows={4}
+                  name="caption"
+                  id="caption"
+                  placeholder="Caption.."
+                  formik={formik}
+                  className="resize-none p-4 border-2 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
+                />
+              </div>
+            </div>
+            <div className="flex mt-4">
+              <button
+                className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold"
+                onClick={() => setFormStep((formStep) => formStep - 1)}
+              >
+                Back
+              </button>
+              <button
+                disabled={formik.isSubmitting}
+                style={{}}
+                className="flex justify-center p-2 bg-fb rounded-lg w-full text-white ml-2 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-semibold"
+                type="submit"
+              >
+                {formik.isSubmitting ? <img src={Loader} /> : "Post"}
+              </button>
+            </div>
+          </form>
+        )}
+      </>
       <div className="flex"></div>
     </Modal>
   );
