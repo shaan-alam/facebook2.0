@@ -7,11 +7,11 @@ import { RootState } from "../../reducers/index";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
 import { SIGN_UP } from "../../constants";
-import Loader from "../../assets/svg/loader.svg";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput";
 import GoogleAuth from "../../components/GoogleAuth";
+import Button from "../../components/Button";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -119,12 +119,13 @@ const SignUp = () => {
               formik={formik}
               placeholder="Repeat Password"
             />
-            <button
+            <Button
               type="submit"
-              className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
-            >
-              {formik.isSubmitting ? <img src={Loader} /> : "Sign up"}
-            </button>
+              isLoading={formik.isSubmitting}
+              text="Sign up"
+              variant="primary"
+              className="py-2 px-4"
+            />
             <div className="text-center mt-3">
               <Link to="/auth/signin" className="text-fb">
                 Already have an account? Login

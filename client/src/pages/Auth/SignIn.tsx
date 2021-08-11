@@ -7,11 +7,11 @@ import { RootState } from "../../reducers/index";
 import { ERROR, SIGN_IN } from "../../constants";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import { clearError } from "../../actions/error";
-import Loader from "../../assets/svg/loader.svg";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput";
 import GoogleAuth from "../../components/GoogleAuth";
+import Button from "../../components/Button";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -96,12 +96,13 @@ const SignIn = () => {
               formik={formik}
               className="focus:ring-2 focus:ring-bg-blue-400 bg-gray-100 mb-5 w-full rounded-lg px-4 py-3 outline-none"
             />
-            <button
+            <Button
               type="submit"
-              className="flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white py-2 px-4 hover:bg-blue-600"
-            >
-              {formik.isSubmitting ? <img src={Loader} /> : "Login"}
-            </button>
+              isLoading={formik.isSubmitting}
+              text="Login"
+              variant="primary"
+              className="py-2 px-4"
+            />
             <div className="text-center mt-3">
               <Link to="/auth/signup" className="text-fb">
                 New to Facebook? Create an Account
