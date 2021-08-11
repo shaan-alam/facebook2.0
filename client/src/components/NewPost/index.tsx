@@ -4,6 +4,7 @@ import UploadStatusModal from "../UploadStatusModal";
 import User from "../../assets/svg/user.svg";
 import useUser from "../../hooks/useUser";
 import UploadPictureModal from "../UploadPictureModal";
+import Avatar from "../Avatar";
 
 const NewPost = () => {
   const [isStatusModalOpen, setStatusModal] = useState<boolean>(false);
@@ -15,11 +16,7 @@ const NewPost = () => {
     <>
       <div className="bg-white shadow-sm p-4 my-3 rounded-lg w-full mx-auto">
         <div className="flex bg-white items-center">
-          <img
-            src={user?.avatar ? user?.avatar : User}
-            alt={user?.fullName}
-            className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
-          />
+          <Avatar className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700" />
           <p className="text-fb font-semibold">{user.fullName}</p>
         </div>
         <div className="flex items-center">

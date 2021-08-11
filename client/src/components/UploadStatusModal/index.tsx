@@ -1,11 +1,12 @@
 import Modal from "../Modal";
 import useUser from "../../hooks/useUser";
 import { useMutation } from "react-query";
-import Loader from "../../assets/svg/loader.svg";
 import FormInput from "../FormInput";
-import { useFormik, yupToFormErrors } from "formik";
+import { useFormik } from "formik";
 import * as api from "../../api";
 import User from "../../assets/svg/user.svg";
+import Button from "../Button";
+import Avatar from "../Avatar";
 
 const UploadStatusModal = ({
   isOpen,
@@ -45,10 +46,7 @@ const UploadStatusModal = ({
   return (
     <Modal isOpen={isOpen} setOpen={setOpen}>
       <div className="flex items-center">
-        <img
-          src={user?.avatar ? user?.avatar : User}
-          className="h-8 w-8 rounded-full"
-        />
+        <Avatar className="h-8 w-8 rounded-full" />
         <h4 className="ml-3 font-semibold text-fb">{user?.fullName}</h4>
       </div>
       <form onSubmit={formik.handleSubmit}>
@@ -60,16 +58,17 @@ const UploadStatusModal = ({
           className="p-4 border-2 my-3 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
           placeholder={`What's on your mind?, ${user?.fullName}`}
         ></FormInput>
-        <button
+        <Button
+          variant="primary"
+          isLoading={formik.isSubmitting}
+          text="Post"
           disabled={
             isLoading || formik.values.status === "" || !formik.values.status
               ? true
               : false
           }
-          className="flex justify-center items-center disabled:opacity-50 w-full rounded-md bg-fb text-white font-semibold py-2 cursor-pointer hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 focus:outline-none"
-        >
-          {isLoading ? <img src={Loader} /> : "Post"}
-        </button>
+          className="w-full rounded-md py-2 cursor-pointer"
+        />
       </form>
     </Modal>
   );

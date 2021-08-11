@@ -14,7 +14,7 @@ const FilterCard = ({
   return (
     <li
       className={`flex cursor-pointer flex-col mr-3 hover:text-black ${
-        selected ? "text-black" : "text-gray-500"
+        selected ? "text-black font-semibold" : "text-gray-500"
       }`}
       onClick={() => setSelectedFilter(filter)}
     >

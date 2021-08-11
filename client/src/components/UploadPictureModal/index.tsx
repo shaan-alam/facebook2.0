@@ -12,6 +12,8 @@ import * as api from "../../api";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import domToImage from "dom-to-image";
+import Button from "../Button";
+import Avatar from "../Avatar";
 
 interface Filter {
   name: string;
@@ -107,6 +109,9 @@ const UploadPictureModal = ({
             <h2 className="text-center font-semibold text-xl mb-4">
               Crop your Image
             </h2>
+            <div className="my-2 w-full text-center text-gray-500 font-medium">
+              Use mouse wheel to scroll in/out
+            </div>
             <Cropper
               style={{ height: "400px", width: "100%" }}
               zoomTo={1}
@@ -119,7 +124,7 @@ const UploadPictureModal = ({
               background={false}
               responsive={true}
               autoCropArea={1}
-              checkOrientation={false} 
+              checkOrientation={false}
               onInitialized={(instance) => {
                 setCropper(instance);
               }}
@@ -128,14 +133,16 @@ const UploadPictureModal = ({
             />
 
             <div className="flex mt-4">
-              <button
-                className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold"
+              <Button
+                text="Back"
+                variant="secondary"
+                className="p-2 w-full font-semibold"
                 onClick={() => setFormStep((formStep) => formStep - 1)}
-              >
-                Back
-              </button>
-              <button
-                className="p-2 bg-fb rounded-lg w-full text-white ml-2 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-semibold"
+              />
+              <Button
+                variant="primary"
+                text="Next"
+                className="p-2 ml-2 font-semibold"
                 onClick={(e: React.SyntheticEvent) => {
                   e.preventDefault();
                   if (typeof cropper !== "undefined") {
@@ -143,9 +150,7 @@ const UploadPictureModal = ({
                   }
                   setFormStep((formStep) => formStep + 1);
                 }}
-              >
-                Next
-              </button>
+              />
             </div>
           </div>
         )}
@@ -166,7 +171,7 @@ const UploadPictureModal = ({
               />
             </div>
             <div className="w-full filters overflow-x-auto mt-2">
-              <ul className="flex mt-4">
+              <ul className="flex mt-4 py-4">
                 {filters.map((filter: any) => (
                   <FilterCard
                     src={image as string}
@@ -179,14 +184,16 @@ const UploadPictureModal = ({
               </ul>
             </div>
             <div className="flex mt-4">
-              <button
+              <Button
+                text="Back"
+                variant="secondary"
                 className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold"
                 onClick={() => setFormStep((formStep) => formStep - 1)}
-              >
-                Cancel
-              </button>
-              <button
-                className="p-2 bg-fb rounded-lg w-full text-white ml-2 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-semibold"
+              />
+              <Button
+                text="Next"
+                variant="primary"
+                className="p-2 ml-2"
                 onClick={(e: React.SyntheticEvent) => {
                   e.preventDefault();
                   domToImage
@@ -198,9 +205,7 @@ const UploadPictureModal = ({
                       setFormStep((formStep) => formStep + 1);
                     });
                 }}
-              >
-                Next
-              </button>
+              />
             </div>
           </div>
         )}
@@ -216,11 +221,7 @@ const UploadPictureModal = ({
               />
               <div className="md:ml-4">
                 <div className="flex items-center mt-4">
-                  <img
-                    src={user?.avatar}
-                    alt={user?.fullName}
-                    className="rounded-full h-7 w-7 mb-2 mr-1"
-                  />
+                  <Avatar className="rounded-full h-7 w-7 mb-2 mr-1" />
                   <h1 className="text-fb font-semibold">{user?.fullName}</h1>
                 </div>
                 <FormInput
@@ -236,20 +237,20 @@ const UploadPictureModal = ({
               </div>
             </div>
             <div className="flex mt-4">
-              <button
-                className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold"
+              <Button
+                variant="secondary"
+                text="Back"
+                className="p-2"
                 onClick={() => setFormStep((formStep) => formStep - 1)}
-              >
-                Back
-              </button>
-              <button
+              />
+              <Button
+                text="Post"
+                isLoading={formik.isSubmitting}
+                variant="primary"
                 disabled={formik.isSubmitting}
-                style={{}}
-                className="flex justify-center p-2 bg-fb rounded-lg w-full text-white ml-2 hover:bg-blue-600 focus:ring-4 focus:ring-blue-400 font-semibold"
+                className="ml-2"
                 type="submit"
-              >
-                {formik.isSubmitting ? <img src={Loader} /> : "Post"}
-              </button>
+              />
             </div>
           </form>
         )}
