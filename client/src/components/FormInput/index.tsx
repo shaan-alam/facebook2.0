@@ -11,11 +11,15 @@ const FormInput = ({
   formik,
   as,
   disabled,
+  cols,
+  rows,
 }: {
   id: string;
   name: string;
   formik: any;
   as: "normal" | "password" | "textarea";
+  cols?: number;
+  rows?: number;
   type?: string;
   placeholder?: string;
   className?: string;
@@ -56,13 +60,22 @@ const FormInput = ({
     );
   } else if (as === "textarea") {
     return (
-      <textarea
-        name={name}
-        id={id}
-        className={className}
-        placeholder={placeholder}
-        {...formik.getFieldProps(name)}
-      ></textarea>
+      <>
+        {formik.touched[name] && formik.errors[name] && (
+          <div className="text-red-500 font-semibold text-center py-2">
+            {formik.errors[name]}
+          </div>
+        )}
+        <textarea
+          name={name}
+          cols={cols}
+          rows={rows}
+          id={id}
+          className={className}
+          placeholder={placeholder}
+          {...formik.getFieldProps(name)}
+        ></textarea>
+      </>
     );
   }
 
