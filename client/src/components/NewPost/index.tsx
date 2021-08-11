@@ -13,7 +13,7 @@ const NewPost = () => {
 
   return (
     <>
-      <div className="bg-white shadow-sm p-4 my-3 rounded-lg">
+      <div className="bg-white shadow-sm p-4 my-3 rounded-lg w-full mx-auto">
         <div className="flex bg-white items-center">
           <img
             src={user?.avatar ? user?.avatar : User}
