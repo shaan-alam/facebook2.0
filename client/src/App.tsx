@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Feed from "./pages/Feed";
 
@@ -20,7 +20,6 @@ import { ReactQueryDevtools } from "react-query/devtools";
 const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
