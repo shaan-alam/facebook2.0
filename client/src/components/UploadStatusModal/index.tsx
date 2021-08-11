@@ -3,7 +3,7 @@ import useUser from "../../hooks/useUser";
 import { useMutation } from "react-query";
 import Loader from "../../assets/svg/loader.svg";
 import FormInput from "../FormInput";
-import { useFormik } from "formik";
+import { useFormik, yupToFormErrors } from "formik";
 import * as api from "../../api";
 import User from "../../assets/svg/user.svg";
 
@@ -76,4 +76,3 @@ const UploadStatusModal = ({
 };
 
 export default UploadStatusModal;
-
