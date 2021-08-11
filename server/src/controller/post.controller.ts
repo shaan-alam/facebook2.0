@@ -82,6 +82,7 @@ export const getPosts = async (req: Request, res: Response) => {
         $project: {
           _id: 1,
           imageURL: 1,
+          thumbnail: 1,
           caption: 1,
           createAt: 1,
           "author.fullName": 1,
