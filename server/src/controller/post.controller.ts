@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import logger from "../logger";
 import Post from "../models/post.model";
 import PostLikes from "../models/PostLikes.model";
-import cloudinary from "../utils/cloudinary.util";
+import cloudinary, { formatCloudinaryUrl } from "../utils/cloudinary.util";
 
 /**
  * @description Creates a new Post
@@ -10,21 +10,28 @@ import cloudinary from "../utils/cloudinary.util";
  * @param res Express Response Object
  */
 export const createPost = async (req: Request, res: Response) => {
-  const { imageURL, caption } = req.body;
-  let image;
+  const { image, caption } = req.body;
+  let uploadedImage;
 
   try {
-    if (imageURL) {
-      image = await cloudinary.v2.uploader.upload(imageURL, {
+    if (image) {
+      uploadedImage = await cloudinary.v2.uploader.upload(image, {
         folder: `${process.env.CLOUDINARY_POST_UPLOAD_FOLDER}`,
       });
     }
 
+    const thumbnail_url = formatCloudinaryUrl(
+      uploadedImage?.secure_url as string,
+      { width: 400, height: 400 },
+      true
+    );
+
     // Create a new Post document
     const newPost = await new Post({
-      imageURL: image?.secure_url ? image?.secure_url : "",
+      imageURL: uploadedImage?.secure_url ? uploadedImage?.secure_url : "",
       caption,
       author: res.locals.userId,
+      thumbnailURL: thumbnail_url,
     });
     await newPost.save();
 
@@ -38,7 +45,7 @@ export const createPost = async (req: Request, res: Response) => {
 
     res.json({ post: newPost, newPostLikes });
   } catch (err) {
-    logger.error(err.message);
+    logger.error(err);
     res.status(400).json({ message: err.message });
   }
 };
@@ -52,6 +59,7 @@ export const getPosts = async (req: Request, res: Response) => {
   try {
     // Fetch all the posts along with their author and likes
     const posts = await Post.aggregate([
+      { $sort: { createdAt: -1 } },
       {
         $lookup: {
           from: "users",
@@ -75,7 +83,9 @@ export const getPosts = async (req: Request, res: Response) => {
           _id: 1,
           imageURL: 1,
           caption: 1,
+          createAt: 1,
           "author.fullName": 1,
+          "author.avatar": 1,
           "likes.likes": 1,
         },
       },
@@ -89,7 +99,7 @@ export const getPosts = async (req: Request, res: Response) => {
     res.json(result);
     // const postsWithLikes = await PostLikes.findOne({ post})
   } catch (err) {
-    logger.error(err.message);
+    logger.error(err);
     res.status(404).json({ message: err.message });
   }
 };
