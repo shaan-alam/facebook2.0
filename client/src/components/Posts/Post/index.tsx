@@ -30,24 +30,27 @@ const Post = ({ post }: { post: PostType }) => {
     }
   }, []);
 
+  console.log(post.thumbnailURL);
   return (
-    <div className="post mb-3 bg-white shadow-sm">
+    <div className="post mb-3 bg-white shadow-sm w-full mx-auto">
       <div className="flex items-center bg-white mb-3 p-4">
         <img
-          src={user?.avatar ? user?.avatar : User}
+          src={post?.author?.avatar ? post?.author?.avatar : User}
           alt={post?.author?.fullName}
           className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
         />
         <p className="text-fb font-semibold">{post?.author?.fullName}</p>
       </div>
       <div className="post-image px-4">
-        {!isLoaded && post?.imageURL && <Skeleton height={400} width="200" />}
+        {!isLoaded && post?.thumbnailURL && (
+          <Skeleton height={400} width="200" />
+        )}
         {post?.imageURL !== "" ? (
           <img
             ref={postImageRef}
             src={post?.imageURL}
             alt={post?.caption}
-            className="my-3 w-full rounded-lg"
+            className={`my-3 w-full rounded-lg ${!isLoaded ? "hidden" : ""}`}
             onLoad={() => setLoaded(true)}
           />
         ) : null}

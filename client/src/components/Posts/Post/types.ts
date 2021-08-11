@@ -2,9 +2,10 @@ export type PostType = {
   _id: string;
   caption: string;
   imageURL: string;
+  thumbnailURL: string;
   author: {
-    _id: string;
     fullName: string;
+    avatar: string;
   };
   likes: {
     likes: Array<{
