@@ -8,7 +8,8 @@ import Skeleton from "react-loading-skeleton";
 import { useEffect } from "react";
 import useUser from "../../../hooks/useUser";
 import TextTruncate from "react-truncate";
-import Linkify from "react-linkify";
+import PostStats from "./PostStats";
+import Avatar from "../../Avatar";
 
 const Post = ({ post }: { post: PostType }) => {
   const [isTruncated, setTruncated] = useState<boolean>(true); // To determine whether to show full post caption or truncted text caption
@@ -30,10 +31,9 @@ const Post = ({ post }: { post: PostType }) => {
     }
   }, []);
 
-  console.log(post.thumbnailURL);
   return (
-    <div className="post mb-3 bg-white shadow-sm w-full mx-auto">
-      <div className="flex items-center bg-white mb-3 p-4">
+    <div className="post mb-3 p-4 bg-white shadow-sm w-full mx-auto rounded-lg">
+      <div className="flex items-center bg-white mb-3 pt-4">
         <img
           src={post?.author?.avatar ? post?.author?.avatar : User}
           alt={post?.author?.fullName}
@@ -41,7 +41,7 @@ const Post = ({ post }: { post: PostType }) => {
         />
         <p className="text-fb font-semibold">{post?.author?.fullName}</p>
       </div>
-      <div className="post-image px-4">
+      <div className="post-image">
         {!isLoaded && post?.thumbnailURL && (
           <Skeleton height={400} width="200" />
         )}
@@ -54,44 +54,42 @@ const Post = ({ post }: { post: PostType }) => {
             onLoad={() => setLoaded(true)}
           />
         ) : null}
-        <div className="caption">
-          {isTruncated ? (
-            <TextTruncate
-              lines={3}
-              ellipsis={
-                <a
-                  href="#!"
-                  onClick={() => setTruncated(false)}
-                  className="text-fb"
-                >
-                  ...Show more..
-                </a>
-              }
-            >
-              <p className="leading-7">{post?.caption}</p>
-            </TextTruncate>
-          ) : (
-            <>
-              <p className="leading-7">{post?.caption}</p>
+      </div>
+      <div className="caption mb-4">
+        {isTruncated ? (
+          <TextTruncate
+            lines={3}
+            ellipsis={
               <a
                 href="#!"
-                onClick={() => setTruncated(true)}
+                onClick={() => setTruncated(false)}
                 className="text-fb"
               >
-                Show less
+                ...Show more..
               </a>
-            </>
-          )}
-        </div>
+            }
+          >
+            <p className="leading-7">{post?.caption}</p>
+          </TextTruncate>
+        ) : (
+          <>
+            <p className="leading-7">{post?.caption}</p>
+            <a href="#!" onClick={() => setTruncated(true)} className="text-fb">
+              Show less
+            </a>
+          </>
+        )}
       </div>
-      <div className="post-actions">
+      <PostStats />
+      <div className="post-actions mt-3">
         <PostActions commentBox={commentBox} post={post} user={user} />
       </div>
-      <div className="add-comment ">
+      <div className="add-comment flex items-center">
+        <Avatar className="h-7 w-7 rounded-full mt-3 mr-1" />
         <input
           ref={commentBox}
           type="text"
-          className="w-full p-2 outline-none mt-6 border-t-2 focus:bg-blue-50 bg-gray-50"
+          className="w-full p-2 rounded-full outline-none mt-6 focus:bg-gray-200 bg-gray-100"
           placeholder="Comment..."
         />
       </div>
