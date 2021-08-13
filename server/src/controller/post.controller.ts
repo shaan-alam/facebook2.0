@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import logger from "../logger";
 import Post from "../models/post.model";
-import PostLikes from "../models/PostLikes.model";
+import Reactions from "../models/reactions.model";
 import cloudinary, { formatCloudinaryUrl } from "../utils/cloudinary.util";
 
 /**
@@ -36,9 +36,9 @@ export const createPost = async (req: Request, res: Response) => {
     await newPost.save();
 
     // Create a newPostLikes Document
-    const newPostLikes = await new PostLikes({
+    const newPostLikes = await new Reactions({
       postId: newPost._id,
-      likes: [],
+      reactions: [],
     });
 
     await newPostLikes.save();
@@ -92,7 +92,7 @@ export const getPosts = async (req: Request, res: Response) => {
       },
     ]);
 
-    const result = await PostLikes.populate(posts, {
+    const result = await Reactions.populate(posts, {
       path: "likes.likes",
       select: "fullName _id",
     });
@@ -160,34 +160,52 @@ export const deletePost = async (req: Request, res: Response) => {
  * @param req Express Request Object
  * @param res Express Response Object
  */
-export const likePost = async (req: Request, res: Response) => {
-  const { userID } = req.body;
+export const reactPost = async (req: Request, res: Response) => {
+  const { reaction: userReaction } = req.body;
+
 
   const { _id: postId } = res.locals.post;
 
   try {
-    const postLikes = await PostLikes.findOne({ postId });
-    let updatedPostLikes: any = {};
+    let updatedReactions: any = {};
 
-    if ((postLikes as any).likes.indexOf(userID) >= 0) {
-      updatedPostLikes = await PostLikes.findOneAndUpdate(
+    const existingReactions = await Reactions.findOne({ postId });
+
+    if (
+      existingReactions?.reactions?.filter(
+        (result) => result.by == userReaction.by
+      ).length !== 0
+    ) {
+      updatedReactions = await Reactions.findOneAndUpdate(
         { postId },
-        {
-          $pull: { likes: userID },
-        },
-        { new: true }
+        { $pull: { reactions: { by: userReaction.by } } }
       );
     } else {
-      updatedPostLikes = await PostLikes.findOneAndUpdate(
+      updatedReactions = await Reactions.findOneAndUpdate(
         { postId },
-        {
-          $push: { likes: userID },
-        },
-        { new: true }
+        { $push: { reactions: userReaction } }
       );
     }
 
-    res.json({ updatedPostLikes });
+    // if ((postReactions as any).likes.indexOf(userID) >= 0) {
+    //   updatedReactions = await Reactions.findOneAndUpdate(
+    //     { postId },
+    //     {
+    //       $pull: { likes: userID },
+    //     },
+    //     { new: true }
+    //   );
+    // } else {
+    //   updatedReactions = await Reactions.findOneAndUpdate(
+    //     { postId },
+    //     {
+    //       $push: { likes: userID },
+    //     },
+    //     { new: true }
+    //   );
+    // }
+
+    res.json({ updatedReactions });
   } catch (err) {
     logger.error(err);
     res.status(400).json({ message: err.message });
