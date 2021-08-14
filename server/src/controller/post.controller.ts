@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import logger from "../logger";
 import Post from "../models/post.model";
-import Reactions from "../models/reactions.model";
+import Reactions, { Reaction } from "../models/reactions.model";
 import cloudinary, { formatCloudinaryUrl } from "../utils/cloudinary.util";
 
 /**
@@ -163,49 +163,54 @@ export const deletePost = async (req: Request, res: Response) => {
 export const reactPost = async (req: Request, res: Response) => {
   const { reaction: userReaction } = req.body;
 
-
   const { _id: postId } = res.locals.post;
 
   try {
     let updatedReactions: any = {};
 
-    const existingReactions = await Reactions.findOne({ postId });
+    const reactions = await Reactions.findOne({ postId });
+    const existingReactions = reactions?.reactions?.filter(
+      (result) => result.by == userReaction.by
+    )[0];
 
-    if (
-      existingReactions?.reactions?.filter(
-        (result) => result.by == userReaction.by
-      ).length !== 0
-    ) {
-      updatedReactions = await Reactions.findOneAndUpdate(
-        { postId },
-        { $pull: { reactions: { by: userReaction.by } } }
-      );
+    if (existingReactions) {
+      // If a reaction already exists for the user,
+      // Then check if the reaction emoji is same
+      if (existingReactions.emoji === userReaction.emoji) {
+        // If the previous reaction emoji is same as new one,
+        // then remove the reaction
+        updatedReactions = await Reactions.findOneAndUpdate(
+          { postId },
+          { $pull: { reactions: { _id: existingReactions?._id } } },
+          { new: true }
+        );
+      } else {
+        // If the previous reaction emoji and new reaction emoji are different
+        // then update the reaction emoji to the new one
+        existingReactions.emoji = userReaction.emoji;
+
+        updatedReactions = await Reactions.findOneAndUpdate(
+          { postId },
+          {
+            reactions: (reactions?.reactions as Array<Reaction>).map((reaction) =>
+              reaction._id === existingReactions._id
+                ? existingReactions
+                : reaction
+            ),
+          },
+          { new: true }
+        );
+      }
     } else {
+      // If there are no reaction for the user, then push one to the reactions array
       updatedReactions = await Reactions.findOneAndUpdate(
         { postId },
-        { $push: { reactions: userReaction } }
+        { $push: { reactions: userReaction } },
+        { new: true }
       );
     }
 
-    // if ((postReactions as any).likes.indexOf(userID) >= 0) {
-    //   updatedReactions = await Reactions.findOneAndUpdate(
-    //     { postId },
-    //     {
-    //       $pull: { likes: userID },
-    //     },
-    //     { new: true }
-    //   );
-    // } else {
-    //   updatedReactions = await Reactions.findOneAndUpdate(
-    //     { postId },
-    //     {
-    //       $push: { likes: userID },
-    //     },
-    //     { new: true }
-    //   );
-    // }
-
-    res.json({ updatedReactions });
+    return res.json(updatedReactions);
   } catch (err) {
     logger.error(err);
     res.status(400).json({ message: err.message });

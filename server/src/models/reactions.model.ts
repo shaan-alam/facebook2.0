@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
-type Reaction = {
-  type: string;
+export type Reaction = {
+  _id: string;
+  emoji: string;
   by: string;
-}
+};
 
 interface ReactionDocument extends mongoose.Document {
   postId: typeof mongoose.Schema.Types.ObjectId;
