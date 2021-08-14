@@ -8,6 +8,8 @@ import { ExclamationIcon } from "@heroicons/react/solid";
 const Posts = () => {
   const fetchPosts = async () => {
     const posts = await getPosts();
+    console.log(posts.data);
+
     return posts.data;
   };
 

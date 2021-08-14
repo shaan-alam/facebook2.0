@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "react-query";
-import { likePost } from "../../../../api";
+import { reactPost } from "../../../../api";
 import { PostType } from "../types";
 import { FacebookSelector } from "@charkour/react-reactions";
 import { reactions, Reaction, Reactions } from "./reactions";
@@ -15,23 +15,25 @@ const PostActions = ({
   post: PostType;
   user: any;
 }) => {
-  const { likes } = post?.likes;
+  const { reactions: postReactions } = post?.reactions;
+  const [showReactions, setShowReactions] = useState<boolean>(false); // State for showing the reactions circular box
+  const [reaction, setReaction] = useState<Reaction>(reactions.default);
+  const [currentUserReaction] = useState(
+    postReactions.filter((reaction) => reaction.by._id === user?._id)[0] || null
+  ); // If the currently logged in user reacted for this post, then store his reaction
 
-  const [reaction, setReaction] = useState<Reaction>({
-    name: "Like",
-    icon: "",
-    textColor: "",
-  });
-  const [showReactions, setShowReactions] = useState<boolean>(false);
+  useEffect(() => {
+    if (currentUserReaction !== null) {
+      // If currentUserReaction exists, then set it to reaction state...
+      // We have to use currentUserReaction for storing user's reaction (which comes from the backend)
+      // and reaction state for storing the further reactions!!
+      setReaction({ ...reactions[currentUserReaction.emoji] });
+    }
+  }, [currentUserReaction]);
 
-  // To know whether did current logged in user like this post?
-  const [didCurrentUserLike, setCurrentUserLike] = useState<boolean>(
-    likes?.filter(({ _id }: { _id: string }) => _id === user._id).length !== 0
-  );
-
-  // Mutation for liking the post
-  const mutation = useMutation((userID: string) =>
-    likePost(post?._id, user._id)
+  // Mutation for reacting to the post
+  const mutation = useMutation((reaction: any) => 
+    reactPost(post?._id, { ...reaction })
   );
 
   return (
@@ -54,9 +56,16 @@ const PostActions = ({
               className={`reactions absolute bottom-10 z-10 shadow-xl rounded-full`}
             >
               <FacebookSelector
+                reactions={["love", "haha", "wow", "sad", "angry"]}
                 onSelect={(newReaction: keyof Reactions) => {
-                  console.log(newReaction);
+                  if (
+                    newReaction.toLowerCase() === reaction.name.toLowerCase()
+                  ) {
+                    mutation.mutate({ emoji: reaction.name, by: user?._id });
+                    return setReaction(reactions.default);
+                  }
                   setReaction(reactions[newReaction]);
+                  mutation.mutate({ emoji: newReaction, by: user?._id });
                 }}
               />
             </motion.div>
@@ -65,43 +74,28 @@ const PostActions = ({
             style={{ color: reaction.textColor }}
             className="py-2 w-full font-semibold flex items-center justify-center"
             onClick={(e: React.SyntheticEvent) => {
-              if (reaction.name !== "Like") {
-                setCurrentUserLike(false);
-                return setReaction(reactions.like);
-              }
+              if (reaction.name !== "like" && reaction.name !== "default") {
+                mutation.mutate({ emoji: reaction.name, by: user?._id }); // Remove the already existing reaction emoji!
 
-              setCurrentUserLike(!didCurrentUserLike);
-              setReaction(reactions.like);
+                // Make the reaction icon back to unlike
+                return setReaction(reactions.default);
+              }
+              // Like/Unlike the post
+              mutation.mutate({ emoji: reactions.like.name, by: user?._id });
+              setReaction((reaction) =>
+                reaction.name === "like" ? reactions.default : reactions.like
+              );
             }}
           >
             <div className="w-full flex items-center justify-center text-gray-600">
-              <i
-                style={{
-                  backgroundImage:
-                    reaction.name === "Like"
-                      ? "url(https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/ut5P48U8gch.png)"
-                      : "",
-                  backgroundPosition: didCurrentUserLike
-                    ? "0 -172px"
-                    : "0 -191px",
-                  backgroundSize: "auto",
-                  width: "18px",
-                  height: "18px",
-                  backgroundRepeat: "no-repeat",
-                  display: "inline-block",
-                  filter: didCurrentUserLike
-                    ? "invert(39%) sepia(57%) saturate(200%) saturate(200%) saturate(200%) saturate(200%) saturate(200%) saturate(147.75%) hue-rotate(202deg) brightness(97%) contrast(96%)"
-                    : "",
-                }}
-              ></i>
-              &nbsp;
-              {reaction.name !== "Like" && (
+              {reaction.icon && (
                 <img
                   src={reaction.icon}
                   className="h-6 w-6 mr-1 rounded-full"
                 />
               )}
-              {reaction.name}
+              &nbsp;
+              <p style={{ color: reaction.textColor }}>{reaction.label}</p>
             </div>
           </div>
         </div>
@@ -131,13 +125,3 @@ const PostActions = ({
 
 export default PostActions;
 
-// Liked
-// background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/ut5P48U8gch.png"); background-position: 0px -172px; background-size: auto; width: 18px; height: 18px; background-repeat: no-repeat; display: inline-block;
-
-// comment
-// background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/ut5P48U8gch.png');
-// background-position:0 -153px;
-// background-size:auto;
-// width:18px;height:18px;
-// background-repeat:no-repeat;
-// display:inline-block

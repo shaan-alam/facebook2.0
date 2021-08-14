@@ -7,10 +7,14 @@ export type PostType = {
     fullName: string;
     avatar: string;
   };
-  likes: {
-    likes: Array<{
+  reactions: {
+    reactions: Array<{
       _id: string;
-      fullName: string;
+      emoji: string;
+      by: {
+        _id: string;
+        fullName: string;
+      };
     }>;
   };
 };

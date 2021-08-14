@@ -4,3 +4,8 @@ export interface SignUpDataType {
   password: string;
   confirmPassword: string;
 }
+
+export interface Reaction {
+  emoji: string,
+  by: string 
+}

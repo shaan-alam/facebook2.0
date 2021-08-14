@@ -71,13 +71,13 @@ export const getPosts = async (req: Request, res: Response) => {
       { $unwind: "$author" },
       {
         $lookup: {
-          from: "postlikes",
+          from: "reactions",
           localField: "_id",
           foreignField: "postId",
-          as: "likes",
+          as: "reactions",
         },
       },
-      { $unwind: "$likes" },
+      { $unwind: "$reactions" },
       {
         $project: {
           _id: 1,
@@ -87,17 +87,18 @@ export const getPosts = async (req: Request, res: Response) => {
           createAt: 1,
           "author.fullName": 1,
           "author.avatar": 1,
-          "likes.likes": 1,
+          "reactions.reactions": 1,
         },
       },
     ]);
 
     const result = await Reactions.populate(posts, {
-      path: "likes.likes",
+      path: "reactions.reactions.by",
       select: "fullName _id",
+      model: "User",
     });
 
-    res.json(result);
+    res.json(posts);
     // const postsWithLikes = await PostLikes.findOne({ post})
   } catch (err) {
     logger.error(err);
@@ -163,6 +164,8 @@ export const deletePost = async (req: Request, res: Response) => {
 export const reactPost = async (req: Request, res: Response) => {
   const { reaction: userReaction } = req.body;
 
+  console.log(userReaction);
+
   const { _id: postId } = res.locals.post;
 
   try {
@@ -192,10 +195,11 @@ export const reactPost = async (req: Request, res: Response) => {
         updatedReactions = await Reactions.findOneAndUpdate(
           { postId },
           {
-            reactions: (reactions?.reactions as Array<Reaction>).map((reaction) =>
-              reaction._id === existingReactions._id
-                ? existingReactions
-                : reaction
+            reactions: (reactions?.reactions as Array<Reaction>).map(
+              (reaction) =>
+                reaction._id === existingReactions._id
+                  ? existingReactions
+                  : reaction
             ),
           },
           { new: true }

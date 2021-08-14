@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { EditPost, NewPost } from "../actions/types";
 import { BASE_URL } from "../constants";
-import { SignUpDataType } from "./types";
+import { SignUpDataType, Reaction } from "./types";
 
 const API = axios.create({ baseURL: BASE_URL }); // Creating an Axios Instance for API calls.
 
@@ -15,6 +15,9 @@ API.interceptors.request.use((req: AxiosRequestConfig) => {
 
   return req;
 });
+
+const cancelToken = axios.CancelToken;
+const source = cancelToken.source();
 
 /**
  * @description Get the user from the backend
@@ -87,9 +90,9 @@ export const editPost = (id: string, newPost: EditPost) =>
   API.patch(`/posts/${id}`, newPost);
 
 /**
- * @description Function making a PATCH API call to like a post
+ * @description Function making a PATCH API call to react to a post
  * @param {[String]} id ID of the post to be liked
- * @return {[Promise<AxiosResponse<any>>]} Returns a promise of AxiosResponse<any>
+ * @param {[Reaction]} reaction An object containing user's reaction details for example { emoji: 'haha', by: 'some user ID'}
  */
-export const likePost = (id: string, userID: string) =>
-  API.patch(`/posts/${id}/likePost`, { userID });
+export const reactPost = (id: string, reaction: Reaction) =>
+  API.patch(`/posts/${id}/reactPost`, { reaction, cancelToken: source.token });
