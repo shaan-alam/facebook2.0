@@ -28,9 +28,9 @@ const Modal = ({
   }, []);
 
   return isOpen ? (
-    <div className="modal-backdrop px-5 flex justify-center items-center h-screen w-screen fixed top-0 left-0 right-0 bottom-0 bg-black z-10 bg-opacity-80">
+    <div className="modal-backdrop px-5 flex justify-center items-center h-screen w-screen fixed top-0 left-0 right-0 bottom-0 bg-white z-10 bg-opacity-80">
       <motion.div
-        className="w-full sm:w-3/4 md:w-1/2 bg-white rounded-3xl relative p-12"
+        className="w-full sm:w-3/4 md:w-1/2 bg-white rounded-3xl relative p-12 shadow-2xl border-2"
         initial={{ scale: 0.7, opacity: 1 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 180, duration: 1 }}
