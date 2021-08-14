@@ -14,6 +14,15 @@ import Avatar from "../../Avatar";
 const Post = ({ post }: { post: PostType }) => {
   const [isTruncated, setTruncated] = useState<boolean>(true); // To determine whether to show full post caption or truncted text caption
   const [isLoaded, setLoaded] = useState<boolean>(false); // To determine if the image is completely loaded!
+  const [counters, setCounters] = useState<
+    Array<{ _id: string; emoji: string; by: string }>
+  >(
+    post?.reactions?.reactions.map(({ emoji, by: { _id, fullName } }) => ({
+      _id,
+      emoji,
+      by: fullName,
+    }))
+  );
 
   const dispatch = useDispatch();
   const user = useUser();
@@ -80,9 +89,13 @@ const Post = ({ post }: { post: PostType }) => {
           </>
         )}
       </div>
-      <PostStats />
+      <PostStats counters={counters} />
       <div className="post-actions mt-3">
-        <PostActions commentBox={commentBox} post={post} user={user} />
+        <PostActions
+          commentBox={commentBox}
+          post={post}
+          setCounters={setCounters}
+        />
       </div>
       <div className="add-comment flex items-center">
         <Avatar className="h-7 w-7 rounded-full mt-3 mr-1" />

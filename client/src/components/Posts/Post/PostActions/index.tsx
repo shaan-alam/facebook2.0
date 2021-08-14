@@ -5,16 +5,26 @@ import { PostType } from "../types";
 import { FacebookSelector } from "@charkour/react-reactions";
 import { reactions, Reaction, Reactions } from "./reactions";
 import { motion } from "framer-motion";
+import useUser from "../../../../hooks/useUser";
 
 const PostActions = ({
   commentBox,
   post,
-  user,
+  setCounters,
 }: {
   commentBox: React.RefObject<HTMLInputElement>;
   post: PostType;
-  user: any;
+  setCounters: React.Dispatch<
+    React.SetStateAction<
+      {
+        _id: string;
+        emoji: string;
+        by: string;
+      }[]
+    >
+  >;
 }) => {
+  const user = useUser();
   const { reactions: postReactions } = post?.reactions;
   const [showReactions, setShowReactions] = useState<boolean>(false); // State for showing the reactions circular box
   const [reaction, setReaction] = useState<Reaction>(reactions.default);
@@ -32,7 +42,7 @@ const PostActions = ({
   }, [currentUserReaction]);
 
   // Mutation for reacting to the post
-  const mutation = useMutation((reaction: any) => 
+  const mutation = useMutation((reaction: any) =>
     reactPost(post?._id, { ...reaction })
   );
 
@@ -61,9 +71,28 @@ const PostActions = ({
                   if (
                     newReaction.toLowerCase() === reaction.name.toLowerCase()
                   ) {
+                    // On new reaction, check if new reaction is same as the old one
+                    // if same, then remove the old reaction
                     mutation.mutate({ emoji: reaction.name, by: user?._id });
-                    return setReaction(reactions.default);
+
+                    setCounters((counters) =>
+                      counters.filter((counter) => counter._id !== user?._id)
+                    );
+
+                    return setReaction(reactions.default); // set the default state for reaction
                   }
+
+                  //
+                  setCounters((counters) =>
+                    counters.filter((counter) => counter._id !== user?._id)
+                  );
+
+                  setCounters((counters) => [
+                    ...counters,
+                    { _id: user?._id, emoji: newReaction, by: user?.fullName },
+                  ]);
+
+                  // If the new reaction is different from the old one (or even new), then set the new reaction
                   setReaction(reactions[newReaction]);
                   mutation.mutate({ emoji: newReaction, by: user?._id });
                 }}
@@ -75,16 +104,37 @@ const PostActions = ({
             className="py-2 w-full font-semibold flex items-center justify-center"
             onClick={(e: React.SyntheticEvent) => {
               if (reaction.name !== "like" && reaction.name !== "default") {
-                mutation.mutate({ emoji: reaction.name, by: user?._id }); // Remove the already existing reaction emoji!
+                // If the reaction is something other than like, then
+                // Remove the already existing reaction emoji!
+                mutation.mutate({ emoji: reaction.name, by: user?._id });
+
+                // Also remove the reaction from the reactions counter
+                setCounters((countes) =>
+                  countes.filter((counter) => counter._id !== user?._id)
+                );
 
                 // Make the reaction icon back to unlike
                 return setReaction(reactions.default);
               }
+
               // Like/Unlike the post
+              if (reaction.name === "like") {
+                // If the previous reaction was like, then set reaction to default and remove the reaction from the
+                // reaction counter
+                setCounters((counters) =>
+                  counters.filter((counter) => counter._id !== user?._id)
+                );
+                setReaction(reactions.default);
+              } else {
+                // Else set the reaction to like and also add the like counter in the reactions counter
+                setCounters((counters) => [
+                  ...counters,
+                  { _id: user?._id, emoji: "like", by: user?.fullName },
+                ]);
+                setReaction(reactions.like);
+              }
+
               mutation.mutate({ emoji: reactions.like.name, by: user?._id });
-              setReaction((reaction) =>
-                reaction.name === "like" ? reactions.default : reactions.like
-              );
             }}
           >
             <div className="w-full flex items-center justify-center text-gray-600">
@@ -124,4 +174,3 @@ const PostActions = ({
 };
 
 export default PostActions;
-
