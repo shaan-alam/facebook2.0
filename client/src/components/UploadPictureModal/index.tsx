@@ -33,6 +33,9 @@ const UploadPictureModal = ({
   const [formStep, setFormStep] = useState<number>(0);
   const [selectedFilter, setSelectedFilter] = useState<Filter>(filters[0]);
 
+  const [dragOver, setDragOver] = useState<boolean>(false);
+  const [fileDropError, setFileDropError] = useState<string>("");
+
   const formik = useFormik({
     initialValues: {
       caption: "",
@@ -67,28 +70,63 @@ const UploadPictureModal = ({
       files = e.target.files;
     }
 
+    if (files[0].type.split("/")[0] !== "image") {
+      return setFileDropError("Please provide an image file to upload!");
+    }
+
+    setFileDropError("");
+
     const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
     reader.onload = () => {
       setImage(reader.result as any);
     };
 
     setFormStep((formStep) => formStep + 1);
-    reader.readAsDataURL(files[0]);
+  };
+
+  const onDragOver = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setDragOver(true);
   };
 
   return (
     <Modal isOpen={isOpen} setOpen={setOpen}>
       {/* To Select the image file */}
       <>
+        {fileDropError && (
+          <span className="text-xs text-red-500 font-semibold text-center">
+            {fileDropError}
+          </span>
+        )}
         {formStep == 0 && (
           <>
             <label
+              onDragOver={onDragOver}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.isPropagationStopped();
+
+                setDragOver(false);
+                fileSelect(e);
+              }}
               htmlFor="file"
-              className="h-20 my-7  w-full border-dashed border-4 border-gray-300 rounded-md flex justify-center items-center cursor-pointer hover:border-gray-500 text-gray-400 hover:text-gray-500"
+              className={`h-20 my-7 w-full border-dashed border-4 rounded-md flex justify-center items-center cursor-pointer hover:border-gray-500 text-gray-400 hover:text-gray-500 ${
+                dragOver ? "border-gray-500" : "border-gray-300"
+              }`}
             >
-              <PhotographIcon className="h-10 w-10" />
-              &nbsp;
-              <p className="font-semibold">Drag & Drop or select a file.</p>
+              {dragOver ? (
+                <p className="text-xl font-semibold text-gray-500">
+                  Drop here...
+                </p>
+              ) : (
+                <>
+                  <PhotographIcon className="h-10 w-10" />
+                  &nbsp;
+                  <p className="font-semibold">Drag & Drop or select a file.</p>
+                </>
+              )}
             </label>
             <input
               type="file"
