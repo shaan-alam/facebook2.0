@@ -1,5 +1,5 @@
-import Post from "./Post";
-import { PostType } from "./Post/types";
+import Post from "../Post";
+import { PostType } from "../Post/types";
 import { useQuery } from "react-query";
 import { getPosts } from "../../api/index";
 import Loader from "react-loader-spinner";
