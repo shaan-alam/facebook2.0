@@ -53,9 +53,7 @@ const Post = ({ post }: { post: PostType }) => {
         <p className="text-fb font-semibold">{post?.author?.fullName}</p>
       </div>
       <div className="post-image">
-        {!isLoaded && post?.thumbnailURL && (
-          <Skeleton height={400} width="200" />
-        )}
+        {!isLoaded && <Skeleton height={400} width="200" />}
         {post?.imageURL !== "" ? (
           <img
             ref={postImageRef}

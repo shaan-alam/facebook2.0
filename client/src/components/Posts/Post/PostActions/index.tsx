@@ -1,29 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "react-query";
 import { reactPost } from "../../../../api";
-import { PostType } from "../types";
 import { FacebookSelector } from "@charkour/react-reactions";
-import { reactions, Reaction, Reactions } from "./reactions";
+import { reactions, Reactions } from "./reactions";
 import { motion } from "framer-motion";
 import useUser from "../../../../hooks/useUser";
+import { PostActionsFC, Reaction } from "./types";
 
-const PostActions = ({
-  commentBox,
-  post,
-  setCounters,
-}: {
-  commentBox: React.RefObject<HTMLInputElement>;
-  post: PostType;
-  setCounters: React.Dispatch<
-    React.SetStateAction<
-      {
-        _id: string;
-        emoji: string;
-        by: string;
-      }[]
-    >
-  >;
-}) => {
+const PostActions = ({ commentBox, post, setCounters }: PostActionsFC) => {
   const user = useUser();
   const { reactions: postReactions } = post?.reactions;
   const [showReactions, setShowReactions] = useState<boolean>(false); // State for showing the reactions circular box
@@ -46,6 +30,69 @@ const PostActions = ({
     reactPost(post?._id, { ...reaction })
   );
 
+  const onFaceookSelect = (newReaction: keyof Reactions) => {
+    if (newReaction.toLowerCase() === reaction.name.toLowerCase()) {
+      // On new reaction, check if new reaction is same as the old one
+      // if same, then remove the old reaction
+      mutation.mutate({ emoji: reaction.name, by: user?._id });
+
+      setCounters((counters) =>
+        counters.filter((counter) => counter._id !== user?._id)
+      );
+
+      return setReaction(reactions.default); // set the default state for reaction
+    }
+
+    //
+    setCounters((counters) =>
+      counters.filter((counter) => counter._id !== user?._id)
+    );
+
+    setCounters((counters) => [
+      ...counters,
+      { _id: user?._id, emoji: newReaction, by: user?.fullName },
+    ]);
+
+    // If the new reaction is different from the old one (or even new), then set the new reaction
+    setReaction(reactions[newReaction]);
+    mutation.mutate({ emoji: newReaction, by: user?._id });
+  };
+
+  const handleLike = (e: React.SyntheticEvent) => {
+    if (reaction.name !== "like" && reaction.name !== "default") {
+      // If the reaction is something other than like, then
+      // Remove the already existing reaction emoji!
+      mutation.mutate({ emoji: reaction.name, by: user?._id });
+
+      // Also remove the reaction from the reactions counter
+      setCounters((countes) =>
+        countes.filter((counter) => counter._id !== user?._id)
+      );
+
+      // Make the reaction icon back to unlike
+      return setReaction(reactions.default);
+    }
+
+    // Like/Unlike the post
+    if (reaction.name === "like") {
+      // If the previous reaction was like, then set reaction to default and remove the reaction from the
+      // reaction counter
+      setCounters((counters) =>
+        counters.filter((counter) => counter._id !== user?._id)
+      );
+      setReaction(reactions.default);
+    } else {
+      // Else set the reaction to like and also add the like counter in the reactions counter
+      setCounters((counters) => [
+        ...counters,
+        { _id: user?._id, emoji: "like", by: user?.fullName },
+      ]);
+      setReaction(reactions.like);
+    }
+
+    mutation.mutate({ emoji: reactions.like.name, by: user?._id });
+  };
+
   return (
     <div className="mt-2 flex justify-between px-4 border-b-2 border-t-2 border-gray-300 py-1 relative cursor-pointer">
       <div
@@ -67,75 +114,14 @@ const PostActions = ({
             >
               <FacebookSelector
                 reactions={["love", "haha", "wow", "sad", "angry"]}
-                onSelect={(newReaction: keyof Reactions) => {
-                  if (
-                    newReaction.toLowerCase() === reaction.name.toLowerCase()
-                  ) {
-                    // On new reaction, check if new reaction is same as the old one
-                    // if same, then remove the old reaction
-                    mutation.mutate({ emoji: reaction.name, by: user?._id });
-
-                    setCounters((counters) =>
-                      counters.filter((counter) => counter._id !== user?._id)
-                    );
-
-                    return setReaction(reactions.default); // set the default state for reaction
-                  }
-
-                  //
-                  setCounters((counters) =>
-                    counters.filter((counter) => counter._id !== user?._id)
-                  );
-
-                  setCounters((counters) => [
-                    ...counters,
-                    { _id: user?._id, emoji: newReaction, by: user?.fullName },
-                  ]);
-
-                  // If the new reaction is different from the old one (or even new), then set the new reaction
-                  setReaction(reactions[newReaction]);
-                  mutation.mutate({ emoji: newReaction, by: user?._id });
-                }}
+                onSelect={onFaceookSelect}
               />
             </motion.div>
           )}
           <div
             style={{ color: reaction.textColor }}
             className="py-2 w-full font-semibold flex items-center justify-center"
-            onClick={(e: React.SyntheticEvent) => {
-              if (reaction.name !== "like" && reaction.name !== "default") {
-                // If the reaction is something other than like, then
-                // Remove the already existing reaction emoji!
-                mutation.mutate({ emoji: reaction.name, by: user?._id });
-
-                // Also remove the reaction from the reactions counter
-                setCounters((countes) =>
-                  countes.filter((counter) => counter._id !== user?._id)
-                );
-
-                // Make the reaction icon back to unlike
-                return setReaction(reactions.default);
-              }
-
-              // Like/Unlike the post
-              if (reaction.name === "like") {
-                // If the previous reaction was like, then set reaction to default and remove the reaction from the
-                // reaction counter
-                setCounters((counters) =>
-                  counters.filter((counter) => counter._id !== user?._id)
-                );
-                setReaction(reactions.default);
-              } else {
-                // Else set the reaction to like and also add the like counter in the reactions counter
-                setCounters((counters) => [
-                  ...counters,
-                  { _id: user?._id, emoji: "like", by: user?.fullName },
-                ]);
-                setReaction(reactions.like);
-              }
-
-              mutation.mutate({ emoji: reactions.like.name, by: user?._id });
-            }}
+            onClick={handleLike}
           >
             <div className="w-full flex items-center justify-center text-gray-600">
               {reaction.icon && (

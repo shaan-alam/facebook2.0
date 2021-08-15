@@ -1,9 +1,4 @@
-export interface Reaction {
-  name: string;
-  label: string;
-  icon: string;
-  textColor: string;
-}
+import { Reaction } from "./types";
 
 export type Reactions = Record<string, Reaction>;
 

@@ -4,11 +4,12 @@ interface PostDocument extends mongoose.Document {
   imageURL: string;
   caption: string;
   author: typeof mongoose.Schema.Types.ObjectId;
-  likes: typeof mongoose.Schema.Types.ObjectId[];
+  filter: string
 }
 
 const PostSchema = new mongoose.Schema(
   {
+    filter: String,
     imageURL: {
       type: String,
       default: "",

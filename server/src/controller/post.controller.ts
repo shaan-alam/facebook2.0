@@ -10,7 +10,7 @@ import cloudinary, { formatCloudinaryUrl } from "../utils/cloudinary.util";
  * @param res Express Response Object
  */
 export const createPost = async (req: Request, res: Response) => {
-  const { image, caption } = req.body;
+  const { filter, image, caption } = req.body;
   let uploadedImage;
 
   try {
@@ -25,9 +25,11 @@ export const createPost = async (req: Request, res: Response) => {
       { width: 400, height: 400 },
       true
     );
+    console.log(filter);
 
     // Create a new Post document
     const newPost = await new Post({
+      filter,
       imageURL: uploadedImage?.secure_url ? uploadedImage?.secure_url : "",
       caption,
       author: res.locals.userId,
@@ -84,10 +86,11 @@ export const getPosts = async (req: Request, res: Response) => {
           imageURL: 1,
           thumbnail: 1,
           caption: 1,
-          createAt: 1,
+          createdAt: 1,
           "author.fullName": 1,
           "author.avatar": 1,
           "reactions.reactions": 1,
+          filter: 1,
         },
       },
     ]);
