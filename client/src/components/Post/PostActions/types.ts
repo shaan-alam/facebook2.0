@@ -13,7 +13,7 @@ export interface Reaction {
   textColor: string;
 }
 
-export interface PostActionsFC {
+export interface PostActionsProps {
   commentBox: React.RefObject<HTMLInputElement>;
   post: PostType;
   setCounters: React.Dispatch<React.SetStateAction<Counters[]>>;

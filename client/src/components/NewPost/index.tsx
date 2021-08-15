@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { PhotographIcon } from "@heroicons/react/solid";
 import UploadStatusModal from "../UploadStatusModal";
-import User from "../../assets/svg/user.svg";
 import useUser from "../../hooks/useUser";
 import UploadPictureModal from "../UploadPictureModal";
 import Avatar from "../Avatar";

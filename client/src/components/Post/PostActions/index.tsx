@@ -5,9 +5,9 @@ import { FacebookSelector } from "@charkour/react-reactions";
 import { reactions, Reactions } from "./reactions";
 import { motion } from "framer-motion";
 import useUser from "../../../hooks/useUser";
-import { PostActionsFC, Reaction } from "./types";
+import { PostActionsProps, Reaction } from "./types";
 
-const PostActions = ({ commentBox, post, setCounters }: PostActionsFC) => {
+const PostActions = ({ commentBox, post, setCounters }: PostActionsProps) => {
   const user = useUser();
   const { reactions: postReactions } = post?.reactions;
   const [showReactions, setShowReactions] = useState<boolean>(false); // State for showing the reactions circular box

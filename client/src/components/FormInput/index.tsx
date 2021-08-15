@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EyeIcon } from "@heroicons/react/solid";
 import { EyeOffIcon } from "@heroicons/react/solid";
+import { FormInputProps } from "./types";
 
 const FormInput = ({
   type,
@@ -13,18 +14,7 @@ const FormInput = ({
   disabled,
   cols,
   rows,
-}: {
-  id: string;
-  name: string;
-  formik: any;
-  as: "normal" | "password" | "textarea";
-  cols?: number;
-  rows?: number;
-  type?: string;
-  placeholder?: string;
-  className?: string;
-  disabled?: boolean;
-}) => {
+}: FormInputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   if (as === "password") {

@@ -1,4 +1,5 @@
 import Loader from "../../assets/svg/loader.svg";
+import { ButtonProps } from "./types";
 
 const Button = ({
   type,
@@ -8,16 +9,7 @@ const Button = ({
   isLoading,
   text,
   variant,
-}: {
-  text: string;
-  variant: "primary" | "secondary";
-  isLoading?: boolean;
-  disabled?: boolean;
-  className?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  type?: "button" | "submit" | "reset" | undefined;
-  style?: Record<any, string>
-}) => {
+}: ButtonProps) => {
   const initialPrimayButtonClasses =
     "flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white hover:bg-blue-600";
   const initialSecondaryButtonClasses =

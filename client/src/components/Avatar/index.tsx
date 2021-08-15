@@ -1,15 +1,8 @@
 import useUser from "../../hooks/useUser";
 import User from "../../assets/svg/user.svg";
+import { AvatarProps } from "./types";
 
-const Avatar = ({
-  className,
-  name,
-  withName,
-}: {
-  className: string;
-  name?: string;
-  withName?: boolean;
-}) => {
+const Avatar = ({ className, name, withName }: AvatarProps) => {
   const user = useUser();
 
   return withName ? (

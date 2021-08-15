@@ -4,17 +4,11 @@ import { useMutation } from "react-query";
 import FormInput from "../FormInput";
 import { useFormik } from "formik";
 import * as api from "../../api";
-import User from "../../assets/svg/user.svg";
 import Button from "../Button";
 import Avatar from "../Avatar";
+import { UploadStatusModalProps } from "./types";
 
-const UploadStatusModal = ({
-  isOpen,
-  setOpen,
-}: {
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const UploadStatusModal = ({ isOpen, setOpen }: UploadStatusModalProps) => {
   const user = useUser();
 
   const postStatus = async (status: {

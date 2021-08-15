@@ -1,16 +1,9 @@
 import { useEffect } from "react";
 import { XIcon } from "@heroicons/react/solid";
 import { motion } from "framer-motion";
+import { ModalProps } from "./types";
 
-const Modal = ({
-  isOpen,
-  setOpen,
-  children,
-}: {
-  children: JSX.Element[];
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const Modal = ({ isOpen, setOpen, children }: ModalProps) => {
   useEffect(() => {
     const closeModal = (e: any) => {
       if (e.code == "27" || e.target.classList.contains("modal-backdrop")) {

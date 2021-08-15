@@ -10,18 +10,13 @@ import * as api from "../../api";
 import Button from "../Button";
 import Avatar from "../Avatar";
 import "../../assets/css/cssgram.css";
+import { UploadPictureModalProps } from "./types";
 
 interface Filter {
   name: string;
   label: string;
 }
-const UploadPictureModal = ({
-  isOpen,
-  setOpen,
-}: {
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   const user = useUser();
 
   const filterImageRef = useRef<any>();
