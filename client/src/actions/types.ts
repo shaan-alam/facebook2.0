@@ -54,6 +54,7 @@ export type DeletePostType = (
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
 export interface NewPost {
+  filter: string;
   image: string;
   caption: string;
 }

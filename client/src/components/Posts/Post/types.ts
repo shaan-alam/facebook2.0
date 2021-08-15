@@ -7,6 +7,7 @@ export type PostType = {
     fullName: string;
     avatar: string;
   };
+  filter: string,
   reactions: {
     reactions: Array<{
       _id: string;

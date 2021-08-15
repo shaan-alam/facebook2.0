@@ -7,15 +7,13 @@ import { useFormik } from "formik";
 import FormInput from "../FormInput";
 import useUser from "../../hooks/useUser";
 import * as api from "../../api";
-import Cropper from "react-cropper";
-import "cropperjs/dist/cropper.css";
-import domToImage from "dom-to-image";
 import Button from "../Button";
 import Avatar from "../Avatar";
+import "../../assets/css/cssgram.css";
 
 interface Filter {
   name: string;
-  filter: string;
+  label: string;
 }
 const UploadPictureModal = ({
   isOpen,
@@ -28,8 +26,6 @@ const UploadPictureModal = ({
 
   const filterImageRef = useRef<any>();
   const [image, setImage] = useState<string>();
-  const [cropData, setCropData] = useState("#");
-  const [cropper, setCropper] = useState<any>();
   const [formStep, setFormStep] = useState<number>(0);
   const [selectedFilter, setSelectedFilter] = useState<Filter>(filters[0]);
 
@@ -41,11 +37,11 @@ const UploadPictureModal = ({
       caption: "",
     },
     onSubmit: async (values: any, { setSubmitting }) => {
-      console.log(values);
       setSubmitting(true);
 
       try {
         await api.createPost({
+          filter: selectedFilter.name,
           image: image as string,
           caption: values.caption,
         });
@@ -112,14 +108,12 @@ const UploadPictureModal = ({
                 fileSelect(e);
               }}
               htmlFor="file"
-              className={`h-20 my-7 w-full border-dashed border-4 rounded-md flex justify-center items-center cursor-pointer hover:border-gray-500 text-gray-400 hover:text-gray-500 ${
-                dragOver ? "border-gray-500" : "border-gray-300"
+              className={`h-48 my-7 w-full border-dashed border-4 rounded-md flex justify-center items-center cursor-pointer hover:border-gray-500 text-gray-400 hover:text-gray-500 ${
+                dragOver ? "border-fb" : "border-gray-300"
               }`}
             >
               {dragOver ? (
-                <p className="text-xl font-semibold text-gray-500">
-                  Drop here...
-                </p>
+                <p className="text-xl font-semibold text-fb">Drop here...</p>
               ) : (
                 <>
                   <PhotographIcon className="h-10 w-10" />
@@ -139,73 +133,17 @@ const UploadPictureModal = ({
           </>
         )}
 
-        {/* To crop the image in 1 / 1 aspect ratio */}
-        {formStep === 1 && image && (
-          <div className="my-4">
-            <h2 className="text-center font-semibold text-xl mb-4">
-              Crop your Image
-            </h2>
-            <div className="my-2 w-full text-center text-gray-500 font-medium">
-              Use mouse wheel to scroll in/out
-            </div>
-            <Cropper
-              style={{ height: "400px", width: "100%" }}
-              zoomTo={1}
-              initialAspectRatio={1 / 1}
-              preview=""
-              src={image}
-              viewMode={1}
-              minCropBoxHeight={10}
-              minCropBoxWidth={10}
-              background={false}
-              responsive={true}
-              autoCropArea={1}
-              checkOrientation={false}
-              onInitialized={(instance) => {
-                setCropper(instance);
-              }}
-              guides={true}
-              aspectRatio={1200 / 630}
-            />
-
-            <div className="flex mt-4">
-              <Button
-                text="Back"
-                variant="secondary"
-                className="p-2 w-full font-semibold"
-                onClick={() => setFormStep((formStep) => formStep - 1)}
-              />
-              <Button
-                variant="primary"
-                text="Next"
-                className="p-2 ml-2 font-semibold"
-                onClick={(e: React.SyntheticEvent) => {
-                  e.preventDefault();
-                  if (typeof cropper !== "undefined") {
-                    setCropData(cropper.getCroppedCanvas().toDataURL());
-                  }
-                  setFormStep((formStep) => formStep + 1);
-                }}
-              />
-            </div>
-          </div>
-        )}
-
         {/* To apply filter to the cropped image */}
-        {formStep === 2 && cropData && (
+        {formStep === 1 && image && (
           <div className="mt-4">
             <h4 className="font-semibold mb-4 text-center w-full">Preview: </h4>
-            <div
-              style={{ height: "auto", margin: "auto" }}
-              className="flex justify-center items-center"
-            >
-              <img
-                ref={filterImageRef}
-                src={cropData}
-                style={{ filter: selectedFilter.filter }}
-                className="w-full"
-              />
-            </div>
+
+            <img
+              ref={filterImageRef}
+              src={image}
+              style={{ filter: selectedFilter.name }}
+              className={`w-full ${selectedFilter.name}`}
+            />
             <div className="w-full filters overflow-x-auto mt-2">
               <ul className="flex mt-4 py-4">
                 {filters.map((filter: any) => (
@@ -232,14 +170,15 @@ const UploadPictureModal = ({
                 className="p-2 ml-2"
                 onClick={(e: React.SyntheticEvent) => {
                   e.preventDefault();
-                  domToImage
-                    .toPng(filterImageRef.current, {
-                      quality: 1,
-                    })
-                    .then((dataUrl: string) => {
-                      setImage(dataUrl);
-                      setFormStep((formStep) => formStep + 1);
-                    });
+                  setFormStep((formStep) => formStep + 1);
+                  // domToImage
+                  //   .toPng(filterImageRef.current, {
+                  //     height: 0,
+                  //   })
+                  //   .then((dataUrl: string) => {
+                  //     setImage(dataUrl);
+                  //     setFormStep((formStep) => formStep + 1);
+                  //   });
                 }}
               />
             </div>
@@ -247,13 +186,13 @@ const UploadPictureModal = ({
         )}
         {/* To type the caption and submit the form... */}
 
-        {formStep === 3 && image && (
+        {formStep === 2 && image && (
           <form onSubmit={formik.handleSubmit}>
             <div className="flex flex-col md:flex-row md:justify-evenly p-4 items-start">
               <img
                 src={image as string}
                 alt="Preview File"
-                className="w-full md:w-72 object-cover self-center"
+                className={`w-full md:w-72 object-cover self-center ${selectedFilter.name}`}
               />
               <div className="md:ml-4">
                 <div className="flex items-center mt-4">

@@ -17,7 +17,11 @@ const UploadStatusModal = ({
 }) => {
   const user = useUser();
 
-  const postStatus = async (status: { caption: string; image: string }) => {
+  const postStatus = async (status: {
+    filter: string;
+    caption: string;
+    image: string;
+  }) => {
     try {
       const { data } = await api.createPost(status);
 
@@ -39,7 +43,7 @@ const UploadStatusModal = ({
     },
     onSubmit: (values: { status: string }) => {
       // Make a POST request to the backend for creating a new status
-      mutate({ caption: values.status, image: "" });
+      mutate({ caption: values.status, image: "", filter: "" });
     },
   });
 

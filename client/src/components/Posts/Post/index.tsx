@@ -11,6 +11,8 @@ import TextTruncate from "react-truncate";
 import PostStats from "./PostStats";
 import Avatar from "../../Avatar";
 
+import { getFilter } from "../../../utils/filters";
+
 const Post = ({ post }: { post: PostType }) => {
   const [isTruncated, setTruncated] = useState<boolean>(true); // To determine whether to show full post caption or truncted text caption
   const [isLoaded, setLoaded] = useState<boolean>(false); // To determine if the image is completely loaded!
@@ -59,7 +61,9 @@ const Post = ({ post }: { post: PostType }) => {
             ref={postImageRef}
             src={post?.imageURL}
             alt={post?.caption}
-            className={`my-3 w-full rounded-lg ${!isLoaded ? "hidden" : ""}`}
+            className={`my-3 w-full rounded-lg ${post?.filter} ${
+              !isLoaded ? "hidden" : ""
+            }`}
             onLoad={() => setLoaded(true)}
           />
         ) : null}
