@@ -4,6 +4,7 @@ import UploadStatusModal from "../UploadStatusModal";
 import useUser from "../../hooks/useUser";
 import UploadPictureModal from "../UploadPictureModal";
 import Avatar from "../Avatar";
+import { AnimatePresence, motion } from "framer-motion";
 
 const NewPost = () => {
   const [isStatusModalOpen, setStatusModal] = useState<boolean>(false);
@@ -32,18 +33,22 @@ const NewPost = () => {
           </div>
         </div>
       </div>
-      {isStatusModalOpen && (
-        <UploadStatusModal
-          isOpen={isStatusModalOpen}
-          setOpen={setStatusModal}
-        />
-      )}
-      {isPictureModalOpen && (
-        <UploadPictureModal
-          isOpen={isPictureModalOpen}
-          setOpen={setPictureModal}
-        />
-      )}
+      <AnimatePresence>
+        {isStatusModalOpen && (
+          <UploadStatusModal
+            key="uploadStatusModal"
+            isOpen={isStatusModalOpen}
+            setOpen={setStatusModal}
+          />
+        )}
+        {isPictureModalOpen && (
+          <UploadPictureModal
+            key="uploadStatusModal"
+            isOpen={isPictureModalOpen}
+            setOpen={setPictureModal}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };
