@@ -23,12 +23,17 @@ const Modal = ({ isOpen, setOpen, modalTitle, children }: ModalProps) => {
 
   return isOpen
     ? ReactDOM.createPortal(
-        <div className="modal-backdrop px-5 flex justify-center items-center h-screen w-screen fixed top-0 left-0 right-0 bottom-0 bg-white z-10 bg-opacity-80">
+        <div
+          className="modal-backdrop px-5 flex justify-center items-center h-screen w-screen fixed top-0 left-0 right-0 bottom-0 z-10"
+          style={{ background: "rgba(0, 0, 0, 0.8)" }}
+        >
           <motion.div
+            key="modal"
             className="w-full sm:w-3/4 md:w-1/2 bg-white rounded-3xl shadow-2xl border-2"
-            initial={{ scale: 0.7, opacity: 1 }}
+            initial={{ scale: 0.7, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 180, duration: 1 }}
+            exit={{ scale: 0.7, opacity: 0 }}
+            transition={{ type: "tween" }}
           >
             <div className="flex items-center border-b-2 border-gray-200 p-2">
               <h1 className="text-xl font-bold w-full text-center text-gray-600 ">

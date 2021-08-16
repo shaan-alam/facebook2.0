@@ -28,7 +28,7 @@ const Post = ({ post }: { post: PostType }) => {
           name={post?.author?.fullName}
           withName
         />
-        <PostDropdown />
+        <PostDropdown post={post} />
       </div>
       <PostImage
         image={post?.imageURL}
