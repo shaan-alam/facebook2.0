@@ -24,6 +24,7 @@ const UploadStatusModal = ({ isOpen, setOpen }: UploadStatusModalProps) => {
       // Clear form values
       formik.resetForm();
 
+      setOpen(false);
       return data;
     } catch (err) {
       console.log(err);
