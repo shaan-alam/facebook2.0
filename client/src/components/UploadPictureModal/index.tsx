@@ -4,21 +4,20 @@ import { PhotographIcon } from "@heroicons/react/solid";
 import { filters } from "../../utils/filters";
 import FilterCard from "../FilterCard";
 import { useFormik } from "formik";
-import FormInput from "../FormInput";
 import useUser from "../../hooks/useUser";
 import * as api from "../../api";
 import Button from "../Button";
 import Avatar from "../Avatar";
 import "../../assets/css/cssgram.css";
 import { UploadPictureModalProps } from "./types";
-import "./index.css";
+import { useMutation } from "react-query";
+import { useQueryClient } from "react-query";
+import Skeleton from "react-loading-skeleton";
+import { Filter, NewPost } from "./types";
 
-interface Filter {
-  name: string;
-  label: string;
-}
 const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   const user = useUser();
+  const queryClient = useQueryClient();
 
   const filterImageRef = useRef<any>();
   const [image, setImage] = useState<string>();
@@ -28,26 +27,31 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [fileDropError, setFileDropError] = useState<string>("");
 
+  const { mutate, isError, error } = useMutation(
+    (newPost: NewPost) => api.createPost(newPost),
+    {
+      onSuccess: () => queryClient.refetchQueries("posts"),
+    }
+  );
+
   const formik = useFormik({
     initialValues: {
       caption: "",
     },
-    onSubmit: async (values: any, { setSubmitting }) => {
+    onSubmit: (values, { setSubmitting }) => {
       setSubmitting(true);
 
-      try {
-        await api.createPost({
-          filter: selectedFilter.name,
-          image: image as string,
-          caption: values.caption,
-        });
+      const newPost = {
+        filter: selectedFilter.name,
+        image: image as string,
+        caption: values.caption,
+      };
 
-        setSubmitting(false);
-        formik.resetForm();
-        setOpen(false);
-      } catch (err) {
-        console.log(err);
-      }
+      mutate(newPost);
+
+      setSubmitting(false);
+      formik.resetForm();
+      setOpen(false);
     },
   });
 
@@ -71,7 +75,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
     reader.onload = () => {
-      setImage(reader.result as any);
+      setImage(reader.result as string);
     };
 
     setFormStep((formStep) => formStep + 1);
@@ -130,10 +134,10 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
         )}
 
         {/* To apply filter to the cropped image */}
-        {formStep === 1 && image && (
+        {formStep === 1 && (
           <div className="mt-4">
             <h4 className="font-semibold mb-4 text-center w-full">Preview: </h4>
-
+            {!image && <Skeleton height={400} width="200" />}
             <img
               ref={filterImageRef}
               src={image}
@@ -167,14 +171,6 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
                 onClick={(e: React.SyntheticEvent) => {
                   e.preventDefault();
                   setFormStep((formStep) => formStep + 1);
-                  // domToImage
-                  //   .toPng(filterImageRef.current, {
-                  //     height: 0,
-                  //   })
-                  //   .then((dataUrl: string) => {
-                  //     setImage(dataUrl);
-                  //     setFormStep((formStep) => formStep + 1);
-                  //   });
                 }}
               />
             </div>
@@ -185,22 +181,17 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
         {formStep === 2 && image && (
           <form onSubmit={formik.handleSubmit}>
             <div className="flex flex-col md:justify-evenly p-4 items-start">
+              {isError && (
+                <div className="p-2 bg-red-200 text-red-500 font-bold text-center rounded-lg w-full mb-4">
+                  {error as string}
+                </div>
+              )}
               <div className="mb-4">
                 <Avatar
                   className="rounded-full h-7 w-7 mb-2 mr-1"
                   name={user?.fullName}
                   withName
                 />
-                {/* <FormInput
-                  as="textarea"
-                  cols={60}
-                  rows={4}
-                  name="caption"
-                  id="caption"
-                  placeholder="Caption.."
-                  formik={formik}
-                  className="mt-4 resize-none p-4 border-2 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
-                /> */}
                 <div
                   contentEditable={true}
                   id="editable"
@@ -224,11 +215,13 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
                   }}
                 ></div>
               </div>
-              <img
-                src={image as string}
-                alt="Preview File"
-                className={`w-96 rounded-lg object-cover self-center ${selectedFilter.name}`}
-              />
+              <div className="h-48 overflow-y-auto">
+                <img
+                  src={image as string}
+                  alt="Preview File"
+                  className={`w-full rounded-lg object-cover self-center ${selectedFilter.name}`}
+                />
+              </div>
             </div>
             <div className="flex mt-4">
               <Button
