@@ -26,10 +26,14 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [fileDropError, setFileDropError] = useState<string>("");
 
-  const { mutate, isError, error } = useMutation(
+  const { mutate, isError, error, isLoading } = useMutation(
     (newPost: NewPost) => api.createPost(newPost),
     {
-      onSuccess: () => queryClient.refetchQueries("posts"),
+      onSuccess: () => {
+        formik.resetForm();
+        setOpen(false);
+        queryClient.refetchQueries("posts");
+      },
     }
   );
 
@@ -37,20 +41,18 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
     initialValues: {
       caption: "",
     },
-    onSubmit: (values, { setSubmitting }) => {
-      setSubmitting(true);
-
+    onSubmit: async (values) => {
       const newPost = {
         filter: selectedFilter.name,
         image: image as string,
         caption: values.caption,
       };
 
-      mutate(newPost);
-
-      setSubmitting(false);
-      formik.resetForm();
-      setOpen(false);
+      try {
+        await mutate(newPost);
+      } catch (err) {
+        console.log(err);
+      }
     },
   });
 
@@ -230,7 +232,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
               />
               <Button
                 text="Post"
-                isLoading={formik.isSubmitting}
+                isLoading={isLoading}
                 variant="primary"
                 disabled={formik.isSubmitting}
                 className="ml-2"
