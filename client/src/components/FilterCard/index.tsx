@@ -1,5 +1,6 @@
 import "../../assets/css/cssgram.css";
 import { FilterCardProps } from "./types";
+import Image from "../Image";
 
 const FilterCard = ({
   src,
@@ -14,12 +15,13 @@ const FilterCard = ({
       }`}
       onClick={() => setSelectedFilter(filter)}
     >
-      <span className="text-center w-full">{filter.label}</span>
-      <img
+      {src && <span className="text-center w-full">{filter.label}</span>}
+      <Image
         src={src as string}
-        alt={filter.name}
         style={{ maxWidth: "100px" }}
         className={`w-48 object-scale-down ${filter.name}`}
+        skeletonHeight={100}
+        skeletonWidth={120}
       />
     </li>
   );

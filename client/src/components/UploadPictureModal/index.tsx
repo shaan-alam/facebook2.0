@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Modal from "../Modal";
 import { PhotographIcon } from "@heroicons/react/solid";
 import { filters } from "../../utils/filters";
@@ -12,14 +12,13 @@ import "../../assets/css/cssgram.css";
 import { UploadPictureModalProps } from "./types";
 import { useMutation } from "react-query";
 import { useQueryClient } from "react-query";
-import Skeleton from "react-loading-skeleton";
 import { Filter, NewPost } from "./types";
+import Image from "../Image";
 
 const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   const user = useUser();
   const queryClient = useQueryClient();
 
-  const filterImageRef = useRef<any>();
   const [image, setImage] = useState<string>();
   const [formStep, setFormStep] = useState<number>(0);
   const [selectedFilter, setSelectedFilter] = useState<Filter>(filters[0]);
@@ -137,9 +136,8 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
         {formStep === 1 && (
           <div className="mt-4">
             <h4 className="font-semibold mb-4 text-center w-full">Preview: </h4>
-            {!image && <Skeleton height={400} width="200" />}
-            <img
-              ref={filterImageRef}
+            <Image
+              skeletonHeight={400}
               src={image}
               style={{ filter: selectedFilter.name }}
               className={`w-full ${selectedFilter.name}`}
