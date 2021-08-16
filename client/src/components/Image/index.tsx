@@ -8,6 +8,7 @@ export interface ImageProps
   > {
   skeletonHeight?: number;
   skeletonWidth?: number;
+  isLoading?: boolean;
 }
 
 const Image = ({
@@ -15,11 +16,14 @@ const Image = ({
   skeletonWidth,
   src,
   alt,
+  isLoading,
   ...otherProps
 }: ImageProps) => {
   return (
     <>
-      {!src && <Skeleton height={skeletonHeight} width={skeletonWidth} />}
+      {(!src || isLoading) && (
+        <Skeleton height={skeletonHeight} width={skeletonWidth} />
+      )}
       <img src={src} alt={alt} {...otherProps} />
     </>
   );
