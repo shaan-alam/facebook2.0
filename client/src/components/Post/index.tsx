@@ -6,6 +6,7 @@ import Avatar from "../Avatar";
 import PostImage from "./PostImage";
 import PostCaption from "./PostCaption";
 import { Counters } from "./PostActions/types";
+import PostDropdown from "./PostDropdown";
 
 const Post = ({ post }: { post: PostType }) => {
   const [counters, setCounters] = useState<Counters[]>(
@@ -21,12 +22,13 @@ const Post = ({ post }: { post: PostType }) => {
 
   return (
     <div className="post mb-3 p-4 bg-white shadow-sm w-full mx-auto rounded-lg">
-      <div className="bg-white mb-3 pt-4">
+      <div className="flex items-center justify-between bg-white mb-3 pt-4">
         <Avatar
           className="h-7 w-7 rounded-full"
           name={post?.author?.fullName}
           withName
         />
+        <PostDropdown />
       </div>
       <PostImage
         image={post?.imageURL}
