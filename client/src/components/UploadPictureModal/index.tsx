@@ -11,6 +11,7 @@ import Button from "../Button";
 import Avatar from "../Avatar";
 import "../../assets/css/cssgram.css";
 import { UploadPictureModalProps } from "./types";
+import "./index.css";
 
 interface Filter {
   name: string;
@@ -82,9 +83,9 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} setOpen={setOpen}>
+    <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Create Post">
       {/* To Select the image file */}
-      <>
+      <div className="p-12">
         {fileDropError && (
           <span className="text-xs text-red-500 font-semibold text-center">
             {fileDropError}
@@ -183,18 +184,14 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
 
         {formStep === 2 && image && (
           <form onSubmit={formik.handleSubmit}>
-            <div className="flex flex-col md:flex-row md:justify-evenly p-4 items-start">
-              <img
-                src={image as string}
-                alt="Preview File"
-                className={`w-full md:w-72 object-cover self-center ${selectedFilter.name}`}
-              />
-              <div className="md:ml-4">
-                <div className="flex items-center mt-4">
-                  <Avatar className="rounded-full h-7 w-7 mb-2 mr-1" />
-                  <h1 className="text-fb font-semibold">{user?.fullName}</h1>
-                </div>
-                <FormInput
+            <div className="flex flex-col md:justify-evenly p-4 items-start">
+              <div className="mb-4">
+                <Avatar
+                  className="rounded-full h-7 w-7 mb-2 mr-1"
+                  name={user?.fullName}
+                  withName
+                />
+                {/* <FormInput
                   as="textarea"
                   cols={60}
                   rows={4}
@@ -202,9 +199,36 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
                   id="caption"
                   placeholder="Caption.."
                   formik={formik}
-                  className="resize-none p-4 border-2 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
-                />
+                  className="mt-4 resize-none p-4 border-2 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
+                /> */}
+                <div
+                  contentEditable={true}
+                  id="editable"
+                  className="h-12 w-full my-4 break-all overflow-y-auto outline-none"
+                  data-placeholder={`What's on your mind, ${user?.fullName}`}
+                  spellCheck={false}
+                  onFocus={(e) => {
+                    e.target.style.color = "#000";
+
+                    e.target.innerHTML ==
+                      e.target.getAttribute("data-placeholder") &&
+                      (e.target.innerHTML = "");
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.color =
+                      e.target.innerHTML == "" ? "#aaa" : "#000";
+
+                    e.target.innerHTML == "" &&
+                      (e.target.innerHTML =
+                        e.target.getAttribute("data-placeholder") || "");
+                  }}
+                ></div>
               </div>
+              <img
+                src={image as string}
+                alt="Preview File"
+                className={`w-96 rounded-lg object-cover self-center ${selectedFilter.name}`}
+              />
             </div>
             <div className="flex mt-4">
               <Button
@@ -224,7 +248,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
             </div>
           </form>
         )}
-      </>
+      </div>
       <div className="flex"></div>
     </Modal>
   );

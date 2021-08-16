@@ -42,32 +42,34 @@ const UploadStatusModal = ({ isOpen, setOpen }: UploadStatusModalProps) => {
   });
 
   return (
-    <Modal isOpen={isOpen} setOpen={setOpen}>
-      <div className="flex items-center">
-        <Avatar className="h-8 w-8 rounded-full" />
-        <h4 className="ml-3 font-semibold text-fb">{user?.fullName}</h4>
+    <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Create Post">
+      <div className="p-12">
+        <div className="flex items-center">
+          <Avatar className="h-8 w-8 rounded-full" />
+          <h4 className="ml-3 font-semibold text-fb">{user?.fullName}</h4>
+        </div>
+        <form onSubmit={formik.handleSubmit}>
+          <FormInput
+            as="textarea"
+            name="status"
+            id="status"
+            formik={formik}
+            className="p-4 border-2 my-3 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
+            placeholder={`What's on your mind?, ${user?.fullName}`}
+          ></FormInput>
+          <Button
+            variant="primary"
+            isLoading={formik.isSubmitting}
+            text="Post"
+            disabled={
+              isLoading || formik.values.status === "" || !formik.values.status
+                ? true
+                : false
+            }
+            className="w-full rounded-md py-2 cursor-pointer"
+          />
+        </form>
       </div>
-      <form onSubmit={formik.handleSubmit}>
-        <FormInput
-          as="textarea"
-          name="status"
-          id="status"
-          formik={formik}
-          className="p-4 border-2 my-3 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
-          placeholder={`What's on your mind?, ${user?.fullName}`}
-        ></FormInput>
-        <Button
-          variant="primary"
-          isLoading={formik.isSubmitting}
-          text="Post"
-          disabled={
-            isLoading || formik.values.status === "" || !formik.values.status
-              ? true
-              : false
-          }
-          className="w-full rounded-md py-2 cursor-pointer"
-        />
-      </form>
     </Modal>
   );
 };
