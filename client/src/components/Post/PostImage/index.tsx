@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
+import Image from "../../Image";
 
 const PostImage = ({
   image,
@@ -24,18 +25,16 @@ const PostImage = ({
 
   return image != "" ? (
     <div className="post-image">
-      {!isLoaded && <Skeleton height={400} width="200" />}
-      {image !== "" ? (
-        <img
-          ref={postImageRef}
-          src={image}
-          alt={caption}
-          className={`my-3 w-full rounded-lg ${filter} ${
-            !isLoaded ? "hidden" : ""
-          }`}
-          onLoad={() => setLoaded(true)}
-        />
-      ) : null}
+      <Image
+        isLoading={!isLoaded}
+        skeletonHeight={400}
+        src={image}
+        alt={caption}
+        className={`my-3 w-full rounded-lg ${filter} ${
+          !isLoaded ? "hidden" : ""
+        }`}
+        onLoad={() => setLoaded(true)}
+      />
     </div>
   ) : null;
 };
