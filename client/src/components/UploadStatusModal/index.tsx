@@ -7,9 +7,11 @@ import * as api from "../../api";
 import Button from "../Button";
 import Avatar from "../Avatar";
 import { UploadStatusModalProps } from "./types";
+import { useQueryClient } from "react-query";
 
 const UploadStatusModal = ({ isOpen, setOpen }: UploadStatusModalProps) => {
   const user = useUser();
+  const queryClient = useQueryClient();
 
   const postStatus = async (status: {
     filter: string;
@@ -28,8 +30,14 @@ const UploadStatusModal = ({ isOpen, setOpen }: UploadStatusModalProps) => {
     }
   };
 
-  const { data, isLoading, isError, error, isSuccess, mutate } =
-    useMutation(postStatus);
+  const { data, isLoading, isError, error, isSuccess, mutate } = useMutation(
+    postStatus,
+    {
+      onSuccess: async () => {
+        queryClient.invalidateQueries("posts");
+      },
+    }
+  );
 
   const formik = useFormik({
     initialValues: {

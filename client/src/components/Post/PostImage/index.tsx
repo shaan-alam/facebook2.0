@@ -22,7 +22,7 @@ const PostImage = ({
     }
   }, []);
 
-  return (
+  return image != "" ? (
     <div className="post-image">
       {!isLoaded && <Skeleton height={400} width="200" />}
       {image !== "" ? (
@@ -37,7 +37,7 @@ const PostImage = ({
         />
       ) : null}
     </div>
-  );
+  ) : null;
 };
 
 export default PostImage;
