@@ -54,7 +54,7 @@ const UploadStatusModal = ({ isOpen, setOpen }: UploadStatusModalProps) => {
     <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Create Post">
       <div className="p-12">
         <div className="flex items-center">
-          <Avatar className="h-8 w-8 rounded-full" />
+          <Avatar src={user?.avatar} className="h-8 w-8 rounded-full" />
           <h4 className="ml-3 font-semibold text-fb">{user?.fullName}</h4>
         </div>
         <form onSubmit={formik.handleSubmit}>

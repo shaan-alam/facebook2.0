@@ -48,7 +48,10 @@ const Navbar = () => {
           <BellIcon className="h-9 w-9 mr-4 text-gray-400 cursor-pointer p-2 hover:bg-blue-50 rounded-full" />
           <Menu as="div" className="relative inline-block">
             <Menu.Button className="hover:bg-blue-50 p-2 rounded-lg flex items-center outline-none">
-              <Avatar className="sm:mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700" />
+              <Avatar
+                src={user?.user?.avatar}
+                className="sm:mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
+              />
               <p className="hidden sm:block">{user.user.fullName}</p>
               <ChevronDownIcon className="w-6 sm:ml-4" />
             </Menu.Button>

@@ -16,7 +16,10 @@ const NewPost = () => {
     <>
       <div className="bg-white shadow-sm p-4 my-3 rounded-lg w-full mx-auto">
         <div className="flex bg-white items-center">
-          <Avatar className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700" />
+          <Avatar
+            src={user?.avatar}
+            className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
+          />
           <p className="text-fb font-semibold">{user.fullName}</p>
         </div>
         <div className="flex items-center">

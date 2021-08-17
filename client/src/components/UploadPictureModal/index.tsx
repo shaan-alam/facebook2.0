@@ -188,6 +188,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
               )}
               <div className="mb-4 w-full">
                 <Avatar
+                  src={user?.avatar}
                   className="rounded-full h-7 w-7 mb-2 mr-1"
                   name={user?.fullName}
                   withName
