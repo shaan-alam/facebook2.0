@@ -1,9 +1,4 @@
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import PostActions from "../Post/PostActions";
-import PostStats from "../Post/PostStats";
-import Avatar from "../Avatar";
-import PostImage from "../Post/PostImage";
-import PostCaption from "../Post/PostCaption";
+import Skeleton from "react-loading-skeleton";
 
 const SkeletonPost = () => {
   return (

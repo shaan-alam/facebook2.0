@@ -60,9 +60,7 @@ export interface NewPost {
 }
 
 export interface EditPost {
-  title: string;
-  description: string;
-  tags: string[];
+  caption: string;
 }
 
 export type EditPostType = (
