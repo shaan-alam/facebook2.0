@@ -2,8 +2,8 @@ import Post from "../Post";
 import { PostType } from "../Post/types";
 import { useQuery } from "react-query";
 import { getPosts } from "../../api/index";
-import Loader from "react-loader-spinner";
 import { ExclamationIcon } from "@heroicons/react/solid";
+import SkeletonPost from "../SkeletonPost";
 
 const Posts = () => {
   const fetchPosts = async () => {
@@ -20,8 +20,11 @@ const Posts = () => {
   return (
     <>
       {isLoading && !data && (
-        <div className="flex justify-center items-center h-40 w-full">
-          <Loader type="Oval" height={50} width={50} color="#1877f2" />
+        <div className="">
+          <SkeletonPost />
+          <SkeletonPost />
+          <SkeletonPost />
+          <SkeletonPost />
         </div>
       )}
       {isError && (
