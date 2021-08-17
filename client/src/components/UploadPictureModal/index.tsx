@@ -14,6 +14,7 @@ import { useMutation } from "react-query";
 import { useQueryClient } from "react-query";
 import { Filter, NewPost } from "./types";
 import Image from "../Image";
+import "./index.css";
 
 const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   const user = useUser();
@@ -48,11 +49,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
         caption: values.caption,
       };
 
-      try {
-        await mutate(newPost);
-      } catch (err) {
-        console.log(err);
-      }
+      await mutate(newPost);
     },
   });
 
@@ -194,24 +191,33 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
                 />
                 <div
                   contentEditable={true}
-                  id="editable"
+                  id="caption"
                   className="h-12 w-full my-4 break-all overflow-y-auto outline-none"
                   data-placeholder={`What's on your mind, ${user?.fullName}`}
                   spellCheck={false}
+                  onChange={(e) => {
+                    e.currentTarget.innerText == "" &&
+                      (e.currentTarget.innerText = e.currentTarget.getAttribute(
+                        "data-placeholder"
+                      ) as string);
+                    e.currentTarget.innerText == "" &&
+                      (e.currentTarget.style.color = "#aaa");
+                  }}
                   onFocus={(e) => {
                     e.target.style.color = "#000";
 
-                    e.target.innerHTML ==
+                    e.target.innerText ==
                       e.target.getAttribute("data-placeholder") &&
-                      (e.target.innerHTML = "");
+                      (e.target.innerText = "");
                   }}
                   onBlur={(e) => {
                     e.target.style.color =
-                      e.target.innerHTML == "" ? "#aaa" : "#000";
+                      e.target.innerText == "" ? "#aaa" : "#000";
 
-                    e.target.innerHTML == "" &&
-                      (e.target.innerHTML =
-                        e.target.getAttribute("data-placeholder") || "");
+                    e.target.innerText == "" &&
+                      (e.target.innerText = e.target.getAttribute(
+                        "data-placeholder"
+                      ) as string);
                   }}
                 ></div>
               </div>
