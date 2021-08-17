@@ -14,18 +14,26 @@ import { useMutation } from "react-query";
 import { useQueryClient } from "react-query";
 import { Filter, NewPost } from "./types";
 import Image from "../Image";
+import useDragAndDrop from "../../hooks/useDragAndDrop";
+import FormInput from "../FormInput";
 import "./index.css";
 
 const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
   const user = useUser();
+  const {
+    dragOver,
+    setDragOver,
+    fileDropError,
+    setFileDropError,
+    onDragOver,
+    onDragLeave,
+  } = useDragAndDrop();
+
   const queryClient = useQueryClient();
 
   const [image, setImage] = useState<string>();
   const [formStep, setFormStep] = useState<number>(0);
   const [selectedFilter, setSelectedFilter] = useState<Filter>(filters[0]);
-
-  const [dragOver, setDragOver] = useState<boolean>(false);
-  const [fileDropError, setFileDropError] = useState<string>("");
 
   const { mutate, isError, error, isLoading } = useMutation(
     (newPost: NewPost) => api.createPost(newPost),
@@ -79,11 +87,6 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
     setFormStep((formStep) => formStep + 1);
   };
 
-  const onDragOver = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
-
   return (
     <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Create Post">
       {/* To Select the image file */}
@@ -97,7 +100,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
           <>
             <label
               onDragOver={onDragOver}
-              onDragLeave={() => setDragOver(false)}
+              onDragLeave={onDragLeave}
               onDrop={(e) => {
                 e.preventDefault();
                 e.isPropagationStopped();
@@ -158,7 +161,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
               <Button
                 text="Back"
                 variant="secondary"
-                className="p-2 bg-gray-200 rounded-lg w-full focus:ring-4 focus:ring-gray-400 font-semibold"
+                className="p-2 w-full"
                 onClick={() => setFormStep((formStep) => formStep - 1)}
               />
               <Button
@@ -183,45 +186,23 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
                   {error as string}
                 </div>
               )}
-              <div className="mb-4">
+              <div className="mb-4 w-full">
                 <Avatar
                   className="rounded-full h-7 w-7 mb-2 mr-1"
                   name={user?.fullName}
                   withName
                 />
-                <div
-                  contentEditable={true}
+                <FormInput
+                  as="textarea"
                   id="caption"
-                  className="h-12 w-full my-4 break-all overflow-y-auto outline-none"
-                  data-placeholder={`What's on your mind, ${user?.fullName}`}
-                  spellCheck={false}
-                  onChange={(e) => {
-                    e.currentTarget.innerText == "" &&
-                      (e.currentTarget.innerText = e.currentTarget.getAttribute(
-                        "data-placeholder"
-                      ) as string);
-                    e.currentTarget.innerText == "" &&
-                      (e.currentTarget.style.color = "#aaa");
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.color = "#000";
-
-                    e.target.innerText ==
-                      e.target.getAttribute("data-placeholder") &&
-                      (e.target.innerText = "");
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.color =
-                      e.target.innerText == "" ? "#aaa" : "#000";
-
-                    e.target.innerText == "" &&
-                      (e.target.innerText = e.target.getAttribute(
-                        "data-placeholder"
-                      ) as string);
-                  }}
-                ></div>
+                  placeholder="Caption"
+                  formik={formik}
+                  name="caption"
+                  cols={25}
+                  className="p-4 border-2 my-3 rounded-xl w-full focus:ring-2 focus:ring-blue-400 outline-none"
+                />
               </div>
-              <div className="h-48 overflow-y-auto">
+              <div className="h-48 overflow-y-auto w-full">
                 <img
                   src={image as string}
                   alt="Preview File"
