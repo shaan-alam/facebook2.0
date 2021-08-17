@@ -32,8 +32,6 @@ export const signIn: SignInType =
         password
       );
 
-      console.log(result);
-
       dispatch({ type: AUTH, payload: result.data });
       successRedirect();
     } catch (err) {

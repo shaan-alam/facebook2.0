@@ -1,4 +1,4 @@
-import { SignInFormDataType, SignUpFormDataType } from "../pages/Auth/types";
+import { SignInFormDataType } from "../pages/Auth/types";
 import { Dispatch } from "redux";
 
 export interface AuthResponse {
@@ -35,39 +35,4 @@ export type GoogleAuthenticationType = (
     avatar: string;
   },
   redirect: () => void
-) => (dispatch: Dispatch<any>) => Promise<void>;
-
-export type Post = {
-  image: string;
-  caption: string;
-};
-
-// Post related types and interfaces
-export type GetPostType = () => (dispatch: Dispatch<any>) => Promise<void>;
-
-export type CreatePostType = (
-  post: Post
-) => (dispatch: Dispatch<any>) => Promise<void>;
-
-export type DeletePostType = (
-  id: string
-) => (dispatch: Dispatch<any>) => Promise<void>;
-
-export interface NewPost {
-  filter: string;
-  image: string;
-  caption: string;
-}
-
-export interface EditPost {
-  caption: string;
-}
-
-export type EditPostType = (
-  id: string,
-  newPost: EditPost
-) => (dispatch: Dispatch<any>) => Promise<void>;
-
-export type LikePostType = (
-  id: string
 ) => (dispatch: Dispatch<any>) => Promise<void>;

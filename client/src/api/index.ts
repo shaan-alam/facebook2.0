@@ -1,7 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { EditPost, NewPost } from "../actions/types";
 import { BASE_URL } from "../constants";
-import { SignUpDataType, Reaction } from "./types";
+import {
+  SignUpDataType,
+  Reaction,
+  NewPost,
+  EditPost,
+  GoogleAuthentication,
+} from "./types";
 
 const API = axios.create({ baseURL: BASE_URL }); // Creating an Axios Instance for API calls.
 
@@ -52,13 +57,7 @@ export const getUserFromDB = (email: string) =>
  * @description Function to make a backend request for Google Authentication
  * @param formData An object containing details required for Google Authentication
  */
-export const googleAuthentication = (formData: {
-  avatar: string;
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}) =>
+export const googleAuthentication = (formData: GoogleAuthentication) =>
   API.post("/auth/googleAuth", {
     ...formData,
   });
