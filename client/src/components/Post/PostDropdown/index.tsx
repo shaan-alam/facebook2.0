@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/outline";
 import { Menu, Transition } from "@headlessui/react";
 import PostDeleteModal from "../../PostDeleteModal";
+import PostEditModal from "../../PostEditModal";
 import { AnimatePresence } from "framer-motion";
 import { PostType } from "../types";
 
@@ -67,17 +68,17 @@ const PostDropdown = ({ post }: { post: PostType }) => {
             <div className="p-1">
               <Menu.Item>
                 {({ active }) => (
-                  <a
-                    className={`flex justify-start items-center ${
+                  <div
+                    className={`cursor-pointer flex justify-start items-center ${
                       active && "bg-gray-300 rounded-lg"
                     } p-2 ${
                       active ? "text-gray-700" : "text-gray-700 "
                     } hover:bg-gray-300 hover:text-gray-700`}
-                    href="#!"
+                    onClick={() => setPostEditModal(true)}
                   >
                     <PencilIcon className="h-5 w-5" />
                     &nbsp; Edit Post
-                  </a>
+                  </div>
                 )}
               </Menu.Item>
             </div>
@@ -104,9 +105,17 @@ const PostDropdown = ({ post }: { post: PostType }) => {
       <AnimatePresence>
         {postDeleteModal && (
           <PostDeleteModal
-            key="modal"
+            key="deleteModal"
             isOpen={postDeleteModal}
             setOpen={setPostDeleteModal}
+            post={post}
+          />
+        )}
+        {postEditModal && (
+          <PostEditModal
+            key="editModal"
+            isOpen={postEditModal}
+            setOpen={setPostEditModal}
             post={post}
           />
         )}
