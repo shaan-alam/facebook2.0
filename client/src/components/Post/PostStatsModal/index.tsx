@@ -1,19 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Tab } from "@headlessui/react";
 import Modal from "../../Modal";
 import { reactions as originalReactions } from "../PostActions/reactions";
 import Avatar from "../../Avatar";
-
-interface PostStatsModalInterface {
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  counters: Array<{
-    emoji: string;
-    by: { userID: string; fullName: string; avatar: string };
-  }>;
-}
-
-type Reaction = Record<string, Array<{ emoji: string; by: string }>>;
+import { PostStatsModalInterface } from "./types";
 
 const PostStatsModal = ({
   isOpen,
@@ -21,7 +11,6 @@ const PostStatsModal = ({
   counters,
 }: PostStatsModalInterface) => {
   const [reactionHeadings, setReactionHeadings] = useState<Array<string>>();
-  const [reactions, setReactions] = useState<Reaction>({});
   const [selectedTab, setSelectedTab] = useState("");
 
   useEffect(() => {
@@ -29,8 +18,6 @@ const PostStatsModal = ({
       Array.from(new Set(counters.map((counter) => counter.emoji)))
     );
   }, []);
-
-  console.log(selectedTab);
 
   return (
     <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Reactions...">
@@ -48,25 +35,24 @@ const PostStatsModal = ({
               </button>
             )}
           </Tab>
-          {reactionHeadings &&
-            reactionHeadings.map((reaction) => (
-              <Tab key={reaction} className="mr-6">
-                {({ selected }) => (
-                  <button
-                    onClick={() => setSelectedTab(reaction)}
-                    className={`${
-                      selected ? "bg-blue-100" : "bg-white text-gray-500"
-                    } font-semibold px-7 py-2 rounded-lg flex items-center justify-around hover:bg-blue-100 transition-all`}
-                  >
-                    <img
-                      src={originalReactions[reaction].icon}
-                      className="h-7 w-7 rounded-full"
-                    />
-                    <p className="">&nbsp;{reaction}</p>
-                  </button>
-                )}
-              </Tab>
-            ))}
+          {reactionHeadings?.map((reaction) => (
+            <Tab key={reaction} className="mr-6">
+              {({ selected }) => (
+                <button
+                  onClick={() => setSelectedTab(reaction)}
+                  className={`${
+                    selected ? "bg-blue-100" : "bg-white text-gray-500"
+                  } font-semibold px-7 py-2 rounded-lg flex items-center justify-around hover:bg-blue-100 transition-all`}
+                >
+                  <img
+                    src={originalReactions[reaction].icon}
+                    className="h-7 w-7 rounded-full"
+                  />
+                  <p className="">&nbsp;{reaction}</p>
+                </button>
+              )}
+            </Tab>
+          ))}
         </Tab.List>
         <Tab.Panels className="h-72 overflow-y-auto">
           <Tab.Panel>
