@@ -15,6 +15,7 @@ export type PostType = {
       by: {
         _id: string;
         fullName: string;
+        avatar: string
       };
     }>;
   };

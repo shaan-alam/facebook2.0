@@ -5,6 +5,7 @@ import Button from "../Button";
 import * as api from "../../api";
 import { useMutation, useQueryClient } from "react-query";
 import { PostEditModalProps } from "./types";
+import "../../assets/css/cssgram.css";
 
 const PostEditModal = ({ isOpen, setOpen, post }: PostEditModalProps) => {
   const queryClient = useQueryClient();
@@ -41,6 +42,15 @@ const PostEditModal = ({ isOpen, setOpen, post }: PostEditModalProps) => {
             placeholder="Caption..."
             className="p-2 focus:ring-2 focus:ring-fb rounded-lg w-full my-4 border-2 border-gray-200"
           />
+          {post?.imageURL && (
+            <div className="h-48 overflow-y-auto w-full">
+              <img
+                src={post?.imageURL}
+                alt="Preview File"
+                className={`w-full rounded-lg object-cover self-center ${post?.filter}`}
+              />
+            </div>
+          )}
           <div className="flex justify-between my-4">
             <Button
               text="Discard"

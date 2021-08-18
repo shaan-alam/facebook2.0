@@ -1315,10 +1315,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@headlessui/react@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.3.0.tgz#62287c92604923e5dfb394483e5ec2463e1baea6"
-  integrity sha512-2gqTO6BQ3Jr8vDX1B67n1gl6MGKTt6DBmR+H0qxwj0gTMnR2+Qpktj8alRWxsZBODyOiBb77QSQpE/6gG3MX4Q==
+"@headlessui/react@^0.0.0-d60d2a5":
+  version "0.0.0-d60d2a5"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-0.0.0-d60d2a5.tgz#5064942f8ad705b46e81e212913a3b6a2341c07c"
+  integrity sha512-Kd03xGg9xcK9YOacWG8bVc+mTdh96UTL0JLF33X19pJbwqI1vnnZve3SowwTraEHxIrMM4g3hiU9jHYUPyp1tw==
 
 "@heroicons/react@^1.0.3":
   version "1.0.3"

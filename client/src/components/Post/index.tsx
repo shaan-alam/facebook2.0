@@ -11,11 +11,16 @@ import useUser from "../../hooks/useUser";
 
 const Post = ({ post }: { post: PostType }) => {
   const [counters, setCounters] = useState<Counters[]>(
-    post?.reactions?.reactions.map(({ emoji, by: { _id, fullName } }) => ({
-      _id,
-      emoji,
-      by: fullName,
-    }))
+    post?.reactions?.reactions.map(
+      ({ emoji, by: { _id, fullName, avatar } }) => ({
+        emoji,
+        by: {
+          userID: _id,
+          fullName,
+          avatar,
+        },
+      })
+    )
   );
 
   // CommentBox Ref to focus on the comment Box when clicked on the comment icon

@@ -37,7 +37,7 @@ const PostActions = ({ commentBox, post, setCounters }: PostActionsProps) => {
       mutation.mutate({ emoji: reaction.name, by: user?._id });
 
       setCounters((counters) =>
-        counters.filter((counter) => counter._id !== user?._id)
+        counters.filter((counter) => counter.by.userID !== user?._id)
       );
 
       return setReaction(reactions.default); // set the default state for reaction
@@ -45,12 +45,19 @@ const PostActions = ({ commentBox, post, setCounters }: PostActionsProps) => {
 
     //
     setCounters((counters) =>
-      counters.filter((counter) => counter._id !== user?._id)
+      counters.filter((counter) => counter.by.userID !== user?._id)
     );
 
     setCounters((counters) => [
       ...counters,
-      { _id: user?._id, emoji: newReaction, by: user?.fullName },
+      {
+        emoji: newReaction,
+        by: {
+          userID: user?._id,
+          fullName: user?.fullName,
+          avatar: user?.avatar,
+        },
+      },
     ]);
 
     // If the new reaction is different from the old one (or even new), then set the new reaction
@@ -66,7 +73,7 @@ const PostActions = ({ commentBox, post, setCounters }: PostActionsProps) => {
 
       // Also remove the reaction from the reactions counter
       setCounters((countes) =>
-        countes.filter((counter) => counter._id !== user?._id)
+        countes.filter((counter) => counter.by.userID !== user?._id)
       );
 
       // Make the reaction icon back to unlike
@@ -78,14 +85,21 @@ const PostActions = ({ commentBox, post, setCounters }: PostActionsProps) => {
       // If the previous reaction was like, then set reaction to default and remove the reaction from the
       // reaction counter
       setCounters((counters) =>
-        counters.filter((counter) => counter._id !== user?._id)
+        counters.filter((counter) => counter.by.userID !== user?._id)
       );
       setReaction(reactions.default);
     } else {
       // Else set the reaction to like and also add the like counter in the reactions counter
       setCounters((counters) => [
         ...counters,
-        { _id: user?._id, emoji: "like", by: user?.fullName },
+        {
+          emoji: "like",
+          by: {
+            userID: user?._id,
+            fullName: user?.fullName,
+            avatar: user?.avatar,
+          },
+        },
       ]);
       setReaction(reactions.like);
     }

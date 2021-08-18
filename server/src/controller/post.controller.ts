@@ -97,7 +97,7 @@ export const getPosts = async (req: Request, res: Response) => {
 
     const result = await Reactions.populate(posts, {
       path: "reactions.reactions.by",
-      select: "fullName _id",
+      select: "fullName _id avatar",
       model: "User",
     });
 

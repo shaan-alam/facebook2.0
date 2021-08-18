@@ -1,9 +1,12 @@
 import { PostType } from "../types";
 
 export interface Counters {
-  _id: string;
   emoji: string;
-  by: string;
+  by: {
+    userID: string;
+    fullName: string;
+    avatar: string;
+  };
 }
 
 export interface Reaction {
