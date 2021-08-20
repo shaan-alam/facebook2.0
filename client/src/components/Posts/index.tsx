@@ -8,6 +8,7 @@ import SkeletonPost from "../SkeletonPost";
 const Posts = () => {
   const fetchPosts = async () => {
     const posts = await getPosts();
+    console.log("fetching again!");
     console.log(posts.data);
     return posts.data;
   };

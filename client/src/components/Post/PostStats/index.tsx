@@ -3,15 +3,10 @@ import { FacebookCounter } from "@charkour/react-reactions";
 import { AnimatePresence } from "framer-motion";
 import useUser from "../../../hooks/useUser";
 import PostStatsModal from "../PostStatsModal";
+import Counter from "thousands-counter";
+import { PostStatsProps } from "./types";
 
-const PostStats = ({
-  counters,
-}: {
-  counters: Array<{
-    emoji: string;
-    by: { userID: string; fullName: string; avatar: string };
-  }>;
-}) => {
+const PostStats = ({ counters, comments }: PostStatsProps) => {
   const [postStatsModal, setPostStatsModal] = useState(false);
   const user = useUser();
 
@@ -33,7 +28,9 @@ const PostStats = ({
             : []
         }
       />
-      <p className="text-gray-500 text-sm">3 Comments</p>
+      <p className="text-gray-500 text-sm">
+        {comments == 1 ? "1 Comment" : `${Counter(comments)} comments`}
+      </p>
       <AnimatePresence>
         {postStatsModal && (
           <PostStatsModal

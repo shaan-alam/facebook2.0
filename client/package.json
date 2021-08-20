@@ -39,6 +39,7 @@
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
+    "thousands-counter": "^2.1.0",
     "ts-react-google-login-component": "^1.1.9",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1",

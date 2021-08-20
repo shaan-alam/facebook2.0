@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface ButtonProps {
   text: string;
-  variant: "primary" | "secondary";
+  variant?: "primary" | "secondary";
   isLoading?: boolean;
   disabled?: boolean;
   className?: string;

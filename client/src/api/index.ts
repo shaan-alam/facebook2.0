@@ -95,3 +95,11 @@ export const editPost = (id: string, newPost: EditPost) =>
  */
 export const reactPost = (id: string, reaction: Reaction) =>
   API.patch(`/posts/${id}/reactPost`, { reaction, cancelToken: source.token });
+
+export const fetchComments = (postId: string, offset: number) =>
+  API.get(`/post/comment/${postId}?offset=${offset}`);
+
+export const createComment = (
+  postId: string,
+  comment: { message: string; author: string }
+) => API.post(`/post/comment/${postId}`, { comment });
