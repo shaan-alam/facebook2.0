@@ -61,7 +61,9 @@ export const getPosts = async (req: Request, res: Response) => {
   try {
     // Fetch all the posts along with their author and likes
     const posts = await Post.aggregate([
+      // Sort posts in descending order of their creation time.
       { $sort: { createdAt: -1 } },
+      // Join user (*author of the post) from the users collection
       {
         $lookup: {
           from: "users",
@@ -71,15 +73,76 @@ export const getPosts = async (req: Request, res: Response) => {
         },
       },
       { $unwind: "$author" },
+      // Join reactions of the post from the reactions collection
+      // {
+      //   $lookup: {
+      //     from: "reactions",
+      //     localField: "_id",
+      //     foreignField: "postId",
+      //     as: "reactions",
+      //   },
+      // },
       {
         $lookup: {
           from: "reactions",
-          localField: "_id",
-          foreignField: "postId",
           as: "reactions",
+          let: { postId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$postId", "$$postId"],
+                },
+              },
+            },
+          ],
         },
       },
       { $unwind: "$reactions" },
+      // Join the latest comment for this post from the comments collection
+      // This is just to show a comment in the UI
+      // Later we will fetch the comments (10 each time) in the comment.controller.ts
+      {
+        $lookup: {
+          from: "comments",
+          as: "comments",
+          let: { post_id: "$_id" },
+          pipeline: [
+            // Get the latest comment
+            { $sort: { date: -1 } },
+            {
+              $match: {
+                $expr: { $eq: ["$postId", "$$post_id"] },
+              },
+            },
+            {
+              $limit: 1,
+            },
+            // Join the author of the comment from the users model
+            {
+              $lookup: {
+                from: "users",
+                localField: "author",
+                foreignField: "_id",
+                as: "author",
+              },
+            },
+            {
+              $unwind: "$author",
+            },
+            {
+              $project: {
+                _id: 1,
+                message: 1,
+                date: 1,
+                "author.avatar": 1,
+                "author.fullName": 1,
+                "author._id": 1,
+              },
+            },
+          ],
+        },
+      },
       {
         $project: {
           _id: 1,
@@ -87,19 +150,23 @@ export const getPosts = async (req: Request, res: Response) => {
           thumbnail: 1,
           caption: 1,
           createdAt: 1,
+          comments: 1,
+          filter: 1,
+          "author._id": 1,
           "author.fullName": 1,
           "author.avatar": 1,
           "reactions.reactions": 1,
-          filter: 1,
         },
       },
     ]);
 
-    const result = await Reactions.populate(posts, {
+    // Populate the reactions authors
+    await Reactions.populate(posts, {
       path: "reactions.reactions.by",
       select: "fullName _id avatar",
       model: "User",
     });
+
 
     res.json(posts);
     // const postsWithLikes = await PostLikes.findOne({ post})
