@@ -1,7 +1,0 @@
-.comment-options-button {
-  display: none;
-}
-
-.comment-box:hover .comment-options-button {
-  display: block;
-}
