@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { SlackSelector } from "@charkour/react-reactions";
 import { motion } from "framer-motion";
-import Picker from "emoji-picker-react";
 
 const EmojiPicker = ({
   onEmojiSelect,
@@ -37,12 +36,7 @@ const EmojiPicker = ({
           initial={{ scale: 0.7, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
         >
-          <Picker
-          native={true}
-            onEmojiClick={(e, emojiObject) =>
-              onEmojiSelect(`${emojiObject.emoji}`)
-            }
-          />
+          <SlackSelector onSelect={(emoji) => onEmojiSelect(emoji)} />
         </motion.div>
       )}
     </div>
