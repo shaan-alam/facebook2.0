@@ -122,7 +122,7 @@ router.patch("/:id", validateToken, getPost, editPost);
  * /posts/{id}:
  *  delete:
  *    security:
- *      - bearerAuth: []
+ *      - bearerAuth: []editComment
  *    summary: Delete a post
  *    parameters:
  *      - in: path

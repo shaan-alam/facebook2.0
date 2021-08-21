@@ -15,7 +15,7 @@ import { fetchComments, createComment } from "../../api";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "../Button";
-import loader from "../../assets/svg/loader-dark.svg";
+import EmojiPicker from "../EmojiPicker";
 
 const Post = ({ post }: { post: PostType }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -37,8 +37,8 @@ const Post = ({ post }: { post: PostType }) => {
   const commentBox = useRef<HTMLInputElement>(null);
   const user = useUser();
 
-  // This function will be called by the refetch() function
-  // This function will fetch +5 more comments when clicked on the View more button
+  // This function will be called once the component is mounted
+  // and every time the "View more" button is clicked to fetch +5 more comments
   const fetchMoreComments = async () => {
     try {
       const { data } = await fetchComments(post._id, offset);
@@ -53,7 +53,7 @@ const Post = ({ post }: { post: PostType }) => {
 
   // Quering for comments. refetch() will call for fetchMoreComments() to fetch +5 more comments.
   // For ex => (View more button clicked) => refetch() => fetchMoreComments()
-  const { refetch, isLoading } = useQuery("comments", fetchMoreComments);
+  const { refetch } = useQuery(["comments", post._id], fetchMoreComments);
 
   const mutation = useMutation(
     "createComment",
@@ -111,33 +111,24 @@ const Post = ({ post }: { post: PostType }) => {
         post={post}
         setCounters={setCounters}
       />
-      {!isLoading &&
-        comments.map((comment) => (
-          <PostComment key={comment._id} comment={comment} />
-        ))}
-      {post.commentCount > comments.length ? (
-        <span
-          className="text-gray-600 cursor-pointer hover:underline"
-          onClick={() => refetch()}
-        >
-          View More
-        </span>
-      ) : null}
-      {isLoading && (
-        <span className="flex items-center justify-center h-12 w-full my-4">
-          <img src={loader} />
-        </span>
-      )}
       <div className="add-comment flex items-center">
         <Avatar src={user?.avatar} className="h-7 w-7 rounded-full mt-3 mr-2" />
         <form onSubmit={formik.handleSubmit} className="w-full">
-          <div className="w-full rounded-full mt-3 bg-gray-100 flex justify-between">
+          <div className="w-full rounded-full mt-3 bg-gray-100 flex items-center justify-between">
             <input
               ref={commentBox}
               type="text"
               className="w-full p-2 rounded-full outline-none bg-gray-100"
               placeholder="Comment..."
               {...formik.getFieldProps("comment")}
+            />
+            <EmojiPicker
+              onEmojiSelect={(emoji: string) =>
+                formik.setFieldValue(
+                  "comment",
+                  `${formik.values.comment} ${emoji}`
+                )
+              }
             />
             <Button
               type="submit"
@@ -148,6 +139,19 @@ const Post = ({ post }: { post: PostType }) => {
           </div>
         </form>
       </div>
+      <div className="comments">
+        {comments.map((comment) => (
+          <PostComment key={comment._id} comment={comment} />
+        ))}
+      </div>
+      {post.commentCount > comments.length ? (
+        <span
+          className="text-gray-600 cursor-pointer hover:underline flex items-center"
+          onClick={() => refetch()}
+        >
+          View More
+        </span>
+      ) : null}
     </div>
   );
 };
