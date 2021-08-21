@@ -17,6 +17,8 @@ const PostComment = ({
   const [isLoaded, setLoaded] = useState(false);
   const [menu, setMenu] = useState(false);
 
+  
+
   return (
     <div className="comment flex items-center justify-start my-4">
       {!isLoaded && (
@@ -43,7 +45,7 @@ const PostComment = ({
           {menu && (
             <Menu as="div" className="relative inline-block z-10">
               <Menu.Button>
-                <DotsHorizontalIcon className="comment-options-button ml-3 h-10 w-10 p-2 rounded-full hover:bg-gray-100 cursor-pointer text-gray-500" />
+                <DotsHorizontalIcon className="comment-options-button outline-none ml-3 h-10 w-10 p-2 rounded-full hover:bg-gray-100 cursor-pointer text-gray-500" />
               </Menu.Button>
               <Transition
                 enter="transition duration-100 ease-out"
