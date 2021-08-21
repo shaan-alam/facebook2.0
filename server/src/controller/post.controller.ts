@@ -4,6 +4,8 @@ import Post from "../models/post.model";
 import Reactions, { Reaction } from "../models/reactions.model";
 import cloudinary, { formatCloudinaryUrl } from "../utils/cloudinary.util";
 
+const ObjectId = require("mongoose").Types.ObjectId;
+
 /**
  * @description Creates a new Post
  * @param req Express Request Object
@@ -73,15 +75,7 @@ export const getPosts = async (req: Request, res: Response) => {
         },
       },
       { $unwind: "$author" },
-      // Join reactions of the post from the reactions collection
-      // {
-      //   $lookup: {
-      //     from: "reactions",
-      //     localField: "_id",
-      //     foreignField: "postId",
-      //     as: "reactions",
-      //   },
-      // },
+      // Join the reactions of the post from the reactions collection
       {
         $lookup: {
           from: "reactions",
@@ -116,7 +110,7 @@ export const getPosts = async (req: Request, res: Response) => {
               },
             },
             {
-              $limit: 1,
+              $limit: 3,
             },
             // Join the author of the comment from the users model
             {
@@ -144,6 +138,37 @@ export const getPosts = async (req: Request, res: Response) => {
         },
       },
       {
+        $lookup: {
+          from: "comments",
+          let: { post_id: "$_id" },
+          as: "commentCount",
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$postId", "$$post_id"] },
+              },
+            },
+            {
+              $sort: { date: -1 },
+            },
+            {
+              $group: { _id: null, count: { $sum: 1 } },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: {
+          path: "$commentCount",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          commentCount: "$commentCount.count",
+        },
+      },
+      {
         $project: {
           _id: 1,
           imageURL: 1,
@@ -156,6 +181,7 @@ export const getPosts = async (req: Request, res: Response) => {
           "author.fullName": 1,
           "author.avatar": 1,
           "reactions.reactions": 1,
+          commentCount: 1,
         },
       },
     ]);
@@ -166,7 +192,6 @@ export const getPosts = async (req: Request, res: Response) => {
       select: "fullName _id avatar",
       model: "User",
     });
-
 
     res.json(posts);
     // const postsWithLikes = await PostLikes.findOne({ post})

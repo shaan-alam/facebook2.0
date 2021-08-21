@@ -10,7 +10,7 @@ import PostDropdown from "./PostDropdown";
 import useUser from "../../hooks/useUser";
 import PostComment from "./PostComment";
 import { Comment } from "./types";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { fetchComments, createComment } from "../../api";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -18,8 +18,8 @@ import Button from "../Button";
 import loader from "../../assets/svg/loader-dark.svg";
 
 const Post = ({ post }: { post: PostType }) => {
-  const queryClient = useQueryClient();
-  const [offset, setOffset] = useState(3); // How much comments to fetch each time....
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [offset, setOffset] = useState(3);
   const [counters, setCounters] = useState<Counters[]>(
     post?.reactions?.reactions.map(
       ({ emoji, by: { _id, fullName, avatar } }) => ({
@@ -41,11 +41,11 @@ const Post = ({ post }: { post: PostType }) => {
   // This function will fetch +5 more comments when clicked on the View more button
   const fetchMoreComments = async () => {
     try {
-      const result = await fetchComments(post._id, offset);
+      const { data } = await fetchComments(post._id, offset);
 
       setOffset(offset + 5);
 
-      return result.data;
+      setComments(data);
     } catch (err) {
       console.log(err);
     }
@@ -53,44 +53,17 @@ const Post = ({ post }: { post: PostType }) => {
 
   // Quering for comments. refetch() will call for fetchMoreComments() to fetch +5 more comments.
   // For ex => (View more button clicked) => refetch() => fetchMoreComments()
-  const { data, refetch, isLoading } = useQuery<Comment[]>(
-    "comments",
-    fetchMoreComments
+  const { refetch, isLoading } = useQuery("comments", fetchMoreComments);
+
+  const mutation = useMutation(
+    "createComment",
+    (comment: any) => createComment(post._id, comment),
+    {
+      onSuccess: async (result) => {
+        setComments([result.data.comment, ...comments]);
+      },
+    }
   );
-
-  // const mutation = useMutation(
-  //   "createComment",
-  //   (comment: any) => createComment(post._id, comment),
-  //   {
-  //     onMutate: async (variables) => {
-  //       await queryClient.cancelQueries("comments");
-
-  //       const newComment = {
-  //         _id: Math.random(),
-  //         postId: post._id,
-  //         message: variables.message,
-  //         author: {
-  //           _id: user._id,
-  //           fullName: user.fullName,
-  //           avatar: user.avatar,
-  //         },
-  //       };
-
-  //       queryClient.setQueryData("comments", (oldComments) => [
-  //         newComment,
-  //         ...(oldComments as Array<Comment>),
-  //       ]);
-
-  //       return { newComment };
-  //     },
-  //     onSuccess: (result) => {
-  //       queryClient.setQueryData("comments", (oldComments) => [
-  //         result.data.comment,
-  //         ...(oldComments as Array<Comment>),
-  //       ]);
-  //     },
-  //   }
-  // );
 
   const formik = useFormik({
     initialValues: {
@@ -105,14 +78,13 @@ const Post = ({ post }: { post: PostType }) => {
         author: user._id,
       };
 
-      // try {
-      //   const { data } = await mutation.mutateAsync(newComment);
-      //   setSubmitting(false);
-      //   // setComments([data.comment, ...comments]);
-      //   formik.resetForm();
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      try {
+        await mutation.mutateAsync(newComment);
+        setSubmitting(false);
+        formik.resetForm();
+      } catch (err) {
+        console.log(err);
+      }
     },
   });
 
@@ -133,31 +105,29 @@ const Post = ({ post }: { post: PostType }) => {
         filter={post?.filter}
       />
       <PostCaption caption={post?.caption} />
-      <PostStats counters={counters} comments={(data ? data : []).length} />
+      <PostStats counters={counters} comments={comments.length} />
       <PostActions
         commentBox={commentBox}
         post={post}
         setCounters={setCounters}
       />
-      <div className="comments">
-        {!isLoading &&
-          (data ? data : []).map((comment: Comment) => (
-            <PostComment key={comment._id} comment={comment} />
-          ))}
-        {post.commentCount > (data ? data : []).length ? (
-          <span
-            className="text-gray-600 cursor-pointer hover:underline"
-            onClick={() => refetch()}
-          >
-            View More
-          </span>
-        ) : null}
-        {isLoading && (
-          <span className="flex items-center justify-center h-12 w-full my-4">
-            <img src={loader} />
-          </span>
-        )}
-      </div>
+      {!isLoading &&
+        comments.map((comment) => (
+          <PostComment key={comment._id} comment={comment} />
+        ))}
+      {post.commentCount > comments.length ? (
+        <span
+          className="text-gray-600 cursor-pointer hover:underline"
+          onClick={() => refetch()}
+        >
+          View More
+        </span>
+      ) : null}
+      {isLoading && (
+        <span className="flex items-center justify-center h-12 w-full my-4">
+          <img src={loader} />
+        </span>
+      )}
       <div className="add-comment flex items-center">
         <Avatar src={user?.avatar} className="h-7 w-7 rounded-full mt-3 mr-2" />
         <form onSubmit={formik.handleSubmit} className="w-full">
