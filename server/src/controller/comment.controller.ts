@@ -73,3 +73,25 @@ export const deleteComment = async (req: Request, res: Response) => {
     res.status(500).json(err);
   }
 };
+
+export const editComment = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { message } = req.body;
+
+  console.log(id, message);
+
+  try {
+    const updatedComment = await Comment.findByIdAndUpdate(
+      id,
+      { message },
+      {
+        new: true,
+      }
+    );
+
+    res.json({ comment: updatedComment });
+  } catch (err) {
+    logger.error(err);
+    res.status(500).json({ message: err });
+  }
+};
