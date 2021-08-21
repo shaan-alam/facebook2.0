@@ -15,7 +15,7 @@ import { fetchComments, createComment } from "../../api";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "../Button";
-import loader from "../../assets/svg/loader-dark.svg";
+import EmojiPicker from "../EmojiPicker";
 
 const Post = ({ post }: { post: PostType }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -114,13 +114,21 @@ const Post = ({ post }: { post: PostType }) => {
       <div className="add-comment flex items-center">
         <Avatar src={user?.avatar} className="h-7 w-7 rounded-full mt-3 mr-2" />
         <form onSubmit={formik.handleSubmit} className="w-full">
-          <div className="w-full rounded-full mt-3 bg-gray-100 flex justify-between">
+          <div className="w-full rounded-full mt-3 bg-gray-100 flex items-center justify-between">
             <input
               ref={commentBox}
               type="text"
               className="w-full p-2 rounded-full outline-none bg-gray-100"
               placeholder="Comment..."
               {...formik.getFieldProps("comment")}
+            />
+            <EmojiPicker
+              onEmojiSelect={(emoji: string) =>
+                formik.setFieldValue(
+                  "comment",
+                  `${formik.values.comment} ${emoji}`
+                )
+              }
             />
             <Button
               type="submit"
