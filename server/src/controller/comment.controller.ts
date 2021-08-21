@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Comment from "../models/comment.model";
 import logger from "../logger";
 import { fetchComments } from "../utils/controller.util";
+import { omit } from "lodash";
 
 /**
  * For Commenting on a post.
@@ -12,6 +13,8 @@ export const commentOnPost = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { comment } = req.body;
 
+  console.log(id, comment);
+
   try {
     const newComment = await new Comment({
       message: comment.message,
@@ -20,7 +23,13 @@ export const commentOnPost = async (req: Request, res: Response) => {
     });
     await newComment.save();
 
-    res.json({ comment: newComment });
+    await Comment.populate(newComment, {
+      path: "author",
+      select: "_id fullName avatar",
+      model: "User",
+    });
+
+    res.json({ comment: omit(newComment.toJSON(), "__v") });
   } catch (err) {
     logger.error(err);
     res.status(500).json({ message: err });
@@ -44,5 +53,23 @@ export const retrieveComments = async (req: Request, res: Response) => {
   } catch (err) {
     logger.error(err);
     res.status(500).json({ err });
+  }
+};
+
+/**
+ * @function deleteComment
+ * @description To delete a comment for a post
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
+export const deleteComment = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await Comment.findByIdAndRemove(id);
+
+    res.status(204).json({ message: "Comment Deleted!!" });
+  } catch (err) {
+    res.status(500).json(err);
   }
 };

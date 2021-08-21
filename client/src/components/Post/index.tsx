@@ -105,7 +105,7 @@ const Post = ({ post }: { post: PostType }) => {
         filter={post?.filter}
       />
       <PostCaption caption={post?.caption} />
-      <PostStats counters={counters} comments={10} />
+      <PostStats counters={counters} comments={comments.length} />
       <PostActions
         commentBox={commentBox}
         post={post}
