@@ -20,7 +20,7 @@ const Avatar = ({ src, className, name, withName }: AvatarProps) => {
         className={className}
         onLoad={() => setLoaded(true)}
       />
-      {!isLoaded && (
+      {!isLoaded && withName && (
         <Skeleton style={{ marginLeft: "20px" }} height={30} width={100} />
       )}
       {isLoaded && withName && (

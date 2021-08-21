@@ -103,3 +103,5 @@ export const createComment = (
   postId: string,
   comment: { message: string; author: string }
 ) => API.post(`/post/comment/${postId}`, { comment });
+
+export const deleteComment = (id: string) => API.delete(`/post/comment/${id}`);

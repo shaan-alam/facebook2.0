@@ -10,15 +10,16 @@ import PostDropdown from "./PostDropdown";
 import useUser from "../../hooks/useUser";
 import PostComment from "./PostComment";
 import { Comment } from "./types";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { fetchComments, createComment } from "../../api";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "../Button";
+import loader from "../../assets/svg/loader-dark.svg";
 
 const Post = ({ post }: { post: PostType }) => {
-  const [offset, setOffset] = useState(5); // How much comments to fetch each time....
-  const [comments, setComments] = useState<Comment[]>(post.comments);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [offset, setOffset] = useState(3);
   const [counters, setCounters] = useState<Counters[]>(
     post?.reactions?.reactions.map(
       ({ emoji, by: { _id, fullName, avatar } }) => ({
@@ -42,9 +43,9 @@ const Post = ({ post }: { post: PostType }) => {
     try {
       const { data } = await fetchComments(post._id, offset);
 
-      setComments(data);
+      setOffset(offset + 5);
 
-      setOffset((offset) => offset + 5);
+      setComments(data);
     } catch (err) {
       console.log(err);
     }
@@ -52,10 +53,17 @@ const Post = ({ post }: { post: PostType }) => {
 
   // Quering for comments. refetch() will call for fetchMoreComments() to fetch +5 more comments.
   // For ex => (View more button clicked) => refetch() => fetchMoreComments()
-  const { refetch } = useQuery("comments", fetchMoreComments, {
-    enabled: false,
-    refetchOnWindowFocus: false,
-  });
+  const { refetch, isLoading } = useQuery("comments", fetchMoreComments);
+
+  const mutation = useMutation(
+    "createComment",
+    (comment: any) => createComment(post._id, comment),
+    {
+      onSuccess: async (result) => {
+        setComments([result.data.comment, ...comments]);
+      },
+    }
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -65,15 +73,14 @@ const Post = ({ post }: { post: PostType }) => {
       comment: yup.string().required(),
     }),
     onSubmit: async (values, { setSubmitting }) => {
-      const comment = {
+      const newComment = {
         message: values.comment,
         author: user._id,
       };
 
       try {
-        const { data } = await createComment(post?._id, comment);
+        await mutation.mutateAsync(newComment);
         setSubmitting(false);
-        setComments([data.comment, ...comments]);
         formik.resetForm();
       } catch (err) {
         console.log(err);
@@ -98,25 +105,29 @@ const Post = ({ post }: { post: PostType }) => {
         filter={post?.filter}
       />
       <PostCaption caption={post?.caption} />
-      <PostStats counters={counters} comments={comments.length} />
+      <PostStats counters={counters} comments={10} />
       <PostActions
         commentBox={commentBox}
         post={post}
         setCounters={setCounters}
       />
-      <div className="comments">
-        {comments.map((comment) => (
+      {!isLoading &&
+        comments.map((comment) => (
           <PostComment key={comment._id} comment={comment} />
         ))}
-        {post.commentCount > comments.length ? (
-          <span
-            className="text-gray-600 cursor-pointer hover:underline"
-            onClick={() => refetch()}
-          >
-            View More
-          </span>
-        ) : null}
-      </div>
+      {post.commentCount > comments.length ? (
+        <span
+          className="text-gray-600 cursor-pointer hover:underline"
+          onClick={() => refetch()}
+        >
+          View More
+        </span>
+      ) : null}
+      {isLoading && (
+        <span className="flex items-center justify-center h-12 w-full my-4">
+          <img src={loader} />
+        </span>
+      )}
       <div className="add-comment flex items-center">
         <Avatar src={user?.avatar} className="h-7 w-7 rounded-full mt-3 mr-2" />
         <form onSubmit={formik.handleSubmit} className="w-full">
