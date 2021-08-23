@@ -1,5 +1,10 @@
 import express from "express";
-import { createCommentReply, retrieveCommentReplies } from "../controller/commentReply.controller";
+import {
+  createCommentReply,
+  retrieveCommentReplies,
+  editCommentReply,
+  deleteCommentReply,
+} from "../controller/commentReply.controller";
 import validateToken from "../middlewares/validateToken.middleware";
 import validateRequest from "../middlewares/validateRequest.middleware";
 import { createCommentReplySchema } from "../schema/commentReply.schema";
@@ -13,6 +18,14 @@ router.post(
   createCommentReply
 );
 
-router.get('/replies/:commentId', validateToken, retrieveCommentReplies)
+router.get("/replies/:commentId", validateToken, retrieveCommentReplies);
+
+router.patch("/edit-reply/:commentReplyId", validateToken, editCommentReply);
+
+router.delete(
+  "/delete-reply/:commentReplyId",
+  validateToken,
+  deleteCommentReply
+);
 
 export default router;

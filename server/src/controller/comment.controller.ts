@@ -12,6 +12,7 @@ import { omit } from "lodash";
 export const commentOnPost = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { comment } = req.body;
+
   console.log(id, comment);
 
   try {
