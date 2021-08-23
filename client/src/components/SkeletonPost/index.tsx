@@ -8,7 +8,16 @@ const SkeletonPost = () => {
         <Skeleton style={{ marginLeft: "20px" }} height={30} width={100} />
       </div>
       <Skeleton height={400} />
-      <Skeleton count={1} />
+      <div className="flex items-center justify-start mt-4">
+        <Skeleton style={{ borderRadius: "100%" }} height={30} width={30} />
+        <div className="w-full">
+          <Skeleton
+            count={1}
+            height={30}
+            style={{ borderRadius: "2rem", marginLeft: "7px" }}
+          />
+        </div>
+      </div>
     </div>
   );
 };
