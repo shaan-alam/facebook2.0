@@ -70,7 +70,7 @@ const Post = ({ post }: { post: PostType }) => {
       comment: "",
     },
     validationSchema: yup.object({
-      comment: yup.string().required(),
+      comment: yup.string().trim().required(),
     }),
     onSubmit: async (values, { setSubmitting }) => {
       const newComment = {
@@ -133,8 +133,9 @@ const Post = ({ post }: { post: PostType }) => {
             <Button
               type="submit"
               text="POST"
+              variant="default"
               isLoading={formik.isSubmitting}
-              className="py-2 px-3 rounded-full flex-shrink text-fb font-semibold hover:bg-gray-200"
+              className="py-2 px-3 rounded-full flex-shrink"
             />
           </div>
         </form>
