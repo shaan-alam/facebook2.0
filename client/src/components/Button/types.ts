@@ -1,12 +1,11 @@
-import React from 'react';
+import React from "react";
 
-export interface ButtonProps {
+export interface ButtonProps
+  extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   text: string;
-  variant?: "primary" | "secondary";
+  variant?: "default" | "primary" | "secondary";
   isLoading?: boolean;
-  disabled?: boolean;
-  className?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  type?: "button" | "submit" | "reset" | undefined;
-  style?: Record<any, string>;
 }
