@@ -38,9 +38,6 @@ export const fetchComments = async (postId: string, offset: string) => {
               },
             },
             {
-              $sort: { date: 1 },
-            },
-            {
               $group: { _id: null, count: { $sum: 1 } },
             },
           ],
