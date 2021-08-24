@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Comment } from "../types";
+import { Comment } from "../Post/types";
 import Skeleton from "react-loading-skeleton";
 import { Menu, Transition } from "@headlessui/react";
 import User from "../../../assets/svg/user.svg";
@@ -9,10 +9,10 @@ import {
   PencilIcon,
 } from "@heroicons/react/outline";
 import { useMutation, useQueryClient } from "react-query";
-import { deleteComment, editComment } from "../../../api";
+import { deleteComment, editComment } from "../../api";
 import loader from "../../../assets/svg/loader-dark.svg";
-import useUser from "../../../hooks/useUser";
-import Button from "../../Button";
+import useUser from "../../hooks/useUser";
+import Button from "../Button";
 import { useFormik } from "formik";
 import * as yup from "yup";
 

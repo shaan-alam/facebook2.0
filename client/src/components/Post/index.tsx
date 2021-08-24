@@ -8,7 +8,7 @@ import PostCaption from "./PostCaption";
 import { Counters } from "./PostActions/types";
 import PostDropdown from "./PostDropdown";
 import useUser from "../../hooks/useUser";
-import PostComment from "./PostComment";
+import PostComment from "../Comment";
 import { Comment } from "./types";
 import { useQuery, useMutation } from "react-query";
 import { fetchComments, createComment } from "../../api";
