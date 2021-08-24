@@ -25,6 +25,39 @@ export const fetchComments = async (postId: string, offset: string) => {
       },
       { $unwind: "$author" },
       {
+        $lookup: {
+          from: "commentreplies",
+          let: { commentId: "$_id" },
+          as: "commentReplies",
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$commentId", "$$commentId"],
+                },
+              },
+            },
+            {
+              $sort: { date: 1 },
+            },
+            {
+              $group: { _id: null, count: { $sum: 1 } },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: {
+          path: "$commentReplies",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          commentReplies: "$commentReplies.count",
+        },
+      },
+      {
         $project: {
           _id: 1,
           message: 1,
@@ -32,6 +65,7 @@ export const fetchComments = async (postId: string, offset: string) => {
           "author.avatar": 1,
           "author.fullName": 1,
           date: 1,
+          commentReplies: 1,
         },
       },
     ]);

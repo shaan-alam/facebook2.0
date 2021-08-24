@@ -53,7 +53,9 @@ const Post = ({ post }: { post: PostType }) => {
 
   // Quering for comments. refetch() will call for fetchMoreComments() to fetch +5 more comments.
   // For ex => (View more button clicked) => refetch() => fetchMoreComments()
-  const { refetch } = useQuery(["comments", post._id], fetchMoreComments);
+  const { refetch } = useQuery(["comments", post._id], fetchMoreComments, {
+    refetchOnWindowFocus: false,
+  });
 
   const mutation = useMutation(
     "createComment",
@@ -105,7 +107,7 @@ const Post = ({ post }: { post: PostType }) => {
         filter={post?.filter}
       />
       <PostCaption caption={post?.caption} />
-      <PostStats counters={counters} comments={comments.length} />
+      <PostStats counters={counters} comments={post.commentCount} />
       <PostActions
         commentBox={commentBox}
         post={post}
