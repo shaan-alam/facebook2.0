@@ -108,3 +108,6 @@ export const deleteComment = (id: string) => API.delete(`/post/comment/${id}`);
 
 export const editComment = (id: string, message: string) =>
   API.patch(`/post/comment/${id}`, { message });
+
+export const fetchCommentReplies = (commentId: string, offset: number) =>
+  API.get(`/post/comment-reply/replies/${commentId}?offset=${offset}`);

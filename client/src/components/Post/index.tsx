@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "../Button";
 import EmojiPicker from "../EmojiPicker";
+import loader from "../../assets/svg/loader-dark.svg";
 
 const Post = ({ post }: { post: PostType }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -43,6 +44,7 @@ const Post = ({ post }: { post: PostType }) => {
     try {
       const { data } = await fetchComments(post._id, offset);
 
+      // console.log(data, "data");
       setOffset(offset + 5);
 
       setComments(data);
@@ -53,9 +55,13 @@ const Post = ({ post }: { post: PostType }) => {
 
   // Quering for comments. refetch() will call for fetchMoreComments() to fetch +5 more comments.
   // For ex => (View more button clicked) => refetch() => fetchMoreComments()
-  const { refetch } = useQuery(["comments", post._id], fetchMoreComments, {
-    refetchOnWindowFocus: false,
-  });
+  const { refetch, isLoading, isFetching } = useQuery(
+    ["comments", post._id],
+    fetchMoreComments,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const mutation = useMutation(
     "createComment",
@@ -149,10 +155,10 @@ const Post = ({ post }: { post: PostType }) => {
       </div>
       {post.commentCount > comments.length ? (
         <span
-          className="text-gray-600 cursor-pointer hover:underline flex items-center"
+          className="text-gray-600 cursor-pointer hover:underline flex items-center text-sm"
           onClick={() => refetch()}
         >
-          View More
+          View More &nbsp;{(isLoading || isFetching) && <img src={loader} />}
         </span>
       ) : null}
     </div>

@@ -7,6 +7,7 @@ export interface Comment {
     fullName: string;
     avatar: string;
   };
+  commentRepliesCount: number
 }
 
 export type PostType = {
