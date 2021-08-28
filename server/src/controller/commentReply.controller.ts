@@ -24,7 +24,7 @@ export const createCommentReply = async (req: Request, res: Response) => {
 
     await newCommentReply.save();
 
-    res.json(newCommentReply);
+    res.json({ reply: newCommentReply });
   } catch (err) {
     logger.error(err);
     res.status(500).json({ message: "Something went wrong on our side!" });
@@ -87,10 +87,10 @@ export const editCommentReply = async (req: Request, res: Response) => {
  * @param res Express Response Object
  */
 export const deleteCommentReply = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { commentReplyId } = req.params;
 
   try {
-    await CommentReply.findByIdAndRemove(id);
+    await CommentReply.findByIdAndRemove(commentReplyId);
 
     res.status(204).json({ message: "Comment Reply Deleted!!" });
   } catch (err) {

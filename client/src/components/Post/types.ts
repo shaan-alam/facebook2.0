@@ -7,14 +7,16 @@ export interface Comment {
     fullName: string;
     avatar: string;
   };
+  commentRepliesCount: number
 }
 
 export type PostType = {
   _id: string;
   caption: string;
-  imageURL: string;
+  imageURL: string
   thumbnailURL: string;
   author: {
+    _id: string
     fullName: string;
     avatar: string;
   };
