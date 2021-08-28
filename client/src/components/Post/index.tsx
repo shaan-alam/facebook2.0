@@ -67,7 +67,7 @@ const Post = ({ post }: { post: PostType }) => {
     "createComment",
     (comment: any) => createComment(post._id, comment),
     {
-      onSuccess: async (result) => {
+      onSuccess: (result) => {
         setComments([result.data.comment, ...comments]);
       },
     }
@@ -105,7 +105,7 @@ const Post = ({ post }: { post: PostType }) => {
           name={post?.author?.fullName}
           withName
         />
-        <PostDropdown post={post} />
+        {post.author._id === user._id && <PostDropdown post={post} />}
       </div>
       <PostImage
         image={post?.imageURL}
