@@ -9,8 +9,8 @@ import {
 import Button from "../../Button";
 import { useFormik } from "formik";
 import { useMutation, useQueryClient } from "react-query";
-import { editCommentReply } from "../../../api";
-import useUser from '../../../hooks/useUser'
+import { editCommentReply, deleteCommentReply } from "../../../api";
+import useUser from "../../../hooks/useUser";
 
 export interface CommentReply {
   _id: string;
@@ -30,7 +30,7 @@ const CommentReply = ({ commentReply }: { commentReply: CommentReply }) => {
   const [commentForm, setCommentForm] = useState(false);
   const [menu, setMenu] = useState(false);
 
-  const editCommentReplyMutation = useMutation(
+  const editMutation = useMutation(
     (newComment: { commentReplyId: string; message: string }) =>
       editCommentReply(newComment),
     {
@@ -38,6 +38,16 @@ const CommentReply = ({ commentReply }: { commentReply: CommentReply }) => {
         queryClient.refetchQueries("comment-replies");
         setCommentForm(false);
         formik.setSubmitting(false);
+      },
+    }
+  );
+
+  const deleteMutation = useMutation(
+    () => deleteCommentReply(commentReply._id),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries("comments");
+        queryClient.refetchQueries("comment-replies");
       },
     }
   );
@@ -52,7 +62,7 @@ const CommentReply = ({ commentReply }: { commentReply: CommentReply }) => {
           message: values.commentReply,
           commentReplyId: commentReply._id,
         };
-        await editCommentReplyMutation.mutateAsync(newReply);
+        await editMutation.mutateAsync(newReply);
       } catch (err) {
         console.log(err);
       }
@@ -107,8 +117,8 @@ const CommentReply = ({ commentReply }: { commentReply: CommentReply }) => {
             >
               <div className="py-3 px-5 rounded-2xl bg-gray-200">
                 <h1 className="font-semibold">Shaan Alam</h1>
-                {true && <p>{commentReply.message}</p>}
-                {false && (
+                {!deleteMutation.isLoading && <p>{commentReply.message}</p>}
+                {deleteMutation.isLoading && (
                   <span className="flex justify-center">
                     <img src={loader} />
                   </span>
@@ -154,6 +164,7 @@ const CommentReply = ({ commentReply }: { commentReply: CommentReply }) => {
                               } p-1 ${
                                 active ? "text-gray-700" : "text-gray-700 "
                               } hover:bg-gray-100 hover:text-gray-700`}
+                              onClick={() => deleteMutation.mutate()}
                             >
                               <TrashIcon className="h-5 w-5" />
                               &nbsp; Delete Comment Reply

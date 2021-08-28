@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useMutation, useQueryClient } from "react-query";
 import { createCommentReply } from "../../../api";
+import React from "react";
 
 interface CommentReplyInterface {
   _id: string;
@@ -18,7 +19,15 @@ interface CommentReplyInterface {
   date: string;
 }
 
-const Form = ({ commentId }: { commentId: string }) => {
+const Form = ({
+  commentId,
+  setCommentReplies,
+}: {
+  commentId: string;
+  setCommentReplies: React.Dispatch<
+    React.SetStateAction<CommentReplyInterface[]>
+  >;
+}) => {
   const author = useUser();
   const queryClient = useQueryClient();
 
@@ -26,9 +35,9 @@ const Form = ({ commentId }: { commentId: string }) => {
     (commentReply: { message: string; author: string; commentId: string }) =>
       createCommentReply(commentReply),
     {
-      onSuccess: () => {
+      onSuccess: (result) => {
         formik.resetForm();
-        queryClient.refetchQueries("comment-replies");
+        setCommentReplies((replies) => [...replies, result.data.reply]);
       },
     }
   );

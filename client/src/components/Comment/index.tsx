@@ -238,9 +238,9 @@ const PostComment = ({ comment }: { comment: Comment }) => {
           </div>
         )}
       </div>
-      {commentReplyForm && <Form commentId={comment._id} />}
+      {commentReplyForm && <Form commentId={comment._id} setCommentReplies={setCommentReplies} />}
       {commentReplies.map((reply) => (
-        <CommentReply commentReply={reply} />
+        <CommentReply commentReply={reply} key={reply._id} />
       ))}
     </>
   );
