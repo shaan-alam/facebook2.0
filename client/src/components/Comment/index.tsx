@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Comment } from "../Post/types";
 import Skeleton from "react-loading-skeleton";
 import { Menu, Transition } from "@headlessui/react";
-import User from "../../assets/svg/user.svg";
 import {
   DotsHorizontalIcon,
   TrashIcon,
@@ -17,6 +16,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import CommentReply from "./CommentReply";
 import Form from "./CommentReply/Form";
+import Moment from "react-moment";
 
 interface CommentReplyInterface {
   _id: string;
@@ -161,7 +161,7 @@ const PostComment = ({ comment }: { comment: Comment }) => {
               </div>
 
               {menu && user._id === comment.author._id && (
-                <Menu as="div" className="relative inline-block z-10">
+                <Menu as="div" className="relative inline-block z-10 w-0">
                   <Menu.Button>
                     <DotsHorizontalIcon className="comment-options-button outline-none ml-3 h-10 w-10 p-2 rounded-full hover:bg-gray-100 cursor-pointer text-gray-500" />
                   </Menu.Button>
@@ -224,6 +224,9 @@ const PostComment = ({ comment }: { comment: Comment }) => {
                 >
                   Reply
                 </span>
+                <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
+                  <Moment fromNow>{comment.date}</Moment>
+                </span>
               </div>
             )}
             {comment.commentRepliesCount > commentReplies.length && (
@@ -238,7 +241,9 @@ const PostComment = ({ comment }: { comment: Comment }) => {
           </div>
         )}
       </div>
-      {commentReplyForm && <Form commentId={comment._id} setCommentReplies={setCommentReplies} />}
+      {commentReplyForm && (
+        <Form commentId={comment._id} setCommentReplies={setCommentReplies} />
+      )}
       {commentReplies.map((reply) => (
         <CommentReply commentReply={reply} key={reply._id} />
       ))}

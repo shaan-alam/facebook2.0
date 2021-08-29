@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import { useMutation, useQueryClient } from "react-query";
 import { editCommentReply, deleteCommentReply } from "../../../api";
 import useUser from "../../../hooks/useUser";
+import Moment from "react-moment";
 
 export interface CommentReply {
   _id: string;
@@ -176,6 +177,14 @@ const CommentReply = ({ commentReply }: { commentReply: CommentReply }) => {
                   </Transition>
                 </Menu>
               )}
+            </div>
+            <div className="flex">
+              <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
+                Like
+              </span>
+              <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
+                <Moment fromNow>{commentReply.date}</Moment>
+              </span>
             </div>
           </div>
         )}
