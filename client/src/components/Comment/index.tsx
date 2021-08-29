@@ -1,33 +1,23 @@
 import { useState } from "react";
 import { Comment } from "../Post/types";
 import Skeleton from "react-loading-skeleton";
-import { Menu, Transition } from "@headlessui/react";
-import User from "../../assets/svg/user.svg";
-import {
-  DotsHorizontalIcon,
-  TrashIcon,
-  PencilIcon,
-} from "@heroicons/react/outline";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteComment, editComment, fetchCommentReplies } from "../../api";
+import {
+  deleteComment,
+  editComment,
+  editCommentReply,
+  fetchCommentReplies,
+} from "../../api";
 import loader from "../../assets/svg/loader-dark.svg";
 import useUser from "../../hooks/useUser";
-import Button from "../Button";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CommentReply from "./CommentReply";
 import Form from "./CommentReply/Form";
-
-interface CommentReplyInterface {
-  _id: string;
-  message: string;
-  author: {
-    _id: string;
-    avatar: string;
-    fullName: string;
-  };
-  date: string;
-}
+import Moment from "react-moment";
+import CommentDropdown from "./CommentDropdown";
+import { CommentReplyInterface } from "./types";
+import CommentEditForm from "./CommentEditForm";
 
 const PostComment = ({ comment }: { comment: Comment }) => {
   const user = useUser();
@@ -117,31 +107,12 @@ const PostComment = ({ comment }: { comment: Comment }) => {
         />
         {!isLoaded && <Skeleton count={1} />}
         {commentForm && (
-          <div className="edit-comment w-full flex items-center">
-            <form className="w-full" onSubmit={formik.handleSubmit}>
-              <div className="w-full rounded-full mt-3 bg-gray-100 flex justify-between">
-                <input
-                  type="text"
-                  className="w-full p-2 rounded-full outline-none bg-gray-100"
-                  placeholder="Comment..."
-                  {...formik.getFieldProps("comment")}
-                />
-                <Button
-                  type="submit"
-                  text="POST"
-                  isLoading={formik.isSubmitting}
-                  className="py-2 px-3 rounded-full flex-shrink text-fb font-semibold hover:bg-gray-200"
-                />
-              </div>
-              <a
-                href="#!"
-                onClick={() => setCommentForm(false)}
-                className="text-fb underline block mt-2 text-sm"
-              >
-                Cancel
-              </a>
-            </form>
-          </div>
+          <CommentEditForm
+            initialComment={comment.message}
+            setCommentForm={setCommentForm}
+            isReply={false}
+            commentId={comment._id}
+          />
         )}
         {isLoaded && !commentForm && (
           <div className="flex flex-col">
@@ -159,58 +130,12 @@ const PostComment = ({ comment }: { comment: Comment }) => {
                   </span>
                 )}
               </div>
-
               {menu && user._id === comment.author._id && (
-                <Menu as="div" className="relative inline-block z-10">
-                  <Menu.Button>
-                    <DotsHorizontalIcon className="comment-options-button outline-none ml-3 h-10 w-10 p-2 rounded-full hover:bg-gray-100 cursor-pointer text-gray-500" />
-                  </Menu.Button>
-                  <Transition
-                    enter="transition duration-100 ease-out"
-                    enterFrom="transform scale-50 opacity-0"
-                    enterTo="transform scale-100 opacity-100"
-                    leave="transition duration-75 ease-out"
-                    leaveFrom="transform  scale-100 opacity-100"
-                    leaveTo="transform scale-50 opacity-0"
-                  >
-                    <Menu.Items className="absolute right-1/2 z-10 bg-white rounded-lg shadow-2xl p-1 w-48 origin-left translate-x-1/2">
-                      <div className="border-b p-1">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <div
-                              className={`cursor-pointer flex justify-start items-center ${
-                                active && "bg-gray-300 rounded-lg"
-                              } p-1 ${
-                                active ? "text-gray-700" : "text-gray-700 "
-                              } hover:bg-gray-100 hover:text-gray-700`}
-                              onClick={() => setCommentForm(true)}
-                            >
-                              <PencilIcon className="h-5 w-5" />
-                              &nbsp;Edit Comment
-                            </div>
-                          )}
-                        </Menu.Item>
-                      </div>
-                      <div className="p-1">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <div
-                              className={`cursor-pointer flex justify-start items-center ${
-                                active && "bg-gray-300 rounded-lg"
-                              } p-1 ${
-                                active ? "text-gray-700" : "text-gray-700 "
-                              } hover:bg-gray-100 hover:text-gray-700`}
-                              onClick={() => mutation.mutate()}
-                            >
-                              <TrashIcon className="h-5 w-5" />
-                              &nbsp; Delete Comment
-                            </div>
-                          )}
-                        </Menu.Item>
-                      </div>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                <CommentDropdown
+                  onEditBtnClick={() => setCommentForm(true)}
+                  onDelete={() => mutation.mutate()}
+                  isCommentReply={false}
+                />
               )}
             </div>
             {!mutation.isLoading && (
@@ -223,6 +148,9 @@ const PostComment = ({ comment }: { comment: Comment }) => {
                   onClick={() => setCommentReplyForm(!commentReplyForm)}
                 >
                   Reply
+                </span>
+                <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
+                  <Moment fromNow>{comment.date}</Moment>
                 </span>
               </div>
             )}
@@ -238,7 +166,9 @@ const PostComment = ({ comment }: { comment: Comment }) => {
           </div>
         )}
       </div>
-      {commentReplyForm && <Form commentId={comment._id} setCommentReplies={setCommentReplies} />}
+      {commentReplyForm && (
+        <Form commentId={comment._id} setCommentReplies={setCommentReplies} />
+      )}
       {commentReplies.map((reply) => (
         <CommentReply commentReply={reply} key={reply._id} />
       ))}

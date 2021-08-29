@@ -24,6 +24,12 @@ export const createCommentReply = async (req: Request, res: Response) => {
 
     await newCommentReply.save();
 
+    await CommentReply.populate(newCommentReply, {
+      path: 'author',
+      model: 'User',
+      select: '_id fullName avatar'
+    })
+
     res.json({ reply: newCommentReply });
   } catch (err) {
     logger.error(err);

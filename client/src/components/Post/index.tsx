@@ -153,7 +153,7 @@ const Post = ({ post }: { post: PostType }) => {
           <PostComment key={comment._id} comment={comment} />
         ))}
       </div>
-      {post.commentCount > comments.length ? (
+      {post.commentCount > comments.length && comments.length !== 0 ? (
         <span
           className="text-gray-600 cursor-pointer hover:underline flex items-center text-sm"
           onClick={() => refetch()}
