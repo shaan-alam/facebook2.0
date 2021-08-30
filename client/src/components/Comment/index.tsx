@@ -2,11 +2,7 @@ import { useState } from "react";
 import { Comment } from "../Post/types";
 import Skeleton from "react-loading-skeleton";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import {
-  deleteComment,
-  editComment,
-  fetchCommentReplies,
-} from "../../api";
+import { deleteComment, editComment, fetchCommentReplies } from "../../api";
 import loader from "../../assets/svg/loader-dark.svg";
 import useUser from "../../hooks/useUser";
 import { useFormik } from "formik";
@@ -17,6 +13,7 @@ import Moment from "react-moment";
 import CommentDropdown from "./CommentDropdown";
 import { CommentReplyInterface } from "./types";
 import CommentEditForm from "./CommentEditForm";
+import useDeleteComment from "../../hooks/useDeleteComment";
 
 const PostComment = ({ comment }: { comment: Comment }) => {
   const user = useUser();
@@ -29,6 +26,8 @@ const PostComment = ({ comment }: { comment: Comment }) => {
   );
   const [isLoaded, setLoaded] = useState(false);
   const [menu, setMenu] = useState(false);
+
+  const mutation = useDeleteComment(comment._id);
 
   // This function will be called once the component is mounted
   // and every time the "View more" button is clicked to fetch +5 more comments
@@ -51,12 +50,6 @@ const PostComment = ({ comment }: { comment: Comment }) => {
       refetchOnWindowFocus: false,
     }
   );
-
-  const mutation = useMutation(() => deleteComment(comment._id), {
-    onSuccess: () => {
-      queryClient.refetchQueries("comments");
-    },
-  });
 
   const editCommentMutation = useMutation(
     (newComment: { id: string; message: string }) =>
