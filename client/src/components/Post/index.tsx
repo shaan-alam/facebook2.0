@@ -10,17 +10,23 @@ import PostDropdown from "./PostDropdown";
 import useUser from "../../hooks/useUser";
 import PostComment from "../Comment";
 import { Comment } from "./types";
-import { useQuery, useMutation } from "react-query";
-import { fetchComments, createComment } from "../../api";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "../Button";
 import EmojiPicker from "../EmojiPicker";
 import loader from "../../assets/svg/loader-dark.svg";
+import useFetchComments from "../../hooks/useFetchComments";
+import useCreateComment from "../../hooks/useCreateComment";
 
 const Post = ({ post }: { post: PostType }) => {
+  const user = useUser();
   const [comments, setComments] = useState<Comment[]>([]);
-  const [offset, setOffset] = useState(3);
+
+  const { refetch, isLoading, isFetching } = useFetchComments(
+    post._id,
+    setComments
+  );
+
   const [counters, setCounters] = useState<Counters[]>(
     post?.reactions?.reactions.map(
       ({ emoji, by: { _id, fullName, avatar } }) => ({
@@ -34,44 +40,12 @@ const Post = ({ post }: { post: PostType }) => {
     )
   );
 
+  const mutation = useCreateComment(post._id, (result) =>
+    setComments([result.data.comment, ...comments])
+  );
+
   // CommentBox Ref to focus on the comment Box when clicked on the comment icon
   const commentBox = useRef<HTMLInputElement>(null);
-  const user = useUser();
-
-  // This function will be called once the component is mounted
-  // and every time the "View more" button is clicked to fetch +5 more comments
-  const fetchMoreComments = async () => {
-    try {
-      const { data } = await fetchComments(post._id, offset);
-
-      // console.log(data, "data");
-      setOffset(offset + 5);
-
-      setComments(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // Quering for comments. refetch() will call for fetchMoreComments() to fetch +5 more comments.
-  // For ex => (View more button clicked) => refetch() => fetchMoreComments()
-  const { refetch, isLoading, isFetching } = useQuery(
-    ["comments", post._id],
-    fetchMoreComments,
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
-
-  const mutation = useMutation(
-    "createComment",
-    (comment: any) => createComment(post._id, comment),
-    {
-      onSuccess: (result) => {
-        setComments([result.data.comment, ...comments]);
-      },
-    }
-  );
 
   const formik = useFormik({
     initialValues: {
