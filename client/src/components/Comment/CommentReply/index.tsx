@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from "react-query";
 import { editCommentReply, deleteCommentReply } from "../../../api";
 import useUser from "../../../hooks/useUser";
 import Moment from "react-moment";
-import { FacebookCounter } from "@charkour/react-reactions";
 import CommentDropdown from "../CommentDropdown";
 import { CommentReplyInterface } from "../types";
 import CommentEditForm from "../CommentEditForm";
@@ -54,6 +53,7 @@ const CommentReply = ({
           message: values.commentReply,
           commentReplyId: commentReply._id,
         };
+        formik.resetForm();
         await editMutation.mutateAsync(newReply);
       } catch (err) {
         console.log(err);
@@ -97,7 +97,6 @@ const CommentReply = ({
                     <img src={loader} />
                   </span>
                 )}
-                <FacebookCounter counters={[{ emoji: "like", by: "Shaan" }]} />
               </div>
               {menu && user._id === commentReply.author._id && (
                 <CommentDropdown
@@ -111,7 +110,7 @@ const CommentReply = ({
               <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
                 Like
               </span>
-              <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
+              <span className="text-sm text-gray-600 ml-3 mt-2">
                 <Moment fromNow>{commentReply.date}</Moment>
               </span>
             </div>

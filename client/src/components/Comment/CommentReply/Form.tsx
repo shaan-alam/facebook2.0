@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { useMutation, useQueryClient } from "react-query";
 import { createCommentReply } from "../../../api";
 import React from "react";
+import useCreateCommentReply from "../../../hooks/useCreateCommentReply";
 
 interface CommentReplyInterface {
   _id: string;
@@ -29,18 +30,10 @@ const Form = ({
   >;
 }) => {
   const author = useUser();
-  const queryClient = useQueryClient();
 
-  const mutation = useMutation(
-    (commentReply: { message: string; author: string; commentId: string }) =>
-      createCommentReply(commentReply),
-    {
-      onSuccess: (result) => {
-        formik.resetForm();
-        setCommentReplies((replies) => [...replies, result.data.reply]);
-      },
-    }
-  );
+  const mutation = useCreateCommentReply((result) => {
+    setCommentReplies((replies) => [...replies, result.data.reply]);
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -58,8 +51,8 @@ const Form = ({
           author: author._id,
           commentId,
         });
-
         setSubmitting(false);
+        formik.resetForm();
       } catch (err) {
         console.log(err);
       }
