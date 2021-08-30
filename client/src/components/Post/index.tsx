@@ -10,21 +10,23 @@ import PostDropdown from "./PostDropdown";
 import useUser from "../../hooks/useUser";
 import PostComment from "../Comment";
 import { Comment } from "./types";
-import { useMutation } from "react-query";
-import { createComment } from "../../api";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "../Button";
 import EmojiPicker from "../EmojiPicker";
 import loader from "../../assets/svg/loader-dark.svg";
 import useFetchComments from "../../hooks/useFetchComments";
+import useCreateComment from "../../hooks/useCreateComment";
 
 const Post = ({ post }: { post: PostType }) => {
+  const user = useUser();
   const [comments, setComments] = useState<Comment[]>([]);
+
   const { refetch, isLoading, isFetching } = useFetchComments(
     post._id,
     setComments
   );
+
   const [counters, setCounters] = useState<Counters[]>(
     post?.reactions?.reactions.map(
       ({ emoji, by: { _id, fullName, avatar } }) => ({
@@ -38,19 +40,12 @@ const Post = ({ post }: { post: PostType }) => {
     )
   );
 
+  const mutation = useCreateComment(post._id, (result) =>
+    setComments([result.data.comment, ...comments])
+  );
+
   // CommentBox Ref to focus on the comment Box when clicked on the comment icon
   const commentBox = useRef<HTMLInputElement>(null);
-  const user = useUser();
-
-  const mutation = useMutation(
-    "createComment",
-    (comment: any) => createComment(post._id, comment),
-    {
-      onSuccess: (result) => {
-        setComments([result.data.comment, ...comments]);
-      },
-    }
-  );
 
   const formik = useFormik({
     initialValues: {
