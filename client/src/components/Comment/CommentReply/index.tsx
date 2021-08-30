@@ -54,6 +54,7 @@ const CommentReply = ({
           message: values.commentReply,
           commentReplyId: commentReply._id,
         };
+        formik.resetForm();
         await editMutation.mutateAsync(newReply);
       } catch (err) {
         console.log(err);

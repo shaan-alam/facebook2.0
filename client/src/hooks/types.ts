@@ -62,3 +62,11 @@ export type UseFetchCommentReplies = (
     React.SetStateAction<CommentReplyInterface[]>
   >
 ) => QueryReturnType;
+
+export interface CommentReply {
+  message: string;
+  author: string;
+  commentId: string;
+}
+
+export type UseCreateCommentReply = (onSuccess: CommentCreationSuccess) => any;

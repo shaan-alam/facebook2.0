@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Comment } from "../Post/types";
 import Skeleton from "react-loading-skeleton";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteComment, editComment, fetchCommentReplies } from "../../api";
+import { useQueryClient } from "react-query";
 import loader from "../../assets/svg/loader-dark.svg";
 import useUser from "../../hooks/useUser";
 import { useFormik } from "formik";
