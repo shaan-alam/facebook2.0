@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from "react-query";
 import { editCommentReply, deleteCommentReply } from "../../../api";
 import useUser from "../../../hooks/useUser";
 import Moment from "react-moment";
-import { FacebookCounter } from "@charkour/react-reactions";
 import CommentDropdown from "../CommentDropdown";
 import { CommentReplyInterface } from "../types";
 import CommentEditForm from "../CommentEditForm";
@@ -98,7 +97,6 @@ const CommentReply = ({
                     <img src={loader} />
                   </span>
                 )}
-                <FacebookCounter counters={[{ emoji: "like", by: "Shaan" }]} />
               </div>
               {menu && user._id === commentReply.author._id && (
                 <CommentDropdown
