@@ -7,7 +7,7 @@ import {
 } from "react-query";
 import { Comment } from "../components/Post/types";
 
-export interface ReturnType {
+export interface QueryReturnType {
   refetch: (
     options?: RefetchOptions
   ) => Promise<QueryObserverResult<void, unknown>>;
@@ -19,7 +19,7 @@ export interface ReturnType {
 export type UseFetchComments = (
   postId: string,
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>
-) => ReturnType;
+) => QueryReturnType;
 
 export type CommentCreationSuccess = (
   data: AxiosResponse<any>,
@@ -44,3 +44,21 @@ export type UseEditComment = (
     context: unknown
   ) => void | Promise<unknown>
 ) => UseMutationResult<AxiosResponse<any>, unknown, NewComment, unknown>;
+
+export interface CommentReplyInterface {
+  _id: string;
+  message: string;
+  author: {
+    _id: string;
+    avatar: string;
+    fullName: string;
+  };
+  date: string;
+}
+
+export type UseFetchCommentReplies = (
+  commentId: string,
+  setCommentReplies: React.Dispatch<
+    React.SetStateAction<CommentReplyInterface[]>
+  >
+) => QueryReturnType;

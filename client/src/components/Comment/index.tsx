@@ -15,11 +15,11 @@ import { CommentReplyInterface } from "./types";
 import CommentEditForm from "./CommentEditForm";
 import useDeleteComment from "../../hooks/useDeleteComment";
 import useEditComment from "../../hooks/useEditComment";
+import useFetchCommentReplies from "../../hooks/useFetchCommentReplies";
 
 const PostComment = ({ comment }: { comment: Comment }) => {
   const user = useUser();
   const queryClient = useQueryClient();
-  const [offset, setOffset] = useState(2);
   const [commentForm, setCommentForm] = useState(false);
   const [commentReplyForm, setCommentReplyForm] = useState(false);
   const [commentReplies, setCommentReplies] = useState<CommentReplyInterface[]>(
@@ -28,30 +28,16 @@ const PostComment = ({ comment }: { comment: Comment }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [menu, setMenu] = useState(false);
 
+  // For Deleting comment reply
   const mutation = useDeleteComment(comment._id);
 
-  // This function will be called once the component is mounted
-  // and every time the "View more" button is clicked to fetch +5 more comments
-  const fetchMoreCommentReplies = async () => {
-    try {
-      const { data } = await fetchCommentReplies(comment._id, offset);
-
-      setOffset(offset + 5);
-
-      setCommentReplies(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const { refetch, isLoading, isFetching } = useQuery(
-    ["comment-replies", comment._id],
-    fetchMoreCommentReplies,
-    {
-      refetchOnWindowFocus: false,
-    }
+  // For Fetching comment replies
+  const { refetch, isLoading, isFetching } = useFetchCommentReplies(
+    comment._id,
+    setCommentReplies
   );
 
+  // For updating comment reply
   const editCommentMutation = useEditComment(() => {
     queryClient.refetchQueries("comments");
     formik.setSubmitting(false);
