@@ -110,7 +110,7 @@ const CommentReply = ({
               <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
                 Like
               </span>
-              <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
+              <span className="text-sm text-gray-600 ml-3 mt-2">
                 <Moment fromNow>{commentReply.date}</Moment>
               </span>
             </div>
