@@ -6,6 +6,11 @@ type UseDeleteComment = (
   commentId: string
 ) => UseMutationResult<AxiosResponse<any>, unknown, void, unknown>;
 
+/**
+ * @function useDeleteComment
+ * @description A custom hook to delete Comment;
+ * @param commentId ID of the comment which is to be deleted
+ */
 const useDeleteComment: UseDeleteComment = (commentId) => {
   const queryClient = useQueryClient();
 

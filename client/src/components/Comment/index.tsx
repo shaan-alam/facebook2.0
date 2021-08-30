@@ -14,6 +14,7 @@ import CommentDropdown from "./CommentDropdown";
 import { CommentReplyInterface } from "./types";
 import CommentEditForm from "./CommentEditForm";
 import useDeleteComment from "../../hooks/useDeleteComment";
+import useEditComment from "../../hooks/useEditComment";
 
 const PostComment = ({ comment }: { comment: Comment }) => {
   const user = useUser();
@@ -51,17 +52,11 @@ const PostComment = ({ comment }: { comment: Comment }) => {
     }
   );
 
-  const editCommentMutation = useMutation(
-    (newComment: { id: string; message: string }) =>
-      editComment(newComment.id, newComment.message),
-    {
-      onSuccess: () => {
-        queryClient.refetchQueries("comments");
-        formik.setSubmitting(false);
-        setCommentForm(false);
-      },
-    }
-  );
+  const editCommentMutation = useEditComment(() => {
+    queryClient.refetchQueries("comments");
+    formik.setSubmitting(false);
+    setCommentForm(false);
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -71,8 +66,6 @@ const PostComment = ({ comment }: { comment: Comment }) => {
       comment: yup.string().required(),
     }),
     onSubmit: async (values) => {
-      console.log(values);
-
       try {
         await editCommentMutation.mutateAsync({
           id: comment._id,
