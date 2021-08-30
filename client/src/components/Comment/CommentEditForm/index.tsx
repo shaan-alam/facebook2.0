@@ -5,8 +5,6 @@ import { useMutation, useQueryClient } from "react-query";
 import {
   editComment,
   editCommentReply,
-  deleteComment,
-  deleteCommentReply,
 } from "../../../api";
 
 const CommentEditForm = ({

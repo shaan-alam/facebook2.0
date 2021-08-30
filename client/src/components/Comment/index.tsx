@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   deleteComment,
   editComment,
-  editCommentReply,
   fetchCommentReplies,
 } from "../../api";
 import loader from "../../assets/svg/loader-dark.svg";
