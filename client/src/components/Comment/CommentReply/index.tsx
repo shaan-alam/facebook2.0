@@ -1,8 +1,7 @@
 import { useState } from "react";
 import loader from "../../../assets/svg/loader-dark.svg";
 import { useFormik } from "formik";
-import { useMutation, useQueryClient } from "react-query";
-import { deleteCommentReply } from "../../../api";
+import { useQueryClient } from "react-query";
 import useUser from "../../../hooks/useUser";
 import Moment from "react-moment";
 import CommentDropdown from "../CommentDropdown";

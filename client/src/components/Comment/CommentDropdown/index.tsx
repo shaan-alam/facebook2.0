@@ -24,7 +24,7 @@ const CommentDropdown = ({
         leaveFrom="transform  scale-100 opacity-100"
         leaveTo="transform scale-50 opacity-0"
       >
-        <Menu.Items className="absolute right-1/2 z-10 bg-white rounded-lg shadow-2xl p-1 w-60 origin-left translate-x-1/2">
+        <Menu.Items className="absolute z-10 -translate-x-3/4 bg-white rounded-lg shadow-2xl p-1 w-60">
           <div className="border-b p-1">
             <Menu.Item>
               {({ active }) => (
