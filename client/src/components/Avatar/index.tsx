@@ -1,6 +1,5 @@
 import { useState } from "react";
 import useUser from "../../hooks/useUser";
-import User from "../../assets/svg/user.svg";
 import { AvatarProps } from "./types";
 import Skeleton from "react-loading-skeleton";
 
@@ -15,7 +14,7 @@ const Avatar = ({ src, className, name, withName }: AvatarProps) => {
       )}
       <img
         style={{ display: !isLoaded ? "none" : "block" }}
-        src={src ? src : User}
+        src={src}
         alt={user?.fullName}
         className={className}
         onLoad={() => setLoaded(true)}

@@ -36,7 +36,7 @@ const PostComment = ({ comment }: { comment: Comment }) => {
     setCommentReplies
   );
 
-  // For updating comment reply
+  // For updating comment 
   const editCommentMutation = useEditComment(() => {
     queryClient.refetchQueries("comments");
     formik.setSubmitting(false);

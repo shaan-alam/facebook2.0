@@ -70,3 +70,17 @@ export interface CommentReply {
 }
 
 export type UseCreateCommentReply = (onSuccess: CommentCreationSuccess) => any;
+
+export interface NewCommentReply {
+  commentReplyId: string;
+  message: string;
+}
+
+export type UseEditCommentReply = (
+  onSuccess: (
+    data: AxiosResponse<any>,
+    variables: NewCommentReply,
+    context: unknown
+  ) => void | Promise<unknown> | undefined
+) => UseMutationResult<AxiosResponse<any>, unknown, NewCommentReply, unknown>;
+
