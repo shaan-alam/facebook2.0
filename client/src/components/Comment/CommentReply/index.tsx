@@ -2,7 +2,7 @@ import { useState } from "react";
 import loader from "../../../assets/svg/loader-dark.svg";
 import { useFormik } from "formik";
 import { useMutation, useQueryClient } from "react-query";
-import { editCommentReply, deleteCommentReply } from "../../../api";
+import { deleteCommentReply } from "../../../api";
 import useUser from "../../../hooks/useUser";
 import Moment from "react-moment";
 import CommentDropdown from "../CommentDropdown";
@@ -10,6 +10,7 @@ import { CommentReplyInterface } from "../types";
 import CommentEditForm from "../CommentEditForm";
 import Skeleton from "react-loading-skeleton";
 import useEditCommentReply from "../../../hooks/useEditCommentReply";
+import useDeleteCommentReply from "../../../hooks/useDeleteCommentReply";
 
 const CommentReply = ({
   commentReply,
@@ -28,15 +29,7 @@ const CommentReply = ({
     formik.setSubmitting(false);
   });
 
-  const deleteReplyMutation = useMutation(
-    () => deleteCommentReply(commentReply._id),
-    {
-      onSuccess: () => {
-        queryClient.refetchQueries("comments");
-        queryClient.refetchQueries("comment-replies");
-      },
-    }
-  );
+  const deleteReplyMutation = useDeleteCommentReply(commentReply._id);
 
   const formik = useFormik({
     initialValues: {
