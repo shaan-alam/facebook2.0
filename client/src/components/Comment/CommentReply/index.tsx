@@ -9,6 +9,7 @@ import CommentDropdown from "../CommentDropdown";
 import { CommentReplyInterface } from "../types";
 import CommentEditForm from "../CommentEditForm";
 import Skeleton from "react-loading-skeleton";
+import useEditCommentReply from "../../../hooks/useEditCommentReply";
 
 const CommentReply = ({
   commentReply,
@@ -21,17 +22,11 @@ const CommentReply = ({
   const [commentForm, setCommentForm] = useState(false);
   const [menu, setMenu] = useState(false);
 
-  const editMutation = useMutation(
-    (newComment: { commentReplyId: string; message: string }) =>
-      editCommentReply(newComment),
-    {
-      onSuccess: () => {
-        queryClient.refetchQueries("comment-replies");
-        setCommentForm(false);
-        formik.setSubmitting(false);
-      },
-    }
-  );
+  const editMutation = useEditCommentReply(() => {
+    queryClient.refetchQueries("comment-replies");
+    setCommentForm(false);
+    formik.setSubmitting(false);
+  });
 
   const deleteReplyMutation = useMutation(
     () => deleteCommentReply(commentReply._id),
