@@ -10,6 +10,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import SetupProfile from "./pages/Auth/SetupProfile";
 import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
+import Profile from "./pages/Profile";
 
 import "react-toastify/dist/ReactToastify.css";
 import { AUTH } from "./constants";
@@ -20,7 +21,6 @@ import { ReactQueryDevtools } from "react-query/devtools";
 export const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,6 +48,9 @@ const App = (): JSX.Element => {
             </Route>
             <Route path="/auth/setup-profile">
               <SetupProfile />
+            </Route>
+            <Route path="/profile">
+              <Profile />
             </Route>
           </Switch>
         </BrowserRouter>
