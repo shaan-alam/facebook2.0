@@ -34,7 +34,7 @@ export const signIn: SignInType =
 
       dispatch({ type: AUTH, payload: result.data });
       successRedirect();
-    } catch (err) {
+    } catch (err: any) {
       dispatch({
         type: ERROR,
         payload: { ON: SIGN_IN, message: err.response.data.message },
@@ -64,7 +64,7 @@ export const signUp: SignUpType =
 
       // Redirecting to the PostContainer component
       successRedirect();
-    } catch (err) {
+    } catch (err: any) {
       dispatch({
         type: ERROR,
         payload: { ON: SIGN_UP, message: err.response.data.message },
@@ -81,7 +81,7 @@ export const googleAuthentication: GoogleAuthenticationType =
       dispatch({ type: GOOGLE_AUTH_SUCCESS, payload: { user, token } });
 
       redirect(); // Redirect to the Feed Component after Authentication was successfull!
-    } catch (err) {
+    } catch (err: any) {
       dispatch({ type: GOOGLE_AUTH_FAILURE });
       dispatch({
         type: ERROR,
