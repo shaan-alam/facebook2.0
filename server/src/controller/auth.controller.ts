@@ -20,7 +20,7 @@ export const signUp = async (req: Request, res: Response) => {
 
   try {
     const avatar = `https://avatars.dicebear.com/api/initials/${fullName}.svg`;
-    const newUser = await new User({ fullName, email, password, avatar });
+    const newUser = await new User({ fullName, email, password, avatar, });
     await newUser.save();
 
     const token = await signToken(newUser._id);
