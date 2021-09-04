@@ -23,7 +23,7 @@ const useFetchCommentReplies: UseFetchCommentReplies = (
       setOffset(offset + 5);
 
       setCommentReplies(data);
-    } catch (err) {
+    } catch (err: any) {
       setError(err);
       console.log(err);
     }

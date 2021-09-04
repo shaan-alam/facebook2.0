@@ -14,7 +14,7 @@ const PostDeleteModal = ({ isOpen, setOpen, post }: PostDeleteModalProps) => {
       await api.deletePost(_id);
 
       setOpen(false); // Close the modal
-    } catch (err) {
+    } catch (err: any) {
       toast.error(err.message, {
         transition: Flip,
       });

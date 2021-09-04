@@ -21,8 +21,8 @@ const useFetchComments: UseFetchComments = (postId, setComments) => {
       setOffset(offset + 5);
 
       setComments(data);
-    } catch (err) {
-      setError(err);
+    } catch (err: any) {
+      setError(err as string);
       console.log(err);
     }
   };

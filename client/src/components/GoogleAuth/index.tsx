@@ -32,7 +32,7 @@ const GoogleAuth = () => {
           imageUrl,
         });
       }
-    } catch (err) {
+    } catch (err: any) {
       toast.error(err.message, {
         transition: Flip,
       });

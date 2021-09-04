@@ -144,6 +144,6 @@ router.patch("/:id", validateToken, getPost, editPost);
  */
 router.delete("/:id", validateToken, getPost, deletePost);
 
-router.patch('/:id/reactPost', getPost, reactPost)
+router.patch("/:id/reactPost", getPost, reactPost);
 
 export default router;
