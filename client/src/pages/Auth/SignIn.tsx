@@ -21,7 +21,6 @@ interface FormData {
 const SignIn = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const error = useSelector((state: RootState) => state.error);
 
   const mutation = useMutation((formData: FormData) => signIn(formData), {
     onSuccess: (profile) => {
