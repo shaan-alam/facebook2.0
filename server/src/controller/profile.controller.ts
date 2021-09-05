@@ -5,6 +5,7 @@ import Followers from "../models/followers.model";
 import Following from "../models/following.model";
 import logger from "../logger";
 import Post from "../models/post.model";
+import { fetchPosts } from "../utils/controller.util";
 
 /**
  * @description To get the User's profile
@@ -110,128 +111,7 @@ export const getUserPosts = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const posts = await Post.aggregate([
-      { $match: { author: mongoose.Types.ObjectId(id) } },
-      // Join user (*author of the post) from the users collection
-      {
-        $lookup: {
-          from: "users",
-          localField: "author",
-          foreignField: "_id",
-          as: "author",
-        },
-      },
-      { $unwind: "$author" },
-      // Join the reactions of the post from the reactions collection
-      {
-        $lookup: {
-          from: "reactions",
-          as: "reactions",
-          let: { postId: "$_id" },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $eq: ["$postId", "$$postId"],
-                },
-              },
-            },
-          ],
-        },
-      },
-      { $unwind: "$reactions" },
-      // Join the latest comment for this post from the comments collection
-      // This is just to show a comment in the UI
-      // Later we will fetch the comments (10 each time) in the comment.controller.ts
-      {
-        $lookup: {
-          from: "comments",
-          as: "comments",
-          let: { post_id: "$_id" },
-          pipeline: [
-            // Get the latest comment
-            { $sort: { date: -1 } },
-            {
-              $match: {
-                $expr: { $eq: ["$postId", "$$post_id"] },
-              },
-            },
-            {
-              $limit: 3,
-            },
-            // Join the author of the comment from the users model
-            {
-              $lookup: {
-                from: "users",
-                localField: "author",
-                foreignField: "_id",
-                as: "author",
-              },
-            },
-            {
-              $unwind: "$author",
-            },
-            {
-              $project: {
-                _id: 1,
-                message: 1,
-                date: 1,
-                "author.avatar": 1,
-                "author.fullName": 1,
-                "author._id": 1,
-              },
-            },
-          ],
-        },
-      },
-      {
-        $lookup: {
-          from: "comments",
-          let: { post_id: "$_id" },
-          as: "commentCount",
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$postId", "$$post_id"] },
-              },
-            },
-            {
-              $sort: { date: -1 },
-            },
-            {
-              $group: { _id: null, count: { $sum: 1 } },
-            },
-          ],
-        },
-      },
-      {
-        $unwind: {
-          path: "$commentCount",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $addFields: {
-          commentCount: "$commentCount.count",
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          imageURL: 1,
-          thumbnailURL: 1,
-          caption: 1,
-          createdAt: 1,
-          comments: 1,
-          filter: 1,
-          "author._id": 1,
-          "author.fullName": 1,
-          "author.avatar": 1,
-          "reactions.reactions": 1,
-          commentCount: 1,
-        },
-      },
-    ]);
+    const posts = await fetchPosts(id);
 
     res.json(posts);
   } catch (err) {
