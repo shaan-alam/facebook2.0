@@ -7,8 +7,7 @@ import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import useProfilePost from "../../hooks/useProfilePost";
 import useUser from "../../hooks/useUser";
-import { HiUserAdd } from "react-icons/hi";
-import Button from "../../components/Button";
+import FollowButton from "../../components/Button/FollowButton";
 
 const Profile = () => {
   const user = useUser();
@@ -50,15 +49,12 @@ const Profile = () => {
               profile.data?.fullName
             )}
           </h1>
-          {user._id !== id && (
-            <Button variant="primary" className="p-2">
-              <HiUserAdd />
-              &nbsp; Follow
-            </Button>
+          {user._id !== id && <FollowButton userId={id} />}
+          {user._id === id && (
+            <a href="#!" className="text-fb font-bold mt-4 inline-block">
+              Add Bio
+            </a>
           )}
-          <a href="#!" className="text-fb font-bold mt-4 inline-block">
-            Add Bio
-          </a>
         </div>
         <div
           className="bg-gray-200 w-full mt-4"
