@@ -8,7 +8,7 @@ import FormInput from "../../components/FormInput";
 import GoogleAuth from "../../components/GoogleAuth";
 import Button from "../../components/Button";
 import { useMutation } from "react-query";
-import { ToastContainer, toast, Flip } from "react-toastify";
+import { toast, Flip } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { AUTH } from "../../constants";
 
@@ -57,9 +57,8 @@ const SignUp = () => {
         .oneOf([yup.ref("password")], "The two passwords should match"),
     }),
     onSubmit: async (values, { setSubmitting }) => {
-      setSubmitting(true);
-
       await mutation.mutateAsync(values);
+      setSubmitting(false);
     },
   });
 

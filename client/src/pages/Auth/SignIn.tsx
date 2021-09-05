@@ -4,19 +4,38 @@ import { useSelector, useDispatch } from "react-redux";
 import { signIn } from "../../actions/auth";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../reducers/index";
-import { ERROR, SIGN_IN } from "../../constants";
-import { ToastContainer, toast, Flip } from "react-toastify";
-import { clearError } from "../../actions/error";
+import { toast, Flip } from "react-toastify";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput";
 import GoogleAuth from "../../components/GoogleAuth";
 import Button from "../../components/Button";
+import { useMutation } from "react-query";
+import { AUTH } from "../../constants";
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const error = useSelector((state: RootState) => state.error);
+
+  const mutation = useMutation((formData: FormData) => signIn(formData), {
+    onSuccess: (profile) => {
+      localStorage.setItem("profile", JSON.stringify(profile));
+      dispatch({ type: AUTH, payload: profile });
+      history.push("/");
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data.err, {
+        transition: Flip,
+      });
+      formik.resetForm();
+    },
+  });
 
   // Formik configuration
   const formik = useFormik({
@@ -31,13 +50,9 @@ const SignIn = () => {
         .required("Email is required!"),
       password: yup.string().trim().required("Password is required!"),
     }),
-    onSubmit: (values, { setSubmitting }) => {
-      setSubmitting(true);
-
-      // Redirect to the Feed
-      const successRedirect = () => history.push("/");
-
-      dispatch(signIn(values, successRedirect));
+    onSubmit: async (values, { setSubmitting }) => {
+      await mutation.mutateAsync(values);
+      setSubmitting(false);
     },
   });
 
@@ -49,21 +64,6 @@ const SignIn = () => {
       history.push("/");
     }
   }, []);
-
-  useEffect(() => {
-    // Show error if error exists for this component in the redux store.
-    const showError = () => {
-      toast.error(error.message, {
-        transition: Flip,
-      });
-    };
-
-    if (error.ON === SIGN_IN && error.message) {
-      showError();
-      formik.setSubmitting(false);
-      dispatch(clearError());
-    }
-  }, [error]);
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-blue-50">
@@ -113,7 +113,6 @@ const SignIn = () => {
           </form>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };
