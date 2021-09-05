@@ -3,11 +3,16 @@ import { PostType } from "../Post/types";
 import { ExclamationIcon } from "@heroicons/react/solid";
 import SkeletonPost from "../SkeletonPost";
 import { UseQueryResult } from "react-query";
+import { AxiosResponse } from "axios";
 
-const Posts = ({ posts }: { posts: UseQueryResult<any, unknown> }) => {
+const Posts = ({
+  posts,
+}: {
+  posts: UseQueryResult<PostType[] | undefined, unknown>;
+}) => {
   return (
     <>
-      {posts.isLoading && !posts.data && (
+      {posts?.isLoading && !posts?.data && (
         <div className="">
           <SkeletonPost />
           <SkeletonPost />
@@ -15,15 +20,16 @@ const Posts = ({ posts }: { posts: UseQueryResult<any, unknown> }) => {
           <SkeletonPost />
         </div>
       )}
-      {posts.isError && (
+      {posts?.isError && (
         <div className="flex  items-center bg-red-100 border-2 border-red-200 rounded-lg p-3 font-semibold text-red-600">
           <ExclamationIcon className="h-8 w-8" />
           &nbsp; {posts.error}
         </div>
       )}
-      {!posts.isLoading &&
-        posts.isSuccess &&
-        posts.data.map((post: PostType) => (
+      {posts &&
+        !posts?.isLoading &&
+        posts?.isSuccess &&
+        posts?.data?.map((post: PostType) => (
           <Post post={post} key={post?._id} />
         ))}
     </>

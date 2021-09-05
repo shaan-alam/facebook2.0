@@ -5,18 +5,17 @@ import Posts from "../../components/Posts";
 import useProfile from "../../hooks/useProfile";
 import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import Post from "../../components/Post";
 import useProfilePost from "../../hooks/useProfilePost";
 
 const Profile = () => {
   const { id }: { id: string } = useParams();
   const profile = useProfile(id);
-  const posts = useProfilePost(id);
+  const { posts, photos } = useProfilePost(id);
 
   return (
     <>
       <div className="flex flex-col items-center h-1/2 shadow-md">
-        <div className="header relative mx-auto w-full lg:w-3/4 h-96 justify-center items-end z-10">
+        <div className="header relative mx-auto w-full lg:w-3/4 h-96 justify-center items-end">
           <div
             className="h-full w-full"
             style={{
@@ -81,7 +80,7 @@ const Profile = () => {
               followers={profile.data?.followers?.length}
               following={profile.data?.following?.length}
             />
-            <PhotosCard />
+            <PhotosCard photos={photos} />
           </div>
           <main className="main w-full md:w-3/4 mr-4">
             <NewPost />
