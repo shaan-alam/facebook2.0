@@ -65,6 +65,12 @@ export const getPosts = async (req: Request, res: Response) => {
     // Fetch all the posts along with their author and likes
     const posts = await fetchPosts();
 
+    await Post.populate(posts, {
+      path: "reactions.reactions.by",
+      select: "_id fullName avatar",
+      model: "User",
+    });
+
     res.json(posts);
   } catch (err) {
     logger.error(err);

@@ -113,6 +113,12 @@ export const getUserPosts = async (req: Request, res: Response) => {
   try {
     const posts = await fetchPosts(id);
 
+    await Post.populate(posts, {
+      path: "reactions.reactions.by",
+      select: "_id fullName avatar",
+      model: "User",
+    });
+
     res.json(posts);
   } catch (err) {
     logger.error(err.message);
