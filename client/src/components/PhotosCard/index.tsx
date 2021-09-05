@@ -12,7 +12,7 @@ const PhotosCard = ({ photos }: { photos: PostType[] | undefined }) => {
       )}
       <div className="grid grid-cols-3 gap-2">
         {photos?.map((photo) => (
-          <Link to="#!" className="hover:opacity-95">
+          <Link to="#!" className="hover:opacity-95" key={photo._id}>
             <img src={photo.thumbnailURL} alt={photo.caption} />
           </Link>
         ))}

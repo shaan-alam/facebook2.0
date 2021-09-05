@@ -6,8 +6,10 @@ import useProfile from "../../hooks/useProfile";
 import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import useProfilePost from "../../hooks/useProfilePost";
+import useUser from "../../hooks/useUser";
 
 const Profile = () => {
+  const user = useUser();
   const { id }: { id: string } = useParams();
   const profile = useProfile(id);
   const { posts, photos } = useProfilePost(id);
@@ -83,7 +85,12 @@ const Profile = () => {
             <PhotosCard photos={photos} />
           </div>
           <main className="main w-full md:w-3/4 mr-4">
-            <NewPost />
+            {user._id === id && <NewPost />}
+            {posts?.data?.length === 0 && (
+              <div className="w-full text-center bg-white p-6 font-semibold rounded-lg shadow-md">
+                <p>You haven't posted anything till now!!</p>
+              </div>
+            )}
             <Posts posts={posts} />
           </main>
         </div>

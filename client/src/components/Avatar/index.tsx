@@ -29,7 +29,7 @@ const Avatar = ({ src, className, name, withName, link }: AvatarProps) => {
     </div>
   );
 
-  return link ? (
+  return link !== undefined ? (
     <Link to={link}>
       <AvatarComponent />
     </Link>
