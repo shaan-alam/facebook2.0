@@ -14,17 +14,17 @@ const PostStats = ({ counters, comments }: PostStatsProps) => {
     <div className="flex items-center justify-between">
       <FacebookCounter
         onClick={() => setPostStatsModal(true)}
-        counters={counters.map((res) => ({
+        counters={counters?.map((res) => ({
           emoji: res.emoji,
           by: res.by.fullName,
         }))}
         user={user?.fullName}
         important={
-          counters.length > 2
+          counters?.length > 2
             ? counters
-                .filter((counter) => counter.by.userID !== user?._id)
-                .map((counter) => counter.by.fullName)
-                .slice(3)
+                ?.filter((counter) => counter.by.userID !== user?._id)
+                ?.map((counter) => counter.by.fullName)
+                ?.slice(3)
             : []
         }
       />

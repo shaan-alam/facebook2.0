@@ -172,7 +172,7 @@ export const getPosts = async (req: Request, res: Response) => {
         $project: {
           _id: 1,
           imageURL: 1,
-          thumbnail: 1,
+          thumbnailURL: 1,
           caption: 1,
           createdAt: 1,
           comments: 1,
