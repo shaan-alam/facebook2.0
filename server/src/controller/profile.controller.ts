@@ -188,16 +188,16 @@ export const unfollowProfile = async (req: Request, res: Response) => {
   const { id } = req.params; // Id of the user to be followed
   const currentUser = res.locals.userId;
 
-  const userFollowers = await Followers.findOne({
+  const currentUserFollowings = await Following.findOne({
     userId: currentUser._id,
   });
 
   try {
-    if (!userFollowers?.followers.includes(id as any)) {
+    if (!currentUserFollowings?.following.includes(id as any)) {
       throw new Error("Cannot unfollow the user as it is already unfollowed!");
     }
 
-    if (currentUser._id === id) {
+    if (currentUserFollowings._id === id) {
       throw new Error("A user cannot unfollow himself!");
     }
 

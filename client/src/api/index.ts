@@ -133,3 +133,9 @@ export const getProfile = (userId: string) => API.get(`/profile/${userId}`);
 
 export const getProfilePost = (userId: string) =>
   API.get(`/profile/posts/${userId}`);
+
+export const followUser = (userId: string) =>
+  API.patch(`/profile/follow/${userId}`);
+
+export const unfollowUser = (userId: string) =>
+  API.patch(`/profile/unfollow/${userId}`);

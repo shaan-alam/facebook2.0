@@ -12,12 +12,14 @@ type Response = AxiosResponse<{
     lives_in_city: string;
     from_city: string;
   };
-  followers: Array<any>;
-  following: Array<any>;
+  followers: Array<{ _id: string; fullName: string; avatar: string }>;
+  following: Array<{ _id: string; fullName: string; avatar: string }>;
 }>;
 
 const useProfile = (userId: string) => {
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async ({ queryKey }: any) => {
+    const [_key, userId] = queryKey;
+
     try {
       const result: Response = await getProfile(userId);
 
@@ -27,7 +29,7 @@ const useProfile = (userId: string) => {
     }
   };
 
-  return useQuery(["profile", userId], () => fetchProfile(userId));
+  return useQuery(["profile", userId], fetchProfile);
 };
 
 export default useProfile;

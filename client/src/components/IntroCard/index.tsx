@@ -34,7 +34,7 @@ const IntroCard: IntroCardType = ({
           Followed by <b>{followers} People</b>
         </p>
       )}
-      {typeof followers === "number" && followers > 0 && (
+      {typeof following === "number" && following > 0 && (
         <p className="mb-4">
           Following <b>{following} People</b>
         </p>
