@@ -15,13 +15,13 @@ const NewPost = () => {
   return (
     <>
       <div className="bg-white shadow-sm p-4 my-3 rounded-lg w-full mx-auto">
-        <div className="flex bg-white items-center">
-          <Avatar
-            src={user?.avatar}
-            className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
-          />
-          <p className="text-fb font-semibold">{user.fullName}</p>
-        </div>
+        <Avatar
+          src={user?.avatar}
+          className="mr-2 h-8 w-8 rounded-full object-cover hover:ring-2 hover:ring-blue-700"
+          link={`/profile/${user._id}`}
+          name={user.fullName}
+          withName
+        />
         <div className="flex items-center">
           <div
             className="mr-4 w-full h-10 bg-gray-200 my-4 rounded-full py-2 px-4 cursor-pointer hover:shadow-md transition"

@@ -8,6 +8,7 @@ import { clearError } from "../../actions/error";
 // Interfaces and Types
 import NewPost from "../../components/NewPost";
 import ProfileSuggestion from "../../components/ProfileSuggestion";
+import usePosts from "../../hooks/usePosts";
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,8 @@ const Feed = () => {
   useEffect(() => {
     dispatch(clearError());
   }, []);
+
+  const posts = usePosts();
 
   return (
     <div className="bg-gray-100">
@@ -27,7 +30,7 @@ const Feed = () => {
         <div className="wall lg:mr-2 w-full">
           <NewPost />
           <div className="posts my-4 rounded-lg">
-            <Posts />
+            <Posts posts={posts} />
           </div>
         </div>
         <ProfileSuggestion />

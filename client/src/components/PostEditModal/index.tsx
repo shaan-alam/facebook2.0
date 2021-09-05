@@ -15,6 +15,7 @@ const PostEditModal = ({ isOpen, setOpen, post }: PostEditModalProps) => {
     {
       onSuccess: () => {
         queryClient.refetchQueries("posts");
+        queryClient.refetchQueries("profile-post");
         formik.setSubmitting(false);
         setOpen(false);
       },

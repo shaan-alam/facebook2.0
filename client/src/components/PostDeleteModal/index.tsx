@@ -24,8 +24,9 @@ const PostDeleteModal = ({ isOpen, setOpen, post }: PostDeleteModalProps) => {
   const { isLoading, isError, error, mutate } = useMutation(
     (_id: string) => deletePost(_id),
     {
-      onSuccess: async () => {
-        await queryClient.refetchQueries("posts");
+      onSuccess: () => {
+         queryClient.refetchQueries("posts");
+         queryClient.refetchQueries("profile-post");
       },
     }
   );

@@ -5,6 +5,7 @@ import Followers from "../models/followers.model";
 import Following from "../models/following.model";
 import logger from "../logger";
 import Post from "../models/post.model";
+import { fetchPosts } from "../utils/controller.util";
 
 /**
  * @description To get the User's profile
@@ -110,9 +111,13 @@ export const getUserPosts = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const posts = await Post.aggregate([
-      { $match: { author: mongoose.Types.ObjectId(id) } },
-    ]);
+    const posts = await fetchPosts(id);
+
+    await Post.populate(posts, {
+      path: "reactions.reactions.by",
+      select: "_id fullName avatar",
+      model: "User",
+    });
 
     res.json(posts);
   } catch (err) {

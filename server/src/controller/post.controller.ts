@@ -3,6 +3,7 @@ import logger from "../logger";
 import Post from "../models/post.model";
 import Reactions, { Reaction } from "../models/reactions.model";
 import cloudinary, { formatCloudinaryUrl } from "../utils/cloudinary.util";
+import { fetchPosts } from "../utils/controller.util";
 
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -62,139 +63,15 @@ export const createPost = async (req: Request, res: Response) => {
 export const getPosts = async (req: Request, res: Response) => {
   try {
     // Fetch all the posts along with their author and likes
-    const posts = await Post.aggregate([
-      // Sort posts in descending order of their creation time.
-      { $sort: { createdAt: -1 } },
-      // Join user (*author of the post) from the users collection
-      {
-        $lookup: {
-          from: "users",
-          localField: "author",
-          foreignField: "_id",
-          as: "author",
-        },
-      },
-      { $unwind: "$author" },
-      // Join the reactions of the post from the reactions collection
-      {
-        $lookup: {
-          from: "reactions",
-          as: "reactions",
-          let: { postId: "$_id" },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $eq: ["$postId", "$$postId"],
-                },
-              },
-            },
-          ],
-        },
-      },
-      { $unwind: "$reactions" },
-      // Join the latest comment for this post from the comments collection
-      // This is just to show a comment in the UI
-      // Later we will fetch the comments (10 each time) in the comment.controller.ts
-      {
-        $lookup: {
-          from: "comments",
-          as: "comments",
-          let: { post_id: "$_id" },
-          pipeline: [
-            // Get the latest comment
-            { $sort: { date: -1 } },
-            {
-              $match: {
-                $expr: { $eq: ["$postId", "$$post_id"] },
-              },
-            },
-            {
-              $limit: 3,
-            },
-            // Join the author of the comment from the users model
-            {
-              $lookup: {
-                from: "users",
-                localField: "author",
-                foreignField: "_id",
-                as: "author",
-              },
-            },
-            {
-              $unwind: "$author",
-            },
-            {
-              $project: {
-                _id: 1,
-                message: 1,
-                date: 1,
-                "author.avatar": 1,
-                "author.fullName": 1,
-                "author._id": 1,
-              },
-            },
-          ],
-        },
-      },
-      {
-        $lookup: {
-          from: "comments",
-          let: { post_id: "$_id" },
-          as: "commentCount",
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$postId", "$$post_id"] },
-              },
-            },
-            {
-              $sort: { date: -1 },
-            },
-            {
-              $group: { _id: null, count: { $sum: 1 } },
-            },
-          ],
-        },
-      },
-      {
-        $unwind: {
-          path: "$commentCount",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $addFields: {
-          commentCount: "$commentCount.count",
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          imageURL: 1,
-          thumbnail: 1,
-          caption: 1,
-          createdAt: 1,
-          comments: 1,
-          filter: 1,
-          "author._id": 1,
-          "author.fullName": 1,
-          "author.avatar": 1,
-          "reactions.reactions": 1,
-          commentCount: 1,
-        },
-      },
-    ]);
+    const posts = await fetchPosts();
 
-    // Populate the reactions authors
-    await Reactions.populate(posts, {
+    await Post.populate(posts, {
       path: "reactions.reactions.by",
-      select: "fullName _id avatar",
+      select: "_id fullName avatar",
       model: "User",
     });
 
     res.json(posts);
-    // const postsWithLikes = await PostLikes.findOne({ post})
   } catch (err) {
     logger.error(err);
     res.status(404).json({ message: err.message });

@@ -128,3 +128,8 @@ export const editCommentReply = (commentReply: {
 
 export const deleteCommentReply = (commentReplyId: string) =>
   API.delete(`/post/comment-reply/delete-reply/${commentReplyId}`);
+
+export const getProfile = (userId: string) => API.get(`/profile/${userId}`);
+
+export const getProfilePost = (userId: string) =>
+  API.get(`/profile/posts/${userId}`);

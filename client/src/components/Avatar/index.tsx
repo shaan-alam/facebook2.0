@@ -2,12 +2,13 @@ import { useState } from "react";
 import useUser from "../../hooks/useUser";
 import { AvatarProps } from "./types";
 import Skeleton from "react-loading-skeleton";
+import { Link } from "react-router-dom";
 
-const Avatar = ({ src, className, name, withName }: AvatarProps) => {
+const Avatar = ({ src, className, name, withName, link }: AvatarProps) => {
   const user = useUser();
   const [isLoaded, setLoaded] = useState(false);
 
-  return (
+  const AvatarComponent = () => (
     <div className="flex items-center">
       {!isLoaded && (
         <Skeleton style={{ borderRadius: "100%" }} height={30} width={30} />
@@ -26,6 +27,14 @@ const Avatar = ({ src, className, name, withName }: AvatarProps) => {
         <p className="ml-2 text-fb font-semibold">{name}</p>
       )}
     </div>
+  );
+
+  return link !== undefined ? (
+    <Link to={link}>
+      <AvatarComponent />
+    </Link>
+  ) : (
+    <AvatarComponent />
   );
 };
 

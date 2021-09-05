@@ -23,24 +23,12 @@ import * as api from "../api";
  * @param successRedirect is a function to to redirect the user to the PostContainer component if the sign in is sucessful!
  * @return {[Promise<void>]} Returns a promise of Promise<void>
  */
-export const signIn: SignInType =
-  (formData, successRedirect) => async (dispatch: Function) => {
-    try {
-      const { email, password } = formData;
-      const result: AxiosResponse<AuthResponse> = await api.signIn(
-        email,
-        password
-      );
+export const signIn: SignInType = async (formData) => {
+  const { email, password } = formData;
+  const result = await api.signIn(email, password);
 
-      dispatch({ type: AUTH, payload: result.data });
-      successRedirect();
-    } catch (err: any) {
-      dispatch({
-        type: ERROR,
-        payload: { ON: SIGN_IN, message: err.response.data.message },
-      });
-    }
-  };
+  return result.data;
+};
 
 /**
  * @description Action creator for signing up.
@@ -48,29 +36,17 @@ export const signIn: SignInType =
  * @param successRedirect is a function to to redirect the user to the PostContainer component if the sign up is sucessful!
  * @return {[Promise<void>]} Returns a promise of Promise<void>
  */
-export const signUp: SignUpType =
-  (formData, successRedirect) => async (dispatch: Function) => {
-    try {
-      const { fullName, email, password, confirmPassword } = formData;
-      const result = await api.signUp({
-        fullName,
-        email,
-        password,
-        confirmPassword,
-      });
+export const signUp: SignUpType = async (formData) => {
+  const { fullName, email, password, confirmPassword } = formData;
+  const result = await api.signUp({
+    fullName,
+    email,
+    password,
+    confirmPassword,
+  });
 
-      // Result here will be an object containing user profile object and the token
-      dispatch({ type: AUTH, payload: result.data });
-
-      // Redirecting to the PostContainer component
-      successRedirect();
-    } catch (err: any) {
-      dispatch({
-        type: ERROR,
-        payload: { ON: SIGN_UP, message: err.response.data.message },
-      });
-    }
-  };
+  return result.data;
+};
 
 export const googleAuthentication: GoogleAuthenticationType =
   (formData, redirect) => async (dispatch: Function) => {

@@ -49,7 +49,7 @@ const App = (): JSX.Element => {
             <Route path="/auth/setup-profile">
               <SetupProfile />
             </Route>
-            <Route path="/profile">
+            <Route path="/profile/:id">
               <Profile />
             </Route>
           </Switch>
