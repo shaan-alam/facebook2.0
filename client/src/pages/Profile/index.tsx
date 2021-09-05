@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import useProfilePost from "../../hooks/useProfilePost";
 import useUser from "../../hooks/useUser";
+import { HiUserAdd } from "react-icons/hi";
+import Button from "../../components/Button";
 
 const Profile = () => {
   const user = useUser();
@@ -40,14 +42,20 @@ const Profile = () => {
             />
           )}
         </div>
-        <div className="w-full text-center">
-          <h1 className="font-bold text-4xl mt-4">
+        <div className="text-center">
+          <h1 className="font-bold text-2xl mt-4 justify-between">
             {profile.isLoading ? (
               <Skeleton count={1} height={30} width={100} />
             ) : (
               profile.data?.fullName
             )}
           </h1>
+          {user._id !== id && (
+            <Button variant="primary" className="p-2">
+              <HiUserAdd />
+              &nbsp; Follow
+            </Button>
+          )}
           <a href="#!" className="text-fb font-bold mt-4 inline-block">
             Add Bio
           </a>

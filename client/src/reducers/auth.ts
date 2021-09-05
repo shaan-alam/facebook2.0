@@ -16,6 +16,11 @@ interface Action {
       createdAt: string;
       updatedAt: string;
       avatar: string;
+      cover_picture: string;
+      details: {
+        lives_in_city: string;
+        from_city: string;
+      };
     };
     token: string;
   };

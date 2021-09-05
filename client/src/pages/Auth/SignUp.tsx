@@ -1,22 +1,41 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { signUp } from "../../actions/auth";
 import { useHistory } from "react-router-dom";
-import { RootState } from "../../reducers/index";
-import { ToastContainer, toast, Flip } from "react-toastify";
-import { clearError } from "../../actions/error";
-import { SIGN_UP } from "../../constants";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput";
 import GoogleAuth from "../../components/GoogleAuth";
 import Button from "../../components/Button";
+import { useMutation } from "react-query";
+import { ToastContainer, toast, Flip } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { AUTH } from "../../constants";
+
+interface FormData {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const SignUp = () => {
-  const dispatch = useDispatch();
   const history = useHistory();
-  const error = useSelector((state: RootState) => state.error);
+  const dispatch = useDispatch();
+
+  const mutation = useMutation((formData: FormData) => signUp(formData), {
+    onSuccess: (profile) => {
+      localStorage.setItem("profile", JSON.stringify(profile));
+      dispatch({ type: AUTH, payload: profile });
+      history.push("/");
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data.message, {
+        transition: Flip,
+      });
+      formik.resetForm();
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -37,12 +56,10 @@ const SignUp = () => {
         .min(6, "Password must be 6 characters or more!")
         .oneOf([yup.ref("password")], "The two passwords should match"),
     }),
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
 
-      const successRedirect = () => history.push("/");
-
-      dispatch(signUp(values, successRedirect));
+      await mutation.mutateAsync(values);
     },
   });
 
@@ -54,21 +71,6 @@ const SignUp = () => {
       history.push("/");
     }
   }, []);
-
-  useEffect(() => {
-    // Show error if error exists for this component in the redux store.
-    const showError = () => {
-      toast.error(error.message, {
-        transition: Flip,
-      });
-    };
-
-    if (error.ON === SIGN_UP && error.message) {
-      showError();
-      formik.setSubmitting(false);
-      dispatch(clearError());
-    }
-  }, [error]);
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-blue-50">
@@ -136,7 +138,6 @@ const SignUp = () => {
           </form>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

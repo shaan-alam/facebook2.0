@@ -5,7 +5,7 @@ export interface ButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  text: string;
+  text?: string;
   variant?: "default" | "primary" | "secondary";
   isLoading?: boolean;
 }

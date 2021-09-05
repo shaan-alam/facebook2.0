@@ -3,6 +3,7 @@ import loaderDark from "../../assets/svg/loader-dark.svg";
 import { ButtonProps } from "./types";
 
 const Button = ({
+  children,
   type,
   className,
   onClick,
@@ -36,8 +37,10 @@ const Button = ({
               : loader
           }
         />
-      ) : (
+      ) : text ? (
         text
+      ) : (
+        children
       )}
     </button>
   );

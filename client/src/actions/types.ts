@@ -15,16 +15,12 @@ export type SignInType = (
   successRedirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;
 
-export type SignUpType = (
-  formData: {
-    fullName: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  },
-
-  successRedirect: () => void
-) => (dispatch: Dispatch<any>) => Promise<void>;
+export type SignUpType = (formData: {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}) => Promise<void>;
 
 export type GoogleAuthenticationType = (
   formData: {

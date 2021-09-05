@@ -169,7 +169,7 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
               <Button
                 text="Next"
                 variant="primary"
-                className="p-2 ml-2"
+                className="p-2 ml-2 "
                 onClick={(e: React.SyntheticEvent) => {
                   e.preventDefault();
                   setFormStep((formStep) => formStep + 1);
