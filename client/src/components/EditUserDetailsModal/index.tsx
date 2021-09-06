@@ -73,7 +73,7 @@ const EditUserDetailsModal = ({ isOpen, setOpen }: Props) => {
 
   return (
     <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Edit Details">
-      <div className="p-12 overflow-y-auto h-96">
+      <div className="p-4 sm:p-12 overflow-y-auto h-96">
         <form>
           <div className="lives_in p-2 mb-1">
             <label className="mb-1 inline-block font-semibold text-xl">
