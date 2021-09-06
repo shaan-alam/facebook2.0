@@ -11,6 +11,9 @@ type Response = AxiosResponse<{
   details: {
     lives_in_city: string;
     from_city: string;
+    bio: string;
+    works: string[];
+    education: string[];
   };
   followers: Array<{ _id: string; fullName: string; avatar: string }>;
   following: Array<{ _id: string; fullName: string; avatar: string }>;
@@ -21,11 +24,16 @@ const useProfile = (userId: string) => {
     const [_key, userId] = queryKey;
 
     try {
-      const result: Response = await getProfile(userId);
+      if (userId) {
+        const result: Response = await getProfile(userId);
 
-      return result.data;
+        return result.data;
+      }
+
+      return null;
     } catch (err) {
       console.error("Error", err);
+      console.log("here is the error");
     }
   };
 

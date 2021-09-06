@@ -5,6 +5,7 @@ import {
   getUserPosts,
   followProfile,
   unfollowProfile,
+  updateProfileDetails,
 } from "../controller/profile.controller";
 
 const router = express.Router();
@@ -16,5 +17,7 @@ router.patch("/follow/:id", validateToken, followProfile);
 router.patch("/unfollow/:id", validateToken, unfollowProfile);
 
 router.get("/posts/:id", validateToken, getUserPosts);
+
+router.patch("/edit/", validateToken, updateProfileDetails);
 
 export default router;

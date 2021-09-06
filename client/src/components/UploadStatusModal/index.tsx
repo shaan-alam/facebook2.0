@@ -36,7 +36,7 @@ const UploadStatusModal = ({ isOpen, setOpen }: UploadStatusModalProps) => {
     {
       onSuccess: async () => {
         queryClient.invalidateQueries("posts");
-        queryClient.refetchQueries("profile-post");
+        queryClient.refetchQueries(["profile-post", user._id]);
       },
     }
   );

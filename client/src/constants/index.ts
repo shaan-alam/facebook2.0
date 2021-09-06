@@ -3,6 +3,7 @@ export const AUTH = "AUTH";
 export const GOOGLE_AUTH_SUCCESS = "GOOGLE_AUTH_SUCCESS";
 export const GOOGLE_AUTH_FAILURE = "GOOGLE_AUTH_FAILURE";
 export const LOGOUT = "LOGOUT";
+export const SET_USER = "SET_USER";
 
 // Post related constants
 export const GET_POSTS = "GET_POSTS";

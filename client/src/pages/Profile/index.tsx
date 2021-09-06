@@ -50,10 +50,13 @@ const Profile = () => {
             )}
           </h1>
           {user._id !== id && <FollowButton userId={id} />}
-          {user._id === id && (
+          {user._id === id && !user.details.bio && (
             <a href="#!" className="text-fb font-bold mt-4 inline-block">
               Add Bio
             </a>
+          )}
+          {user.details.bio && (
+            <p className="text-gray-600 mt-6 font-bold">{user.details.bio}</p>
           )}
         </div>
         <div
