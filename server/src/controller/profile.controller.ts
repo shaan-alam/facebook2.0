@@ -231,3 +231,20 @@ export const unfollowProfile = async (req: Request, res: Response) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+export const updateProfileDetails = async (req: Request, res: Response) => {
+  const { details } = req.body;
+
+  try {
+    const newDetails = await User.findOneAndUpdate(
+      { _id: res.locals.userId._id },
+      { details: { ...details } },
+      { new: true }
+    );
+
+    res.json(newDetails);
+  } catch (err) {
+    logger.error(err.message);
+    res.status(500).json({ message: err.message });
+  }
+};

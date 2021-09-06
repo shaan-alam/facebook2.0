@@ -1,11 +1,14 @@
 import Button from "../Button";
 import Moment from "react-moment";
+import Skeleton from "react-loading-skeleton";
 
 interface Props {
   details:
     | {
         lives_in_city: string;
         from_city: string;
+        works: string[];
+        education: string[];
       }
     | undefined;
   followers: number | undefined;
@@ -34,6 +37,7 @@ const IntroCard: IntroCardType = ({
           Followed by <b>{followers} People</b>
         </p>
       )}
+      {!details && <Skeleton count={5} height={30} />}
       {typeof following === "number" && following > 0 && (
         <p className="mb-4">
           Following <b>{following} People</b>
@@ -41,16 +45,26 @@ const IntroCard: IntroCardType = ({
       )}
       {details?.lives_in_city && (
         <p className="mb-4">
-          Lives in <b>Basti, Uttar Pradesh</b>
+          Lives in <b>{details.lives_in_city}</b>
         </p>
       )}
       {details?.from_city && (
         <p className="mb-4">
-          From <b>Basti, Uttar Pradesh</b>
+          From <b>{details.from_city}</b>
+        </p>
+      )}
+      {details?.works && (
+        <p className="mb-4">
+          Works at <b>{details.works[0]}</b>
+        </p>
+      )}
+      {details?.works && (
+        <p className="mb-4">
+          Went to <b>{details.education[0]}</b>
         </p>
       )}
       <p className="mb-4">
-        Joined{" "}
+        Joined&nbsp;
         <Moment format="MMM YYYY">{new Date(createdAt!)}</Moment>
       </p>
       <Button variant="secondary" text="Edit Intro" className="font-bold p-2" />

@@ -11,6 +11,9 @@ export interface UserDocument extends mongoose.Document {
   details: {
     lives_in_city: string;
     from_city: string;
+    bio: string;
+    education: string[];
+    works: string[];
   };
   cover_picture: string;
   comparePassword: (c: string) => Promise<boolean>;
@@ -47,6 +50,18 @@ const UserSchema = new mongoose.Schema(
       from_city: {
         type: String,
         default: "",
+      },
+      bio: {
+        type: String,
+        default: "",
+      },
+      education: {
+        type: [String],
+        default: [],
+      },
+      works: {
+        type: [String],
+        default: [],
       },
     },
   },

@@ -12,7 +12,6 @@ interface Action {
       _id: string;
       fullName: string;
       email: string;
-      imageURL: string;
       createdAt: string;
       updatedAt: string;
       avatar: string;
@@ -20,6 +19,9 @@ interface Action {
       details: {
         lives_in_city: string;
         from_city: string;
+        bio: string;
+        works: string[];
+        education: string[];
       };
     };
     token: string;
@@ -36,6 +38,14 @@ interface InitialStateInterface {
       createdAt: string;
       updatedAt: string;
       avatar: string;
+      cover_picture: string;
+      details: {
+        lives_in_city: string;
+        from_city: string;
+        bio: string;
+        works: string[];
+        education: string[];
+      };
     };
   };
 }
@@ -50,6 +60,14 @@ const initialState: InitialStateInterface = {
       createdAt: "",
       updatedAt: "",
       avatar: "",
+      cover_picture: "",
+      details: {
+        bio: "",
+        from_city: "",
+        lives_in_city: "",
+        works: [],
+        education: [],
+      },
     },
   },
 };
@@ -80,8 +98,15 @@ const auth = (state = initialState, action: Action) => {
             email: "",
             createdAt: "",
             updatedAt: "",
-            imageURL: "",
             avatar: "",
+            cover_picture: "",
+            details: {
+              bio: "",
+              from_city: "",
+              lives_in_city: "",
+              works: [],
+              education: [],
+            },
           },
         },
       };
