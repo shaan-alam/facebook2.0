@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Button from "../index";
 import useProfile from "../../../hooks/useProfile";
 import useUser from "../../../hooks/useUser";
@@ -12,9 +11,6 @@ const FollowButtonComponent = ({ userId }: { userId: string }) => {
 
   const followMutation = useFollowUser(userId);
   const unfollowMutation = useUnfollowUser(userId);
-
-  console.log(currentUser);
-  useEffect(() => {}, []);
 
   const FollowButton = () => (
     <Button

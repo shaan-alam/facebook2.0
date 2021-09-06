@@ -139,3 +139,13 @@ export const followUser = (userId: string) =>
 
 export const unfollowUser = (userId: string) =>
   API.patch(`/profile/unfollow/${userId}`);
+
+export const updateProfileDetails = (details: {
+  lives_in_city: string;
+  from_city: string;
+  works: string[];
+  bio: string;
+  education: string[];
+}) => API.patch("/profile/edit", { details });
+
+export const getUserProfile = (id: string) => API.get(`/profile/${id}`);

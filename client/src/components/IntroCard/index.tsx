@@ -1,6 +1,9 @@
+import { useState } from "react";
 import Button from "../Button";
 import Moment from "react-moment";
 import Skeleton from "react-loading-skeleton";
+import EditUserDetailsModal from "../EditUserDetailsModal";
+import { AnimatePresence } from "framer-motion";
 
 interface Props {
   details:
@@ -29,6 +32,8 @@ const IntroCard: IntroCardType = ({
   following,
   createdAt,
 }) => {
+  const [userDetailsModal, setUserDetailsModal] = useState(false);
+
   return (
     <div className="intro-cardm bg-white p-5 rounded-lg shadow-md mb-4 stikcy top-4">
       <h1 className="font-bold text-3xl mb-5">Intro</h1>
@@ -53,21 +58,34 @@ const IntroCard: IntroCardType = ({
           From <b>{details.from_city}</b>
         </p>
       )}
-      {details?.works && (
+      {details?.works.length !== 0 && (
         <p className="mb-4">
-          Works at <b>{details.works[0]}</b>
+          Works at <b>{details?.works[0]}</b>
         </p>
       )}
-      {details?.works && (
+      {details?.education.length !== 0 && (
         <p className="mb-4">
-          Went to <b>{details.education[0]}</b>
+          Went to <b>{details?.education[0]}</b>
         </p>
       )}
       <p className="mb-4">
         Joined&nbsp;
         <Moment format="MMM YYYY">{new Date(createdAt!)}</Moment>
       </p>
-      <Button variant="secondary" text="Edit Intro" className="font-bold p-2" />
+      <Button
+        variant="secondary"
+        text="Edit Intro"
+        className="font-bold p-2"
+        onClick={() => setUserDetailsModal(true)}
+      />
+      <AnimatePresence>
+        {userDetailsModal && (
+          <EditUserDetailsModal
+            isOpen={userDetailsModal}
+            setOpen={setUserDetailsModal}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

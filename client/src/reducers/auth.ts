@@ -3,6 +3,7 @@ import {
   GOOGLE_AUTH_SUCCESS,
   GOOGLE_AUTH_FAILURE,
   LOGOUT,
+  SET_USER,
 } from "../constants";
 
 interface Action {
@@ -82,6 +83,15 @@ const auth = (state = initialState, action: Action) => {
         ...state,
         authData: {
           ...action.payload,
+        },
+      };
+
+    case SET_USER:
+      return {
+        ...state,
+        authData: {
+          ...state.authData,
+          user: action.payload.user,
         },
       };
 

@@ -42,9 +42,8 @@ const UploadPictureModal = ({ isOpen, setOpen }: UploadPictureModalProps) => {
         formik.resetForm();
         setOpen(false);
         queryClient.refetchQueries("posts");
-        queryClient.refetchQueries("profile-post");
+        queryClient.refetchQueries(["profile-post", user._id]);
       },
-
     }
   );
 
