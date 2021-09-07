@@ -55,8 +55,10 @@ const Profile = () => {
               Add Bio
             </a>
           )}
-          {user.details.bio && (
-            <p className="text-gray-600 mt-6 font-bold">{user.details.bio}</p>
+          {!profile.isLoading && (
+            <p className="text-gray-600 mt-6 font-bold">
+              {profile?.data?.details.bio}
+            </p>
           )}
         </div>
         <div

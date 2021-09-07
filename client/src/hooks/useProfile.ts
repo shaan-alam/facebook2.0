@@ -24,13 +24,9 @@ const useProfile = (userId: string) => {
     const [_key, userId] = queryKey;
 
     try {
-      if (userId) {
-        const result: Response = await getProfile(userId);
+      const result: Response = await getProfile(userId);
 
-        return result.data;
-      }
-
-      return null;
+      return result.data;
     } catch (err) {
       console.error("Error", err);
       console.log("here is the error");

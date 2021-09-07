@@ -34,6 +34,12 @@ const EditUserDetailsModal = ({ isOpen, setOpen }: Props) => {
     {
       onSuccess: (values) => {
         queryClient.refetchQueries(["profile", user._id]);
+
+        const profile = JSON.parse(localStorage.getItem("profile") || "{}");
+        profile.user = values.data;
+
+        localStorage.setItem("profile", JSON.stringify(profile));
+
         dispatch({ type: SET_USER, payload: { user: values.data } });
       },
     }
