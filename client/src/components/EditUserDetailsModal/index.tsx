@@ -6,44 +6,17 @@ import Button from "../Button";
 import { FaTimesCircle, FaCheckCircle, FaPlusCircle } from "react-icons/fa";
 import * as yup from "yup";
 import { v4 } from "uuid";
-import { useMutation, useQueryClient } from "react-query";
-import { updateProfileDetails } from "../../api";
-import { useDispatch } from "react-redux";
-import { SET_USER } from "../../constants";
+import useEditUserDetails from "../../hooks/useEditUserDetails";
 
 interface Props {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface ProfileDetails {
-  lives_in_city: string;
-  from_city: string;
-  works: string[];
-  bio: string;
-  education: string[];
-}
-
 const EditUserDetailsModal = ({ isOpen, setOpen }: Props) => {
   const user = useUser();
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
 
-  const mutation = useMutation(
-    (details: ProfileDetails) => updateProfileDetails(details),
-    {
-      onSuccess: (values) => {
-        queryClient.refetchQueries(["profile", user._id]);
-
-        const profile = JSON.parse(localStorage.getItem("profile") || "{}");
-        profile.user = values.data;
-
-        localStorage.setItem("profile", JSON.stringify(profile));
-
-        dispatch({ type: SET_USER, payload: { user: values.data } });
-      },
-    }
-  );
+  const mutation = useEditUserDetails();
 
   const formik = useFormik({
     initialValues: {
@@ -149,7 +122,7 @@ const EditUserDetailsModal = ({ isOpen, setOpen }: Props) => {
               >
                 {work}
                 <span
-                  className="cursor-pointer mr-4 text-fb p-2 rounded-full hover:bg-gray-300"
+                  className="cursor-pointer text-fb p-2 rounded-full hover:bg-gray-300"
                   onClick={() => {
                     formik.setFieldValue(
                       "works",
@@ -193,7 +166,7 @@ const EditUserDetailsModal = ({ isOpen, setOpen }: Props) => {
               >
                 {education}&nbsp;
                 <span
-                  className="cursor-pointer mr-4 text-fb p-2 rounded-full hover:bg-gray-300"
+                  className="cursor-pointer text-fb p-2 rounded-full hover:bg-gray-300"
                   onClick={() =>
                     formik.setFieldValue(
                       "education",
