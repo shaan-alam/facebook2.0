@@ -4,27 +4,9 @@ import Moment from "react-moment";
 import Skeleton from "react-loading-skeleton";
 import EditUserDetailsModal from "../EditUserDetailsModal";
 import { AnimatePresence } from "framer-motion";
-
-interface Props {
-  details:
-    | {
-        lives_in_city: string;
-        from_city: string;
-        works: string[];
-        education: string[];
-      }
-    | undefined;
-  followers: number | undefined;
-  following: number | undefined;
-  createdAt: string | undefined;
-}
-
-type IntroCardType = ({
-  details,
-  followers,
-  following,
-  createdAt,
-}: Props) => JSX.Element;
+import Icon from "../Icon";
+import { icons } from "../../utils/icons";
+import { IntroCardType } from "./types";
 
 const IntroCard: IntroCardType = ({
   details,
@@ -38,40 +20,61 @@ const IntroCard: IntroCardType = ({
     <div className="intro-cardm bg-white p-5 rounded-lg shadow-md mb-4 stikcy top-4">
       <h1 className="font-bold text-3xl mb-5">Intro</h1>
       {typeof followers === "number" && followers > 0 && (
-        <p className="mb-4">
-          Followed by <b>{followers} People</b>
-        </p>
+        <div className="flex items-center mb-4">
+          <Icon src={icons.followers} />
+          <p className="ml-2">
+            Followed by <b>{followers} People</b>
+          </p>
+        </div>
       )}
       {!details && <Skeleton count={5} height={30} />}
       {typeof following === "number" && following > 0 && (
-        <p className="mb-4">
-          Following <b>{following} People</b>
-        </p>
+        <div className="flex items-center mb-4">
+          <Icon src={icons.followings} />
+          <p className="ml-2">
+            Following <b>{following} People</b>
+          </p>
+        </div>
       )}
       {details?.lives_in_city && (
-        <p className="mb-4">
-          Lives in <b>{details.lives_in_city}</b>
-        </p>
+        <div className="flex items-center mb-4">
+          <Icon src={icons.lives_in_city} />
+          <p className="ml-2">
+            Lives in <b>{details.lives_in_city}</b>
+          </p>
+        </div>
       )}
       {details?.from_city && (
-        <p className="mb-4">
-          From <b>{details.from_city}</b>
-        </p>
+        <div className="flex items-center mb-4">
+          <Icon src={icons.from_city} />
+          <p className="ml-2">
+            From <b>{details.from_city}</b>
+          </p>
+        </div>
       )}
       {details?.works.length !== 0 && (
-        <p className="mb-4">
-          Works at <b>{details?.works[0]}</b>
-        </p>
+        <div className="flex items-center mb-4">
+          <Icon src={icons.works} />
+          <p className="ml-2">
+            Works at <b>{details?.works[0]}</b>
+          </p>
+        </div>
       )}
       {details?.education.length !== 0 && (
-        <p className="mb-4">
-          Went to <b>{details?.education[0]}</b>
-        </p>
+        <div className="flex items-center mb-4">
+          <Icon src={icons.works} />
+          <p className="ml-2">
+            Went to <b>{details?.education[0]}</b>
+          </p>
+        </div>
       )}
-      <p className="mb-4">
-        Joined&nbsp;
-        <Moment format="MMM YYYY">{new Date(createdAt!)}</Moment>
-      </p>
+      <div className="flex items-center mb-4">
+        <Icon src={icons.createdAt} />
+        <p className="ml-2">
+          Joined&nbsp;
+          <Moment format="MMM YYYY">{new Date(createdAt!)}</Moment>
+        </p>
+      </div>
       <Button
         variant="secondary"
         text="Edit Intro"
