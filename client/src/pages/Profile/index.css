@@ -1,0 +1,7 @@
+.profile-pic-edit-btn {
+  display: none;
+}
+
+.profile-pic-container:hover .profile-pic-edit-btn {
+  display: block;
+}

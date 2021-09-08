@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { PhotographIcon } from "@heroicons/react/solid";
-import UploadStatusModal from "../UploadStatusModal";
+import UploadStatusModal from "../Modal/UploadStatusModal";
 import useUser from "../../hooks/useUser";
-import UploadPictureModal from "../UploadPictureModal";
+import UploadPictureModal from "../Modal/UploadPictureModal";
 import Avatar from "../Avatar";
 import { AnimatePresence, motion } from "framer-motion";
 

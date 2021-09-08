@@ -10,7 +10,7 @@ const usePosts = () => {
     return result.data;
   };
 
-  return useQuery("posts", fetchPosts);
+  return useQuery("posts", fetchPosts, { refetchOnWindowFocus: true });
 };
 
 export default usePosts;

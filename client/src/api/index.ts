@@ -149,3 +149,6 @@ export const updateProfileDetails = (details: {
 }) => API.patch("/profile/edit", { details });
 
 export const getUserProfile = (id: string) => API.get(`/profile/${id}`);
+
+export const changeUserProfilePicture = (image: string) =>
+  API.patch(`/profile/edit/profile-picture`, { image });

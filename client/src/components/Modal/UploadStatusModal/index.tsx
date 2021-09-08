@@ -1,11 +1,11 @@
-import Modal from "../Modal";
-import useUser from "../../hooks/useUser";
+import Modal from "../index";
+import useUser from "../../../hooks/useUser";
 import { useMutation } from "react-query";
-import FormInput from "../FormInput";
+import FormInput from "../../FormInput";
 import { useFormik } from "formik";
-import * as api from "../../api";
-import Button from "../Button";
-import Avatar from "../Avatar";
+import * as api from "../../../api";
+import Button from "../../Button";
+import Avatar from "../../Avatar";
 import { UploadStatusModalProps } from "./types";
 import { useQueryClient } from "react-query";
 

@@ -1,9 +1,9 @@
 import { PostDeleteModalProps } from "./types";
-import Modal from "../Modal";
+import Modal from "../../Modal";
 import { TrashIcon } from "@heroicons/react/outline";
-import Button from "../Button";
+import Button from "../../Button";
 import { useMutation, useQueryClient } from "react-query";
-import * as api from "../../api";
+import * as api from "../../../api";
 import { toast, Flip, ToastContainer } from "react-toastify";
 
 const PostDeleteModal = ({ isOpen, setOpen, post }: PostDeleteModalProps) => {
@@ -25,8 +25,8 @@ const PostDeleteModal = ({ isOpen, setOpen, post }: PostDeleteModalProps) => {
     (_id: string) => deletePost(_id),
     {
       onSuccess: () => {
-         queryClient.refetchQueries("posts");
-         queryClient.refetchQueries("profile-post");
+        queryClient.refetchQueries("posts");
+        queryClient.refetchQueries("profile-post");
       },
     }
   );

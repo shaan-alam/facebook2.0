@@ -2,7 +2,7 @@ import { useState } from "react";
 import Button from "../Button";
 import Moment from "react-moment";
 import Skeleton from "react-loading-skeleton";
-import EditUserDetailsModal from "../EditUserDetailsModal";
+import EditUserDetailsModal from "../Modal/EditUserDetailsModal";
 import { AnimatePresence } from "framer-motion";
 import Icon from "../Icon";
 import { icons } from "../../utils/icons";

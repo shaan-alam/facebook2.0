@@ -1,3 +1,4 @@
+import { useState } from "react";
 import PhotosCard from "../../components/PhotosCard";
 import IntroCard from "../../components/IntroCard";
 import NewPost from "../../components/NewPost";
@@ -8,9 +9,15 @@ import Skeleton from "react-loading-skeleton";
 import useProfilePost from "../../hooks/useProfilePost";
 import useUser from "../../hooks/useUser";
 import FollowButton from "../../components/Button/FollowButton";
+import { FaPen } from "react-icons/fa";
+import "./index.css";
+import "../../components/Modal/EditProfilePictureModal";
+import EditProfilePictureModal from "../../components/Modal/EditProfilePictureModal";
+import { AnimatePresence } from "framer-motion";
 
 const Profile = () => {
   const user = useUser();
+  const [profilePictureModal, setProfilePictureModal] = useState(false);
   const { id }: { id: string } = useParams();
   const profile = useProfile(id);
   const { posts, photos } = useProfilePost(id);
@@ -34,11 +41,19 @@ const Profile = () => {
               className="absolute -bottom-3 left-1/2 right-1/2 transform -translate-x-1/2"
             />
           ) : (
-            <img
-              src={profile.data?.avatar}
-              alt="Profile Picture"
-              className="w-36 h-36 border-4 border-white rounded-full absolute -bottom-3 left-1/2 right-1/2 transform -translate-x-1/2"
-            />
+            <div className="profile-pic-container w-36 h-36 border-4 border-white rounded-full absolute -bottom-3 left-1/2 right-1/2 transform -translate-x-1/2">
+              <img
+                src={profile.data?.avatar}
+                alt="Profile Picture"
+                className="rounded-full"
+              />
+              <span
+                className="profile-pic-edit-btn absolute bottom-4 -right-3 p-4 rounded-full bg-white cursor-pointer shadow-md"
+                onClick={() => setProfilePictureModal(true)}
+              >
+                <FaPen />
+              </span>
+            </div>
           )}
         </div>
         <div className="text-center">
@@ -104,6 +119,14 @@ const Profile = () => {
           </main>
         </div>
       </div>
+      <AnimatePresence>
+        {profilePictureModal && (
+          <EditProfilePictureModal
+            isOpen={profilePictureModal}
+            setOpen={setProfilePictureModal}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };

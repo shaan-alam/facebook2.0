@@ -1,11 +1,11 @@
-import Modal from "../Modal";
+import Modal from "../index";
 import { useFormik } from "formik";
-import FormInput from "../FormInput";
-import Button from "../Button";
-import * as api from "../../api";
+import FormInput from "../../FormInput";
+import Button from "../../Button";
+import * as api from "../../../api";
 import { useMutation, useQueryClient } from "react-query";
 import { PostEditModalProps } from "./types";
-import "../../assets/css/cssgram.css";
+import "../../../assets/css/cssgram.css";
 
 const PostEditModal = ({ isOpen, setOpen, post }: PostEditModalProps) => {
   const queryClient = useQueryClient();

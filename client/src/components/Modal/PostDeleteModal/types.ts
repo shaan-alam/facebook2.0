@@ -1,5 +1,5 @@
 import React from "react";
-import { PostType } from "../Post/types";
+import { PostType } from "../../Post/types";
 
 export interface PostDeleteModalProps {
   isOpen: boolean;
