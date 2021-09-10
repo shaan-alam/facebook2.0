@@ -75,7 +75,9 @@ const CommentReply = ({
               onMouseLeave={() => setMenu(false)}
             >
               <div className="py-3 px-5 rounded-2xl bg-gray-200">
-                <h1 className="font-semibold">Shaan Alam</h1>
+                <h1 className="font-semibold">
+                  {commentReply.author.fullName}
+                </h1>
                 {!deleteReplyMutation.isLoading && (
                   <p>{commentReply.message}</p>
                 )}

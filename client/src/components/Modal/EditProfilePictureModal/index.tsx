@@ -27,6 +27,8 @@ const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
       onSuccess: (result) => {
         queryClient.refetchQueries(["profile", user?._id]);
         queryClient.refetchQueries(["posts"]);
+        queryClient.refetchQueries(["comments"]);
+        queryClient.refetchQueries(["comment-replies"]);
         queryClient.refetchQueries(["profile-posts", user._id]);
         queryClient.invalidateQueries(["profile", user?._id]);
 

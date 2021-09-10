@@ -106,7 +106,7 @@ const Profile = () => {
               followers={profile.data?.followers?.length}
               following={profile.data?.following?.length}
             />
-            <PhotosCard photos={photos} />
+            {photos && <PhotosCard photos={photos} />}
           </div>
           <main className="main w-full md:w-3/4 mr-4">
             {user._id === id && <NewPost />}
