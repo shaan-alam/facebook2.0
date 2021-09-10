@@ -8,7 +8,7 @@ import { LogoutIcon } from "@heroicons/react/solid";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
 import Avatar from "../Avatar";
-import useUser from "../../hooks/useUser";
+import { useUser } from "../../hooks/user";
 
 const Navbar = () => {
   const user = useUser();

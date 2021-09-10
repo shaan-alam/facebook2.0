@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useDragAndDrop() {
+export function useDragAndDrop() {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [fileDropError, setFileDropError] = useState<string>("");
 

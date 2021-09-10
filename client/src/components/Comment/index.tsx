@@ -3,7 +3,7 @@ import { Comment } from "../Post/types";
 import Skeleton from "react-loading-skeleton";
 import { useQueryClient } from "react-query";
 import loader from "../../assets/svg/loader-dark.svg";
-import useUser from "../../hooks/useUser";
+import { useUser } from "../../hooks/user";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CommentReply from "./CommentReply";
@@ -12,9 +12,8 @@ import Moment from "react-moment";
 import CommentDropdown from "./CommentDropdown";
 import { CommentReplyInterface } from "./types";
 import CommentEditForm from "./CommentEditForm";
-import useDeleteComment from "../../hooks/useDeleteComment";
-import useEditComment from "../../hooks/useEditComment";
-import useFetchCommentReplies from "../../hooks/useFetchCommentReplies";
+import { useDeleteComment, useEditComment } from "../../hooks/comments";
+import { useFetchCommentReplies } from "../../hooks/commentReply";
 
 const PostComment = ({ comment }: { comment: Comment }) => {
   const user = useUser();
@@ -36,7 +35,7 @@ const PostComment = ({ comment }: { comment: Comment }) => {
     setCommentReplies
   );
 
-  // For updating comment 
+  // For updating comment
   const editCommentMutation = useEditComment(() => {
     queryClient.refetchQueries("comments");
     formik.setSubmitting(false);

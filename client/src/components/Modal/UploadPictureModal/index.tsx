@@ -4,7 +4,7 @@ import { PhotographIcon } from "@heroicons/react/solid";
 import { filters } from "../../../utils/filters";
 import FilterCard from "../../FilterCard";
 import { useFormik } from "formik";
-import useUser from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/user";
 import * as api from "../../../api";
 import Button from "../../Button";
 import Avatar from "../../Avatar";
@@ -14,7 +14,7 @@ import { useMutation } from "react-query";
 import { useQueryClient } from "react-query";
 import { Filter, NewPost } from "./types";
 import Image from "../../Image";
-import useDragAndDrop from "../../../hooks/useDragAndDrop";
+import { useDragAndDrop } from "../../../hooks/dragAndDrop";
 import FormInput from "../../FormInput";
 import "./index.css";
 

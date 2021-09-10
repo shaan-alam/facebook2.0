@@ -1,13 +1,11 @@
 import Skeleton from "react-loading-skeleton";
 import User from "../../../assets/svg/user.svg";
-import useUser from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/user";
 import Button from "../../Button";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useMutation, useQueryClient } from "react-query";
-import { createCommentReply } from "../../../api";
 import React from "react";
-import useCreateCommentReply from "../../../hooks/useCreateCommentReply";
+import { useCreateCommentReply } from "../../../hooks/commentReply";
 
 interface CommentReplyInterface {
   _id: string;

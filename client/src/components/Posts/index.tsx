@@ -3,7 +3,6 @@ import { PostType } from "../Post/types";
 import { ExclamationIcon } from "@heroicons/react/solid";
 import SkeletonPost from "../SkeletonPost";
 import { UseQueryResult } from "react-query";
-import { AxiosResponse } from "axios";
 
 const Posts = ({
   posts,

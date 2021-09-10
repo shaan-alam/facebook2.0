@@ -1,5 +1,5 @@
 import Modal from "../index";
-import useUser from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/user";
 import { useMutation } from "react-query";
 import FormInput from "../../FormInput";
 import { useFormik } from "formik";

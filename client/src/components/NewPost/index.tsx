@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { PhotographIcon } from "@heroicons/react/solid";
 import UploadStatusModal from "../Modal/UploadStatusModal";
-import useUser from "../../hooks/useUser";
+import { useUser } from "../../hooks/user";
 import UploadPictureModal from "../Modal/UploadPictureModal";
 import Avatar from "../Avatar";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 const NewPost = () => {
   const [isStatusModalOpen, setStatusModal] = useState<boolean>(false);

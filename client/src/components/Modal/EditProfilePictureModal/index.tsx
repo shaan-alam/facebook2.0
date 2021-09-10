@@ -1,15 +1,11 @@
 import React, { useState, useRef } from "react";
 import { PhotographIcon } from "@heroicons/react/solid";
-import useDragAndDrop from "../../../hooks/useDragAndDrop";
+import { useDragAndDrop } from "../../../hooks/dragAndDrop";
 import Modal from "../index";
 import Button from "../../Button";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { useMutation, useQueryClient } from "react-query";
-import { changeUserProfilePicture } from "../../../api";
-import useUser from "../../../hooks/useUser";
-import { useDispatch } from "react-redux";
-import { SET_USER } from "../../../constants";
+import { useUpdateProfilePicture } from "../../../hooks/profile";
 
 interface Props {
   isOpen: boolean;
@@ -17,36 +13,11 @@ interface Props {
 }
 
 const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
-  const user = useUser();
-  const queryClient = useQueryClient();
   const [formStep, setFormStep] = useState(0);
-  const dispatch = useDispatch();
-  const mutation = useMutation(
-    (image: string) => changeUserProfilePicture(image),
-    {
-      onSuccess: (result) => {
-        queryClient.refetchQueries(["profile", user?._id]);
-        queryClient.refetchQueries(["posts"]);
-        queryClient.refetchQueries(["comments"]);
-        queryClient.refetchQueries(["comment-replies"]);
-        queryClient.refetchQueries(["profile-posts", user._id]);
-        queryClient.invalidateQueries(["profile", user?._id]);
-
-        const profile = JSON.parse(localStorage.getItem("profile") || "{}");
-        profile.user = result.data.updatedUser;
-
-        localStorage.setItem("profile", JSON.stringify(profile));
-
-        dispatch({
-          type: SET_USER,
-          payload: { user: result.data.updatedUser },
-        });
-        setOpen(false);
-      },
-    }
-  );
-
   const cropperRef = useRef<HTMLImageElement>(null);
+  const [image, setImage] = useState<string>();
+
+  const mutation = useUpdateProfilePicture(image, () => setOpen(false));
 
   const {
     dragOver,
@@ -56,7 +27,6 @@ const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
     onDragOver,
     onDragLeave,
   } = useDragAndDrop();
-  const [image, setImage] = useState<string>();
 
   const fileSelect = (e: any) => {
     e.preventDefault();

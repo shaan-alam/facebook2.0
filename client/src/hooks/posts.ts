@@ -3,7 +3,10 @@ import { getPosts } from "../api";
 import { AxiosResponse } from "axios";
 import { PostType } from "../components/Post/types";
 
-const usePosts = () => {
+/**
+ * @description A custom hook to fetch posts from the backend
+ */
+export const usePosts = () => {
   const fetchPosts = async () => {
     const result: AxiosResponse<PostType[]> = await getPosts();
 
@@ -12,5 +15,3 @@ const usePosts = () => {
 
   return useQuery("posts", fetchPosts, { refetchOnWindowFocus: true });
 };
-
-export default usePosts;

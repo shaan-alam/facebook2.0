@@ -1,12 +1,11 @@
 import Modal from "../index";
 import { useFormik } from "formik";
-import useUser from "../../../hooks/useUser";
+import { useUser, useEditUserDetails } from "../../../hooks/user";
 import { HiTrash } from "react-icons/hi";
 import Button from "../../Button";
 import { FaTimesCircle, FaCheckCircle, FaPlusCircle } from "react-icons/fa";
 import * as yup from "yup";
 import { v4 } from "uuid";
-import useEditUserDetails from "../../../hooks/useEditUserDetails";
 
 interface Props {
   isOpen: boolean;

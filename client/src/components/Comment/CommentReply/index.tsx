@@ -2,14 +2,16 @@ import { useState } from "react";
 import loader from "../../../assets/svg/loader-dark.svg";
 import { useFormik } from "formik";
 import { useQueryClient } from "react-query";
-import useUser from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/user";
 import Moment from "react-moment";
 import CommentDropdown from "../CommentDropdown";
 import { CommentReplyInterface } from "../types";
 import CommentEditForm from "../CommentEditForm";
 import Skeleton from "react-loading-skeleton";
-import useEditCommentReply from "../../../hooks/useEditCommentReply";
-import useDeleteCommentReply from "../../../hooks/useDeleteCommentReply";
+import {
+  useDeleteCommentReply,
+  useEditCommentReply,
+} from "../../../hooks/commentReply";
 
 const CommentReply = ({
   commentReply,
