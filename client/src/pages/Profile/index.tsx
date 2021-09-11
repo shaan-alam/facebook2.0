@@ -33,12 +33,14 @@ const Profile = () => {
               alt="Cover"
               className="w-full h-96 object-cover rounded-b-md"
             />
-            <span
-              className="cover-pic-edit-btn absolute top-4 right-4 p-4 rounded-full bg-white cursor-pointer shadow-lg"
-              onClick={() => setCoverPictureModal(true)}
-            >
-              <FaPen />
-            </span>
+            {user._id === id && (
+              <span
+                className="cover-pic-edit-btn absolute top-4 right-4 p-4 rounded-full bg-white cursor-pointer shadow-lg"
+                onClick={() => setCoverPictureModal(true)}
+              >
+                <FaPen />
+              </span>
+            )}
           </div>
           {profile.isLoading ? (
             <Skeleton

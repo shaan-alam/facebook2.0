@@ -285,8 +285,6 @@ export const updateCoverPicture = async (req: Request, res: Response) => {
       folder: `${process.env.CLOUDINARY_COVER_UPLOAD_FOLDER}`,
     });
 
-    logger.info(uploadedImage?.secure_url);
-
     const updatedUser = await User.findOneAndUpdate(
       { _id: res.locals.userId._id },
       {
