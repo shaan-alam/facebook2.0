@@ -6,6 +6,7 @@ import Following from "../models/following.model";
 import logger from "../logger";
 import Post from "../models/post.model";
 import { fetchPosts } from "../utils/controller.util";
+import cloudinary, { formatCloudinaryUrl } from "../utils/cloudinary.util";
 
 /**
  * @description To get the User's profile
@@ -246,5 +247,55 @@ export const updateProfileDetails = async (req: Request, res: Response) => {
   } catch (err) {
     logger.error(err.message);
     res.status(500).json({ message: err.message });
+  }
+};
+
+export const updateProfilePicture = async (req: Request, res: Response) => {
+  const { image } = req.body;
+
+  try {
+    const uploadedImage = await cloudinary.v2.uploader.upload(image, {
+      width: 200,
+      height: 200,
+      folder: `${process.env.CLOUDINARY_AVATAR_UPLOAD_FOLDER}`,
+    });
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: res.locals.userId._id },
+      {
+        avatar: uploadedImage?.secure_url,
+      },
+      { new: true }
+    );
+
+    res.json({ updatedUser });
+  } catch (err) {
+    logger.error(err.message);
+    res.json({ message: err.message });
+  }
+};
+
+export const updateCoverPicture = async (req: Request, res: Response) => {
+  const { image } = req.body;
+
+  try {
+    const uploadedImage = await cloudinary.v2.uploader.upload(image, {
+      width: 851,
+      height: 315,
+      folder: `${process.env.CLOUDINARY_COVER_UPLOAD_FOLDER}`,
+    });
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: res.locals.userId._id },
+      {
+        cover_picture: uploadedImage?.secure_url,
+      },
+      { new: true }
+    );
+
+    res.json({ updatedUser });
+  } catch (err) {
+    logger.error(err.message);
+    res.json({ message: err.message });
   }
 };

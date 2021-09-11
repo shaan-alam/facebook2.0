@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useUser from "../../hooks/useUser";
+import { useUser } from "../../hooks/user";
 import { AvatarProps } from "./types";
 import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router-dom";

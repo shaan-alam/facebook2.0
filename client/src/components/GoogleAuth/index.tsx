@@ -13,7 +13,7 @@ const GoogleAuth = () => {
     const { email, name, imageUrl } = res?.profileObj;
 
     try {
-      const { data } = await api.getUserFromDB(email);
+      const { data } = await api.getUser(email);
 
       // If a user is returned from the backend, that means user has
       // already registered with that email, So Sign him in

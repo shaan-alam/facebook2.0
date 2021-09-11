@@ -4,7 +4,7 @@ import { reactPost } from "../../../api";
 import { FacebookSelector } from "@charkour/react-reactions";
 import { reactions, Reactions } from "./reactions";
 import { motion } from "framer-motion";
-import useUser from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/user";
 import { PostActionsProps, Reaction } from "./types";
 
 const PostActions = ({ commentBox, post, setCounters }: PostActionsProps) => {

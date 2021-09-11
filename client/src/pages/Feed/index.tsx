@@ -8,7 +8,7 @@ import { clearError } from "../../actions/error";
 // Interfaces and Types
 import NewPost from "../../components/NewPost";
 import ProfileSuggestion from "../../components/ProfileSuggestion";
-import usePosts from "../../hooks/usePosts";
+import { usePosts } from "../../hooks/posts";
 
 const Feed = () => {
   const dispatch = useDispatch();

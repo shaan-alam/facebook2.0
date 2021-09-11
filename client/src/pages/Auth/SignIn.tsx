@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { signIn } from "../../actions/auth";
 import { useHistory } from "react-router-dom";
-import { RootState } from "../../reducers/index";
 import { toast, Flip } from "react-toastify";
 import { useFormik } from "formik";
 import * as yup from "yup";

@@ -1,17 +1,9 @@
-import { AxiosResponse } from "axios";
+import { SignInType, SignUpType, GoogleAuthenticationType } from "./types";
 import {
-  AuthResponse,
-  SignInType,
-  SignUpType,
-  GoogleAuthenticationType,
-} from "./types";
-import {
-  AUTH,
   ERROR,
   GOOGLE_AUTH_FAILURE,
   GOOGLE_AUTH_SUCCESS,
   LOGOUT,
-  SIGN_IN,
   SIGN_UP,
 } from "../constants";
 

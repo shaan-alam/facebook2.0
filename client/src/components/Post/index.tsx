@@ -7,7 +7,7 @@ import PostImage from "./PostImage";
 import PostCaption from "./PostCaption";
 import { Counters } from "./PostActions/types";
 import PostDropdown from "./PostDropdown";
-import useUser from "../../hooks/useUser";
+import { useUser } from "../../hooks/user";
 import PostComment from "../Comment";
 import { Comment } from "./types";
 import { useFormik } from "formik";
@@ -15,8 +15,7 @@ import * as yup from "yup";
 import Button from "../Button";
 import EmojiPicker from "../EmojiPicker";
 import loader from "../../assets/svg/loader-dark.svg";
-import useFetchComments from "../../hooks/useFetchComments";
-import useCreateComment from "../../hooks/useCreateComment";
+import { useFetchComments, useCreateComment } from "../../hooks/comments";
 
 const Post = ({ post }: { post: PostType }) => {
   const user = useUser();

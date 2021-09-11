@@ -7,8 +7,8 @@ import {
   BookmarkIcon,
 } from "@heroicons/react/outline";
 import { Menu, Transition } from "@headlessui/react";
-import PostDeleteModal from "../../PostDeleteModal";
-import PostEditModal from "../../PostEditModal";
+import PostDeleteModal from "../../Modal/PostDeleteModal";
+import PostEditModal from "../../Modal/PostEditModal";
 import { AnimatePresence } from "framer-motion";
 import { PostType } from "../types";
 

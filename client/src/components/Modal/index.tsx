@@ -28,7 +28,7 @@ const Modal = ({ isOpen, setOpen, modalTitle, children }: ModalProps) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="modal-backdrop px-5 flex justify-center items-center h-screen w-screen fixed top-0 left-0 right-0 bottom-0 z-10"
-          style={{ background: "rgba(0, 0, 0, 0.8)" }}
+          style={{ background: "rgba(255, 255, 255, 0.8)" }}
         >
           <motion.div
             key="modal"

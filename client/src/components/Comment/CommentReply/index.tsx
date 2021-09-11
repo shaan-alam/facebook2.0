@@ -2,14 +2,16 @@ import { useState } from "react";
 import loader from "../../../assets/svg/loader-dark.svg";
 import { useFormik } from "formik";
 import { useQueryClient } from "react-query";
-import useUser from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/user";
 import Moment from "react-moment";
 import CommentDropdown from "../CommentDropdown";
 import { CommentReplyInterface } from "../types";
 import CommentEditForm from "../CommentEditForm";
 import Skeleton from "react-loading-skeleton";
-import useEditCommentReply from "../../../hooks/useEditCommentReply";
-import useDeleteCommentReply from "../../../hooks/useDeleteCommentReply";
+import {
+  useDeleteCommentReply,
+  useEditCommentReply,
+} from "../../../hooks/commentReply";
 
 const CommentReply = ({
   commentReply,
@@ -75,7 +77,9 @@ const CommentReply = ({
               onMouseLeave={() => setMenu(false)}
             >
               <div className="py-3 px-5 rounded-2xl bg-gray-200">
-                <h1 className="font-semibold">Shaan Alam</h1>
+                <h1 className="font-semibold">
+                  {commentReply.author.fullName}
+                </h1>
                 {!deleteReplyMutation.isLoading && (
                   <p>{commentReply.message}</p>
                 )}

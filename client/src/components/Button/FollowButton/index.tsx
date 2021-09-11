@@ -1,13 +1,12 @@
 import Button from "../index";
-import useProfile from "../../../hooks/useProfile";
-import useUser from "../../../hooks/useUser";
+import { useProfile } from "../../../hooks/profile";
+import { useUser, useFollowUser, useUnfollowUser } from "../../../hooks/user";
 import { HiUserAdd, HiUserRemove } from "react-icons/hi";
-import useFollowUser from "../../../hooks/useFollowUser";
-import useUnfollowUser from "../../../hooks/useUnfollowUser";
 
 const FollowButtonComponent = ({ userId }: { userId: string }) => {
   const user = useUser();
   const { data: currentUser } = useProfile(user._id);
+  const { data: profileUser } = useProfile(userId);
 
   const followMutation = useFollowUser(userId);
   const unfollowMutation = useUnfollowUser(userId);
@@ -22,7 +21,10 @@ const FollowButtonComponent = ({ userId }: { userId: string }) => {
       }}
     >
       <HiUserAdd className="h-5 w-5" />
-      &nbsp; Follow
+      &nbsp;
+      {profileUser?.following.find((following) => following._id === user._id)
+        ? "Follow Back"
+        : "Follow"}
     </Button>
   );
 

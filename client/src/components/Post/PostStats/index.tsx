@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FacebookCounter } from "@charkour/react-reactions";
 import { AnimatePresence } from "framer-motion";
-import useUser from "../../../hooks/useUser";
+import { useUser } from "../../../hooks/user";
 import PostStatsModal from "../PostStatsModal";
 import Counter from "thousands-counter";
 import { PostStatsProps } from "./types";
