@@ -1,27 +1,27 @@
 import { useState } from "react";
-import PhotosCard from "../../components/PhotosCard";
-import IntroCard from "../../components/IntroCard";
-import NewPost from "../../components/NewPost";
-import Posts from "../../components/Posts";
 import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { useProfile, useProfilePost } from "../../hooks/profile";
+import { useProfile } from "../../hooks/profile";
 import { useUser } from "../../hooks/user";
 import FollowButton from "../../components/Button/FollowButton";
-import { FaPen } from "react-icons/fa";
+import { GoDeviceCamera } from "react-icons/go";
 import "./index.css";
 import "../../components/Modal/EditProfilePictureModal";
 import EditProfilePictureModal from "../../components/Modal/EditProfilePictureModal";
 import EditCoverModal from "../../components/Modal/EditCoverModal";
 import { AnimatePresence } from "framer-motion";
+import EditUserDetailsModal from "../../components/Modal/EditUserDetailsModal";
+import ProfileNav from "../../components/ProfileNav";
+import ProfilePosts from "../../components/ProfilePosts";
+import { Switch, Route } from "react-router-dom";
 
 const Profile = () => {
   const user = useUser();
   const [profilePictureModal, setProfilePictureModal] = useState(false);
   const [coverPictureModal, setCoverPictureModal] = useState(false);
+  const [editUserDetailsModal, setEditUserDetailsModal] = useState(false);
   const { id }: { id: string } = useParams();
   const profile = useProfile(id);
-  const { posts, photos } = useProfilePost(id);
 
   return (
     <>
@@ -38,7 +38,7 @@ const Profile = () => {
                 className="cover-pic-edit-btn absolute top-4 right-4 p-4 rounded-full bg-white cursor-pointer shadow-lg"
                 onClick={() => setCoverPictureModal(true)}
               >
-                <FaPen />
+                <GoDeviceCamera className="h-5 w-5 text-gray-800" />
               </span>
             )}
           </div>
@@ -60,7 +60,7 @@ const Profile = () => {
                 className="profile-pic-edit-btn absolute bottom-4 -right-3 p-4 rounded-full bg-white cursor-pointer shadow-lg"
                 onClick={() => setProfilePictureModal(true)}
               >
-                <FaPen />
+                <GoDeviceCamera className="h-5 w-5 text-gray-800" />
               </span>
             </div>
           )}
@@ -75,9 +75,12 @@ const Profile = () => {
           </h1>
           {user._id !== id && <FollowButton userId={id} />}
           {user._id === id && !user.details.bio && (
-            <a href="#!" className="text-fb font-bold mt-4 inline-block">
+            <span
+              className="text-fb font-bold mt-4 inline-block cursor-pointer"
+              onClick={() => setEditUserDetailsModal(true)}
+            >
               Add Bio
-            </a>
+            </span>
           )}
           {!profile.isLoading && (
             <p className="text-gray-600 mt-6 font-bold">
@@ -89,45 +92,25 @@ const Profile = () => {
           className="bg-gray-200 w-full mt-4"
           style={{ height: "2px" }}
         ></div>
-        <div className="nav-menu w-full container">
-          <ul className="flex">
-            <li className="text-fb font-semibold text-lg mr-6 border-b-4 p-4 border-fb">
-              Posts
-            </li>
-            <li className="text-gray-400 font-semibold text-lg mr-6 p-4">
-              About
-            </li>
-            <li className="text-gray-400 font-semibold text-lg mr-6 p-4">
-              Friends
-            </li>
-            <li className="text-gray-400 font-semibold text-lg mr-6 p-4">
-              Photos
-            </li>
-          </ul>
-        </div>
+        <ProfileNav profile={profile} />
       </div>
-      <div className="bg-gray-100 pt-5">
-        <div className="flex justify-around container">
-          <div className="sidebar hidden md:flex flex-col w-1/3 mr-4 static top-4">
-            <IntroCard
-              details={profile.data?.details}
-              createdAt={profile.data?.createdAt}
-              followers={profile.data?.followers?.length}
-              following={profile.data?.following?.length}
-            />
-            {photos && <PhotosCard photos={photos} />}
-          </div>
-          <main className="main w-full md:w-3/4 mr-4">
-            {user._id === id && <NewPost />}
-            {posts?.data?.length === 0 && (
-              <div className="w-full text-center bg-white p-6 font-semibold rounded-lg shadow-md">
-                <p>You haven't posted anything till now!!</p>
-              </div>
-            )}
-            <Posts posts={posts} />
-          </main>
-        </div>
-      </div>
+      <Switch>
+        <Route path="/profile/:id/posts">
+          <ProfilePosts />
+        </Route>
+        <Route path="/profile/:id/about">
+          <ProfilePosts />
+        </Route>
+        <Route path="/profile/:id/followers">
+          <ProfilePosts />
+        </Route>
+        <Route path="/profile/:id/followings">
+          <ProfilePosts />
+        </Route>
+        <Route path="/profile/:id/photos">
+          <ProfilePosts />
+        </Route>
+      </Switch>
       <AnimatePresence>
         {profilePictureModal && (
           <EditProfilePictureModal
@@ -139,6 +122,12 @@ const Profile = () => {
           <EditCoverModal
             isOpen={coverPictureModal}
             setOpen={setCoverPictureModal}
+          />
+        )}
+        {editUserDetailsModal && (
+          <EditUserDetailsModal
+            isOpen={editUserDetailsModal}
+            setOpen={setEditUserDetailsModal}
           />
         )}
       </AnimatePresence>
