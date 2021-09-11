@@ -6,6 +6,7 @@ import { HiUserAdd, HiUserRemove } from "react-icons/hi";
 const FollowButtonComponent = ({ userId }: { userId: string }) => {
   const user = useUser();
   const { data: currentUser } = useProfile(user._id);
+  const { data: profileUser } = useProfile(userId);
 
   const followMutation = useFollowUser(userId);
   const unfollowMutation = useUnfollowUser(userId);
@@ -20,7 +21,10 @@ const FollowButtonComponent = ({ userId }: { userId: string }) => {
       }}
     >
       <HiUserAdd className="h-5 w-5" />
-      &nbsp; Follow
+      &nbsp;
+      {profileUser?.following.find((following) => following._id === user._id)
+        ? "Follow Back"
+        : "Follow"}
     </Button>
   );
 
