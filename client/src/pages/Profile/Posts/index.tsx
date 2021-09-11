@@ -1,20 +1,15 @@
 import { useState } from "react";
-import PhotosCard from "../../components/PhotosCard";
-import IntroCard from "../../components/IntroCard";
-import NewPost from "../../components/NewPost";
-import Posts from "../../components/Posts";
+import PhotosCard from "../../../components/PhotosCard";
+import IntroCard from "../../../components/IntroCard";
+import NewPost from "../../../components/NewPost";
+import Posts from "../../../components/Posts";
 import { useParams } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
-import { useProfile, useProfilePost } from "../../hooks/profile";
-import { useUser } from "../../hooks/user";
-import FollowButton from "../../components/Button/FollowButton";
-import { GoDeviceCamera } from "react-icons/go";
-import "../../components/Modal/EditProfilePictureModal";
-import EditProfilePictureModal from "../../components/Modal/EditProfilePictureModal";
-import EditCoverModal from "../../components/Modal/EditCoverModal";
+import { useProfile, useProfilePost } from "../../../hooks/profile";
+import { useUser } from "../../../hooks/user";
+import EditProfilePictureModal from "../../../components/Modal/EditProfilePictureModal";
+import EditCoverModal from "../../../components/Modal/EditCoverModal";
 import { AnimatePresence } from "framer-motion";
-import EditUserDetailsModal from "../../components/Modal/EditUserDetailsModal";
-import ProfileNav from "../../components/ProfileNav";
+import EditUserDetailsModal from "../../../components/Modal/EditUserDetailsModal";
 
 const ProfilePosts = () => {
   const user = useUser();

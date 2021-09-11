@@ -40,3 +40,4 @@ export {
   updateProfileDetails,
 } from "./profile";
 export { followUser, unfollowUser, getUser } from "./user";
+export { retrieveFollowers } from "./followers";

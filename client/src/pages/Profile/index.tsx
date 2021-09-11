@@ -12,7 +12,8 @@ import EditCoverModal from "../../components/Modal/EditCoverModal";
 import { AnimatePresence } from "framer-motion";
 import EditUserDetailsModal from "../../components/Modal/EditUserDetailsModal";
 import ProfileNav from "../../components/ProfileNav";
-import ProfilePosts from "../../components/ProfilePosts";
+import ProfilePosts from "./Posts";
+import FollowersPage from "./FollowersPage";
 import { Switch, Route } from "react-router-dom";
 
 const Profile = () => {
@@ -98,11 +99,8 @@ const Profile = () => {
         <Route path="/profile/:id/posts">
           <ProfilePosts />
         </Route>
-        <Route path="/profile/:id/about">
-          <ProfilePosts />
-        </Route>
         <Route path="/profile/:id/followers">
-          <ProfilePosts />
+          <FollowersPage />
         </Route>
         <Route path="/profile/:id/followings">
           <ProfilePosts />
