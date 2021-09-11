@@ -19,3 +19,6 @@ export const updateProfileDetails = (details: {
 
 export const changeUserProfilePicture = (image: string) =>
   API.patch(`/profile/edit/profile-picture`, { image });
+
+export const changeCoverPicture = (image: string) =>
+  API.patch(`/profile/edit/cover-picture`, { image });

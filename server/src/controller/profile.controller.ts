@@ -257,13 +257,40 @@ export const updateProfilePicture = async (req: Request, res: Response) => {
     const uploadedImage = await cloudinary.v2.uploader.upload(image, {
       width: 200,
       height: 200,
-      folder: `${process.env.CLOUDINARY_POST_UPLOAD_FOLDER}`,
+      folder: `${process.env.CLOUDINARY_AVATAR_UPLOAD_FOLDER}`,
     });
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: res.locals.userId._id },
       {
         avatar: uploadedImage?.secure_url,
+      },
+      { new: true }
+    );
+
+    res.json({ updatedUser });
+  } catch (err) {
+    logger.error(err.message);
+    res.json({ message: err.message });
+  }
+};
+
+export const updateCoverPicture = async (req: Request, res: Response) => {
+  const { image } = req.body;
+
+  try {
+    const uploadedImage = await cloudinary.v2.uploader.upload(image, {
+      width: 851,
+      height: 315,
+      folder: `${process.env.CLOUDINARY_COVER_UPLOAD_FOLDER}`,
+    });
+
+    logger.info(uploadedImage?.secure_url);
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: res.locals.userId._id },
+      {
+        cover_picture: uploadedImage?.secure_url,
       },
       { new: true }
     );

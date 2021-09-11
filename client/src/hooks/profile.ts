@@ -6,6 +6,7 @@ import { PostType } from "../components/Post/types";
 import { useUser } from "./user";
 import { useDispatch } from "react-redux";
 import { SET_USER } from "../constants";
+import { changeCoverPicture } from "../api/profile";
 
 type Response = AxiosResponse<{
   _id: string;
@@ -91,6 +92,37 @@ export const useUpdateProfilePicture = (
       queryClient.invalidateQueries(["posts"]);
       queryClient.invalidateQueries(["comments"]);
       queryClient.invalidateQueries(["comment-replies"]);
+
+      const profile = JSON.parse(localStorage.getItem("profile") || "{}");
+      profile.user = result.data.updatedUser;
+
+      localStorage.setItem("profile", JSON.stringify(profile));
+
+      dispatch({
+        type: SET_USER,
+        payload: { user: result.data.updatedUser },
+      });
+
+      if (callback !== undefined) {
+        callback();
+      }
+    },
+  });
+};
+
+export const useUpdateCoverPicture = (
+  image: string | undefined,
+  callback?: Function
+) => {
+  const queryClient = useQueryClient();
+  const user = useUser();
+  const dispatch = useDispatch();
+
+  return useMutation((image: string) => changeCoverPicture(image), {
+    onSuccess: (result) => {
+      queryClient.refetchQueries(["profile", user?._id]);
+
+      queryClient.invalidateQueries(["profile", user?._id]);
 
       const profile = JSON.parse(localStorage.getItem("profile") || "{}");
       profile.user = result.data.updatedUser;

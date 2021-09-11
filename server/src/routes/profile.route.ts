@@ -7,6 +7,7 @@ import {
   unfollowProfile,
   updateProfileDetails,
   updateProfilePicture,
+  updateCoverPicture
 } from "../controller/profile.controller";
 
 const router = express.Router();
@@ -22,5 +23,7 @@ router.get("/posts/:id", validateToken, getUserPosts);
 router.patch("/edit/", validateToken, updateProfileDetails);
 
 router.patch("/edit/profile-picture", validateToken, updateProfilePicture);
+
+router.patch('/edit/cover-picture', validateToken, updateCoverPicture)
 
 export default router;

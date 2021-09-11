@@ -5,19 +5,19 @@ import Modal from "../index";
 import Button from "../../Button";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { useUpdateProfilePicture } from "../../../hooks/profile";
+import { useUpdateCoverPicture } from "../../../hooks/profile";
 
 interface Props {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
+const EditCoverModal = ({ isOpen, setOpen }: Props) => {
   const [formStep, setFormStep] = useState(0);
   const cropperRef = useRef<HTMLImageElement>(null);
   const [image, setImage] = useState<string>();
 
-  const mutation = useUpdateProfilePicture(image, () => setOpen(false));
+  const mutation = useUpdateCoverPicture(image, () => setOpen(false));
 
   const {
     dragOver,
@@ -62,7 +62,7 @@ const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
   };
 
   return (
-    <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Edit Profile picture">
+    <Modal isOpen={isOpen} setOpen={setOpen} modalTitle="Edit Cover picture">
       <div className="p-12">
         {fileDropError && (
           <span className="text-xs text-red-500 font-semibold text-center">
@@ -111,11 +111,11 @@ const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
             <Cropper
               src={image}
               style={{ height: 400, width: "100%" }}
-              initialAspectRatio={1 / 1}
+              initialAspectRatio={16 / 9}
               guides={false}
               viewMode={2}
               ref={cropperRef}
-              aspectRatio={1 / 1}
+              aspectRatio={16 / 9}
             />
             <div className="flex mt-4">
               <Button
@@ -125,7 +125,7 @@ const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
                 onClick={() => setFormStep((formStep) => formStep - 1)}
               />
               <Button
-                text="Set as Profile Picture"
+                text="Set as Cover Picture"
                 variant="primary"
                 className="p-2 ml-2 "
                 disabled={mutation.isLoading}
@@ -140,4 +140,4 @@ const EditProfilePictureModal = ({ isOpen, setOpen }: Props) => {
   );
 };
 
-export default EditProfilePictureModal;
+export default EditCoverModal;

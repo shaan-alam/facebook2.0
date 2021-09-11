@@ -12,11 +12,13 @@ import { FaPen } from "react-icons/fa";
 import "./index.css";
 import "../../components/Modal/EditProfilePictureModal";
 import EditProfilePictureModal from "../../components/Modal/EditProfilePictureModal";
+import EditCoverModal from "../../components/Modal/EditCoverModal";
 import { AnimatePresence } from "framer-motion";
 
 const Profile = () => {
   const user = useUser();
   const [profilePictureModal, setProfilePictureModal] = useState(false);
+  const [coverPictureModal, setCoverPictureModal] = useState(false);
   const { id }: { id: string } = useParams();
   const profile = useProfile(id);
   const { posts, photos } = useProfilePost(id);
@@ -25,13 +27,19 @@ const Profile = () => {
     <>
       <div className="flex flex-col items-center h-1/2 shadow-md">
         <div className="header relative mx-auto w-full lg:w-3/4 h-96 justify-center items-end">
-          <div
-            className="h-full w-full"
-            style={{
-              background: `url('https://scontent.fknu1-2.fna.fbcdn.net/v/t1.6435-9/p720x720/48426632_764502247253446_6953128864801357824_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=e3f864&_nc_ohc=cKPvwQiherwAX-DAUdu&_nc_ht=scontent.fknu1-2.fna&oh=c4e877ca013e2934a768f4f42c93aafa&oe=6154ED41')`,
-              backgroundSize: "cover",
-            }}
-          ></div>
+          <div className="cover-pic-container relative h-96">
+            <img
+              src={profile.data?.cover_picture}
+              alt="Cover"
+              className="w-full h-96 object-cover rounded-b-md"
+            />
+            <span
+              className="cover-pic-edit-btn absolute top-4 right-4 p-4 rounded-full bg-white cursor-pointer shadow-lg"
+              onClick={() => setCoverPictureModal(true)}
+            >
+              <FaPen />
+            </span>
+          </div>
           {profile.isLoading ? (
             <Skeleton
               circle
@@ -47,7 +55,7 @@ const Profile = () => {
                 className="rounded-full"
               />
               <span
-                className="profile-pic-edit-btn absolute bottom-4 -right-3 p-4 rounded-full bg-white cursor-pointer shadow-md"
+                className="profile-pic-edit-btn absolute bottom-4 -right-3 p-4 rounded-full bg-white cursor-pointer shadow-lg"
                 onClick={() => setProfilePictureModal(true)}
               >
                 <FaPen />
@@ -123,6 +131,12 @@ const Profile = () => {
           <EditProfilePictureModal
             isOpen={profilePictureModal}
             setOpen={setProfilePictureModal}
+          />
+        )}
+        {coverPictureModal && (
+          <EditCoverModal
+            isOpen={coverPictureModal}
+            setOpen={setCoverPictureModal}
           />
         )}
       </AnimatePresence>
