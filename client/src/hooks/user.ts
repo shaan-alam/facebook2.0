@@ -25,7 +25,7 @@ export const useUser = () => {
  * @description A custom hook to follow a user
  * @param userId The ID of the user who is to be followed
  */
-export const useFollowUser = (userId: string) => {
+export const useFollowUser = (userId: string, callack: Function) => {
   const user = useUser();
   const queryClient = useQueryClient();
 
@@ -33,6 +33,7 @@ export const useFollowUser = (userId: string) => {
     onSuccess: () => {
       queryClient.refetchQueries(["profile", userId]);
       queryClient.refetchQueries(["profile", user._id]);
+      callack();
     },
   });
 };
@@ -41,7 +42,7 @@ export const useFollowUser = (userId: string) => {
  * @description A custom hook to unfollow a user
  * @param userId The ID of the user who is to be unfollowed
  */
-export const useUnfollowUser = (userId: string) => {
+export const useUnfollowUser = (userId: string, callback: Function) => {
   const user = useUser();
   const queryClient = useQueryClient();
 
@@ -49,6 +50,7 @@ export const useUnfollowUser = (userId: string) => {
     onSuccess: () => {
       queryClient.refetchQueries(["profile", userId]);
       queryClient.refetchQueries(["profile", user._id]);
+      callback();
     },
   });
 };
