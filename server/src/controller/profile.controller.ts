@@ -143,7 +143,7 @@ export const followProfile = async (req: Request, res: Response) => {
   try {
     if (
       currentUserFollowings?.following.find(
-        (following) => following.user === (id as any)
+        (following) => following.user.toString() === id
       )
     ) {
       throw new Error("Already following this user!");
@@ -198,19 +198,17 @@ export const unfollowProfile = async (req: Request, res: Response) => {
   });
 
   try {
-    // if (
-    //   !currentUserFollowings?.following.find(
-    //     (following) => following.user === (id as any)
-    //   )
-    // ) {
-    //   throw new Error("Cannot unfollow the user as it is already unfollowed!");
-    // }
+    if (
+      !currentUserFollowings?.following.find(
+        (following) => following.user.toString() === id
+      )
+    ) {
+      throw new Error("Cannot unfollow the user as it is already unfollowed!");
+    }
 
-    // if (currentUserFollowings._id === id) {
-    //   throw new Error("A user cannot unfollow himself!");
-    // }
-
-    // Retrieve current user's followings
+    if (currentUserFollowings._id === id) {
+      throw new Error("A user cannot unfollow himself!");
+    }
 
     await Following.findOneAndUpdate(
       { userId: mongoose.Types.ObjectId(currentUser._id) },
@@ -222,7 +220,6 @@ export const unfollowProfile = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    // Retrieve the followers list of the user who is being followed here
     const userFollowers = await Followers.findOne({
       userId: mongoose.Types.ObjectId(id),
     });
