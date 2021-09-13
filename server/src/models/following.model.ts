@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 interface FollowingDocument extends mongoose.Document {
-  userId: mongoose.Schema.Types.ObjectId;
-  following: mongoose.Schema.Types.ObjectId[];
+  userId: mongoose.Types.ObjectId;
+  following: { user: mongoose.Types.ObjectId }[];
 }
 
 const FollowingSchema = new mongoose.Schema({
@@ -12,8 +12,10 @@ const FollowingSchema = new mongoose.Schema({
   },
   following: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
     },
   ],
 });

@@ -36,7 +36,7 @@ export const getProfile = async (req: Request, res: Response) => {
             {
               $lookup: {
                 from: "users",
-                localField: "followers",
+                localField: "followers.user",
                 foreignField: "_id",
                 as: "followers",
               },
@@ -61,7 +61,7 @@ export const getProfile = async (req: Request, res: Response) => {
             {
               $lookup: {
                 from: "users",
-                localField: "following",
+                localField: "following.user",
                 foreignField: "_id",
                 as: "following",
               },
@@ -141,7 +141,11 @@ export const followProfile = async (req: Request, res: Response) => {
   });
 
   try {
-    if (currentUserFollowings?.following.includes(id as any)) {
+    if (
+      currentUserFollowings?.following.find(
+        (following) => following.user === (id as any)
+      )
+    ) {
       throw new Error("Already following this user!");
     }
 
@@ -154,7 +158,7 @@ export const followProfile = async (req: Request, res: Response) => {
       { userId: currentUser._id },
       {
         $push: {
-          following: id,
+          following: { user: id },
         },
       },
       { new: true }
@@ -167,7 +171,7 @@ export const followProfile = async (req: Request, res: Response) => {
       },
       {
         $push: {
-          followers: currentUser._id,
+          followers: { user: currentUser._id },
         },
       },
       { new: true }
@@ -175,7 +179,7 @@ export const followProfile = async (req: Request, res: Response) => {
 
     res.json({ message: "Followed!" });
   } catch (err) {
-    logger.error("Something went wrong!");
+    logger.error(err.message);
     res.status(400).json({ message: err.message });
   }
 };
@@ -194,41 +198,51 @@ export const unfollowProfile = async (req: Request, res: Response) => {
   });
 
   try {
-    if (!currentUserFollowings?.following.includes(id as any)) {
-      throw new Error("Cannot unfollow the user as it is already unfollowed!");
-    }
+    // if (
+    //   !currentUserFollowings?.following.find(
+    //     (following) => following.user === (id as any)
+    //   )
+    // ) {
+    //   throw new Error("Cannot unfollow the user as it is already unfollowed!");
+    // }
 
-    if (currentUserFollowings._id === id) {
-      throw new Error("A user cannot unfollow himself!");
-    }
+    // if (currentUserFollowings._id === id) {
+    //   throw new Error("A user cannot unfollow himself!");
+    // }
 
     // Retrieve current user's followings
+
     await Following.findOneAndUpdate(
-      { userId: currentUser._id },
+      { userId: mongoose.Types.ObjectId(currentUser._id) },
       {
-        $pull: {
-          following: id,
-        },
+        following: currentUserFollowings?.following?.filter(
+          (following) => following.user.toString() !== id
+        ),
       },
       { new: true }
     );
 
     // Retrieve the followers list of the user who is being followed here
+    const userFollowers = await Followers.findOne({
+      userId: mongoose.Types.ObjectId(id),
+    });
+
     await Followers.findOneAndUpdate(
       {
-        userId: id as any,
+        userId: mongoose.Types.ObjectId(id),
       },
       {
-        $pull: {
-          followers: currentUser._id,
-        },
+        followers: userFollowers?.followers?.filter(
+          (follower) =>
+            follower?.user.toString() !== (currentUser._id as string)
+        ),
       },
       { new: true }
     );
 
     res.json({ message: "Unfollowed!" });
   } catch (err) {
-    logger.error("Something went wrong!");
+    logger.error(err.message);
     res.status(400).json({ message: err.message });
   }
 };
