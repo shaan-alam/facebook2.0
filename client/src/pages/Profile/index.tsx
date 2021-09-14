@@ -15,6 +15,7 @@ import ProfileNav from "../../components/ProfileNav";
 import ProfilePosts from "./Posts";
 import FollowersPage from "./FollowersPage";
 import { Switch, Route } from "react-router-dom";
+import { useQueryClient } from "react-query";
 
 const Profile = () => {
   const user = useUser();
@@ -22,7 +23,9 @@ const Profile = () => {
   const [coverPictureModal, setCoverPictureModal] = useState(false);
   const [editUserDetailsModal, setEditUserDetailsModal] = useState(false);
   const { id }: { id: string } = useParams();
+
   const profile = useProfile(id);
+  const currentUser = useProfile(user._id);
 
   return (
     <>
@@ -74,7 +77,9 @@ const Profile = () => {
               profile.data?.fullName
             )}
           </h1>
-          {user._id !== id && <FollowButton userId={id} />}
+          {user._id !== id && (
+            <FollowButton currentUser={currentUser} profileUser={profile} />
+          )}
           {user._id === id && !user.details.bio && (
             <span
               className="text-fb font-bold mt-4 inline-block cursor-pointer"

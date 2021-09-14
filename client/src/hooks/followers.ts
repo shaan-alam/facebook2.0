@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import * as api from "../api";
+import { retrieveFollowers } from "../api/followers";
 
 type Response = AxiosResponse<{
   followers: {
@@ -8,15 +9,17 @@ type Response = AxiosResponse<{
     fullName: string;
     avatar: string;
     details: {
-      bio: string
-    }
+      bio: string;
+    };
   }[];
 }>;
 
 export const useRetrieveFollowers = (userId: string) => {
-  const retrieveFollowers = async () => {
+  const [offset, setOffset] = useState(20);
+
+  const fetchFollowers = async () => {
     try {
-      const result: Response = await api.retrieveFollowers(userId);
+      const result: Response = await retrieveFollowers(userId, offset);
 
       return result.data;
     } catch (err) {
@@ -24,5 +27,9 @@ export const useRetrieveFollowers = (userId: string) => {
     }
   };
 
-  return useQuery("retrieveFollowers", retrieveFollowers);
+  return useQuery("retrieveFollowers", fetchFollowers, {
+    onSuccess: () => {
+      setOffset((offset) => offset + 20);
+    },
+  });
 };

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router";
 import Button from "../../../components/Button";
 import FollowButton from "../../../components/Button/FollowButton";
@@ -32,6 +33,7 @@ const Follower = ({ follower }: { follower: Follower }) => {
 };
 
 const FollowersPage = () => {
+  const [offset, setOffset] = useState(20);
   const { id }: { id: string } = useParams();
 
   const followers = useRetrieveFollowers(id);
@@ -41,9 +43,10 @@ const FollowersPage = () => {
       <div className="container bg-white rounded-md shadow-md p-10">
         <h1 className="text-3xl font-bold">Your Followers</h1>
         <div className="sm:grid grid-cols-2">
-          {followers.data?.followers.map((follower) => (
-            <Follower follower={follower} />
-          ))}
+          {followers &&
+            followers?.data?.followers.map((follower) => (
+              <Follower follower={follower} key={follower._id} />
+            ))}
         </div>
         <div className="more-btn">
           <Button text="Load More" variant="default" className="p-2" />

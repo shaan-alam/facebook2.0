@@ -4,30 +4,78 @@ import { useProfile } from "../../../hooks/profile";
 import { useUser, useFollowUser, useUnfollowUser } from "../../../hooks/user";
 import Skeleton from "react-loading-skeleton";
 import { useEffect } from "react";
+import { UseQueryResult } from "react-query";
 
-const FollowButtonComponent = ({ userId }: { userId: string }) => {
+type Profile = UseQueryResult<
+  | {
+      _id: string;
+      fullName: string;
+      avatar: string;
+      cover_picture: string;
+      createdAt: string;
+      details: {
+        lives_in_city: string;
+        from_city: string;
+        bio: string;
+        works: string[];
+        education: string[];
+      };
+      followers: Array<{
+        _id: string;
+        fullName: string;
+        avatar: string;
+      }>;
+      following: Array<{
+        _id: string;
+        fullName: string;
+        avatar: string;
+      }>;
+    }
+  | undefined,
+  unknown
+>;
+
+const FollowButtonComponent = ({
+  currentUser,
+  profileUser,
+}: {
+  currentUser: Profile;
+  profileUser: Profile;
+}) => {
   const user = useUser();
 
-  const [isFollowingUser, setFollowingUser] = useState(false);
-  const { data: currentUser } = useProfile(user._id);
-  const { data: profileUser, isLoading } = useProfile(userId);
-
-  const followMutation = useFollowUser(userId, () => setFollowingUser(true));
-
-  const unfollowMutation = useUnfollowUser(userId, () =>
-    setFollowingUser(false)
+  const [isFollowingUser, setFollowingUser] = useState(
+    currentUser?.data?.following?.find(
+      (user) => user._id === profileUser?.data?._id
+    )
+      ? true
+      : false
   );
 
   useEffect(() => {
-    if (currentUser?.following?.find((user) => user._id === userId)) {
-      setFollowingUser(true);
-    }
-  }, []);
+    setFollowingUser(
+      currentUser?.data?.following?.find(
+        (user) => user._id === profileUser?.data?._id
+      )
+        ? true
+        : false
+    );
+  }, [profileUser]);
+  const followMutation = useFollowUser(profileUser?.data?._id as string, () =>
+    setFollowingUser(true)
+  );
+
+  const unfollowMutation = useUnfollowUser(
+    profileUser?.data?._id as string,
+    () => setFollowingUser(false)
+  );
 
   const generateFollowButtonText = () => {
     if (
       !isFollowingUser &&
-      profileUser?.following?.find((usr) => usr._id === currentUser?._id)
+      profileUser?.data?.following?.find(
+        (usr) => usr._id === currentUser?.data?._id
+      )
     ) {
       return "Follow Back";
     } else if (isFollowingUser) {
@@ -39,13 +87,15 @@ const FollowButtonComponent = ({ userId }: { userId: string }) => {
 
   const onClick = () => {
     if (isFollowingUser) {
-      unfollowMutation.mutateAsync();
+      unfollowMutation.mutate();
+      setFollowingUser(false);
     } else {
-      followMutation.mutateAsync();
+      followMutation.mutate();
+      setFollowingUser(true);
     }
   };
 
-  return !isLoading ? (
+  return !profileUser.isLoading ? (
     <Button
       variant={isFollowingUser ? "secondary" : "primary"}
       className="p-2 my-3"

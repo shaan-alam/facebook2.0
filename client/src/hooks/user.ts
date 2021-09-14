@@ -25,15 +25,15 @@ export const useUser = () => {
  * @description A custom hook to follow a user
  * @param userId The ID of the user who is to be followed
  */
-export const useFollowUser = (userId: string, callack: Function) => {
+export const useFollowUser = (userId: string, callback: Function) => {
   const user = useUser();
   const queryClient = useQueryClient();
 
   return useMutation(() => followUser(userId), {
     onSuccess: () => {
+      callback();
       queryClient.refetchQueries(["profile", userId]);
       queryClient.refetchQueries(["profile", user._id]);
-      callack();
     },
   });
 };
@@ -48,9 +48,9 @@ export const useUnfollowUser = (userId: string, callback: Function) => {
 
   return useMutation(() => unfollowUser(userId), {
     onSuccess: () => {
+      callback();
       queryClient.refetchQueries(["profile", userId]);
       queryClient.refetchQueries(["profile", user._id]);
-      callback();
     },
   });
 };
