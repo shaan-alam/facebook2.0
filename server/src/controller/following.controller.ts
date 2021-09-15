@@ -40,7 +40,54 @@ export const retrieveFollowing = async (req: Request, res: Response) => {
       },
     ]);
 
-    res.json({ following: following[0].following });
+    // Retrive total number of followings from the database;
+    const followingCount = await Following.aggregate([
+      { $match: { userId: userId } },
+      // Join the user's followers from the followers collection
+      {
+        $lookup: {
+          from: "users",
+          as: "following",
+          let: { userId: "$following.user" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $in: ["$_id", "$$userId"],
+                },
+              },
+            },
+            {
+              $group: {
+                _id: null,
+                count: { $sum: 1 },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: {
+          path: "$following",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          following: "$following.count",
+        },
+      },
+      {
+        $project: {
+          following: 1,
+        },
+      },
+    ]);
+
+    res.json({
+      following: following[0].following,
+      followingCount: followingCount[0].following,
+    });
   } catch (err) {
     logger.error(err.message);
     res.json({ message: err.message });
