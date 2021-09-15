@@ -4,7 +4,8 @@ import postRoutes from "./post.route";
 import commentRoutes from "./comment.route";
 import commentReplyRoutes from "./commentReply.route";
 import profileRoutes from "./profile.route";
-import followersRoutes from './followers.route'
+import followersRoutes from "./followers.route";
+import followingRoutes from "./following.route";
 
 const routes = (app: Application) => {
   app.use("/auth/", authRoutes);
@@ -17,7 +18,9 @@ const routes = (app: Application) => {
 
   app.use("/profile", profileRoutes);
 
-  app.use('/followers', followersRoutes)
+  app.use("/followers", followersRoutes);
+
+  app.use("/following", followingRoutes);
 };
 
 export default routes;
