@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import { useUser } from "../../../hooks/user";
 import SkeletonFollower from "../../../components/SkeletonFollower";
 import { Link } from "react-router-dom";
+import loader from "../../../assets/svg/loader-dark.svg";
 
 interface Props {
   following: {
@@ -54,7 +55,7 @@ const FollowingPage = ({ userProfile }: FollowingPageProps) => {
   const { id }: { id: string } = useParams();
   const user = useUser();
 
-  const following = useRetrieveFollowing(id);
+  const { following, showMoreButton } = useRetrieveFollowing(id);
 
   return (
     <div className="bg-gray-100 p-4">
@@ -85,9 +86,19 @@ const FollowingPage = ({ userProfile }: FollowingPageProps) => {
             ))
           )}
         </div>
-        <div className="more-btn">
-          <Button text="Load More" variant="default" className="p-2" />
-        </div>
+        {showMoreButton && (
+          <div className="more-btn flex items-center">
+            <Button
+              text="Load More"
+              variant="default"
+              className="p-2"
+              onClick={() => following.refetch()}
+            />
+            {(following.isLoading || following.isFetching) && (
+              <img src={loader} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

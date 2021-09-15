@@ -6,6 +6,7 @@ import { useUser } from "../../../hooks/user";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import SkeletonFollower from "../../../components/SkeletonFollower";
+import loader from "../../../assets/svg/loader-dark.svg";
 
 interface Follower {
   _id: string;
@@ -52,7 +53,7 @@ const FollowersPage = ({ userProfile }: FollowerPageProps) => {
   const { id }: { id: string } = useParams();
   const user = useUser();
 
-  const followers = useRetrieveFollowers(id);
+  const { followers, showMoreButton } = useRetrieveFollowers(id);
 
   return (
     <div className="bg-gray-100 p-4">
@@ -65,14 +66,14 @@ const FollowersPage = ({ userProfile }: FollowerPageProps) => {
           </p>
         ) : (
           <h1 className="text-3xl font-bold">
-          {!userProfile._id ? (
-            <Skeleton count={1} width={300} />
-          ) : user._id === userProfile._id ? (
-            "Your Followers"
-          ) : (
-            `${userProfile.fullName}'s Followers`
-          )}
-        </h1>
+            {!userProfile._id ? (
+              <Skeleton count={1} width={300} />
+            ) : user._id === userProfile._id ? (
+              "Your Followers"
+            ) : (
+              `${userProfile.fullName}'s Followers`
+            )}
+          </h1>
         )}
         <div className="sm:grid grid-cols-2">
           {followers.isLoading ? (
@@ -83,9 +84,19 @@ const FollowersPage = ({ userProfile }: FollowerPageProps) => {
             ))
           )}
         </div>
-        <div className="more-btn">
-          <Button text="Load More" variant="default" className="p-2" />
-        </div>
+        {showMoreButton && (
+          <div className="more-btn flex items-center">
+            <Button
+              text="Load More"
+              variant="default"
+              className="p-2"
+              onClick={() => followers.refetch()}
+            />
+            {(followers.isLoading || followers.isFetching) && (
+              <img src={loader} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

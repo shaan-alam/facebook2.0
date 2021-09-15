@@ -3,23 +3,33 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { retrieveFollowing } from "../api/following";
 
+interface Following {
+  _id: string;
+  fullName: string;
+  avatar: string;
+  details: {
+    bio: string;
+  };
+}
+
 type Response = AxiosResponse<{
-  following: {
-    _id: string;
-    fullName: string;
-    avatar: string;
-    details: {
-      bio: string;
-    };
-  }[];
+  following: Following[];
+  followingCount: number;
 }>;
 
 export const useRetrieveFollowing = (userId: string) => {
-  const [offset, setOffset] = useState(20);
+  const [offset, setOffset] = useState(1);
+
+  // To determine whether to show the load more button on the following page or not!
+  const [showMoreButton, setShowMoreButton] = useState(true);
 
   const fetchFollowing = async () => {
     try {
       const result: Response = await retrieveFollowing(userId, offset);
+
+      if (result.data.followingCount === result.data.following.length) {
+        setShowMoreButton(false);
+      }
 
       return result.data;
     } catch (err) {
@@ -27,9 +37,12 @@ export const useRetrieveFollowing = (userId: string) => {
     }
   };
 
-  return useQuery(["retrieveFollowing", userId], fetchFollowing, {
-    onSuccess: () => {
-      setOffset((offset) => offset + 20);
-    },
-  });
+  return {
+    following: useQuery(["retrieveFollowing", userId], fetchFollowing, {
+      onSuccess: () => {
+        setOffset((offset) => offset + 20);
+      },
+    }),
+    showMoreButton,
+  };
 };
