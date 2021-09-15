@@ -4,45 +4,16 @@ import { useProfile } from "../../../hooks/profile";
 import { useUser, useFollowUser, useUnfollowUser } from "../../../hooks/user";
 import Skeleton from "react-loading-skeleton";
 import { useEffect } from "react";
-import { UseQueryResult } from "react-query";
 
-type Profile = UseQueryResult<
-  | {
-      _id: string;
-      fullName: string;
-      avatar: string;
-      cover_picture: string;
-      createdAt: string;
-      details: {
-        lives_in_city: string;
-        from_city: string;
-        bio: string;
-        works: string[];
-        education: string[];
-      };
-      followers: Array<{
-        _id: string;
-        fullName: string;
-        avatar: string;
-      }>;
-      following: Array<{
-        _id: string;
-        fullName: string;
-        avatar: string;
-      }>;
-    }
-  | undefined,
-  unknown
->;
+interface Props {
+  userId: string;
+}
 
-const FollowButtonComponent = ({
-  currentUser,
-  profileUser,
-}: {
-  currentUser: Profile;
-  profileUser: Profile;
-}) => {
+const FollowButtonComponent = ({ userId }: Props) => {
   const user = useUser();
+
+  const profileUser = useProfile(userId);
+  const currentUser = useProfile(user._id);
 
   const [isFollowingUser, setFollowingUser] = useState(
     currentUser?.data?.following?.find(

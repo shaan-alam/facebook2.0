@@ -23,7 +23,7 @@ const ProfileNav = ({ profile }: Props) => {
           </span>
         </NavLink>
         <NavLink
-          to={`/profile/${profile?.data?._id}/followings`}
+          to={`/profile/${profile?.data?._id}/following`}
           activeClassName="text-fb border-b-4 border-fb"
           className="text-gray-600 font-semibold text-lg mr-6 p-4 cursor-pointer hover:bg-gray-200"
         >

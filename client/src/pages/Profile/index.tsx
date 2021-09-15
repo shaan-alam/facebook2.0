@@ -13,9 +13,9 @@ import { AnimatePresence } from "framer-motion";
 import EditUserDetailsModal from "../../components/Modal/EditUserDetailsModal";
 import ProfileNav from "../../components/ProfileNav";
 import ProfilePosts from "./Posts";
-import FollowersPage from "./FollowersPage";
 import { Switch, Route } from "react-router-dom";
-import { useQueryClient } from "react-query";
+import FollowersPage from "./FollowersPage";
+import FollowingPage from "./FollowingPage";
 
 const Profile = () => {
   const user = useUser();
@@ -78,7 +78,7 @@ const Profile = () => {
             )}
           </h1>
           {user._id !== id && (
-            <FollowButton currentUser={currentUser} profileUser={profile} />
+            <FollowButton userId={id} />
           )}
           {user._id === id && !user.details.bio && (
             <span
@@ -105,10 +105,20 @@ const Profile = () => {
           <ProfilePosts />
         </Route>
         <Route path="/profile/:id/followers">
-          <FollowersPage />
+          <FollowersPage
+            userProfile={{
+              _id: profile.data?._id,
+              fullName: profile.data?.fullName,
+            }}
+          />
         </Route>
-        <Route path="/profile/:id/followings">
-          <ProfilePosts />
+        <Route path="/profile/:id/following">
+          <FollowingPage
+            userProfile={{
+              _id: profile.data?._id,
+              fullName: profile.data?.fullName,
+            }}
+          />
         </Route>
         <Route path="/profile/:id/photos">
           <ProfilePosts />
