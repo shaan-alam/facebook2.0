@@ -18,7 +18,7 @@ type Response = AxiosResponse<{
 }>;
 
 export const useRetrieveFollowing = (userId: string) => {
-  const [offset, setOffset] = useState(1);
+  const [offset, setOffset] = useState(20);
 
   // To determine whether to show the load more button on the following page or not!
   const [showMoreButton, setShowMoreButton] = useState(true);
