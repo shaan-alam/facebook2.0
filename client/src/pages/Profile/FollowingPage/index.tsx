@@ -4,7 +4,7 @@ import FollowButton from "../../../components/Button/FollowButton";
 import { useRetrieveFollowing } from "../../../hooks/following";
 import Skeleton from "react-loading-skeleton";
 import { useUser } from "../../../hooks/user";
-import SkeletonFollower from "../../../components/SkeletonFollower";
+import SkeletonFollower from "../../../components/Skeletons/SkeletonFollower";
 import { Link } from "react-router-dom";
 import loader from "../../../assets/svg/loader-dark.svg";
 

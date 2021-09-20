@@ -1,7 +1,7 @@
 import Post from "../Post";
 import { PostType } from "../Post/types";
 import { ExclamationIcon } from "@heroicons/react/solid";
-import SkeletonPost from "../SkeletonPost";
+import SkeletonPost from "../Skeletons/SkeletonPost";
 import { UseQueryResult } from "react-query";
 
 const Posts = ({

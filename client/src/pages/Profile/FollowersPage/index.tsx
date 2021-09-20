@@ -5,7 +5,7 @@ import { useRetrieveFollowers } from "../../../hooks/followers";
 import { useUser } from "../../../hooks/user";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import SkeletonFollower from "../../../components/SkeletonFollower";
+import SkeletonFollower from "../../../components/Skeletons/SkeletonFollower";
 import loader from "../../../assets/svg/loader-dark.svg";
 
 interface Follower {

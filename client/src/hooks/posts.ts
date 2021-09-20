@@ -10,6 +10,8 @@ export const usePosts = () => {
   const fetchPosts = async () => {
     const result: AxiosResponse<PostType[]> = await getPosts();
 
+    console.log("DATA", result.data);
+
     return result.data;
   };
 

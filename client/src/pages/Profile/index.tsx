@@ -12,10 +12,11 @@ import EditCoverModal from "../../components/Modal/EditCoverModal";
 import { AnimatePresence } from "framer-motion";
 import EditUserDetailsModal from "../../components/Modal/EditUserDetailsModal";
 import ProfileNav from "../../components/ProfileNav";
-import ProfilePosts from "./Posts";
+import ProfilePosts from "./PostsPage";
 import { Switch, Route } from "react-router-dom";
 import FollowersPage from "./FollowersPage";
 import FollowingPage from "./FollowingPage";
+import PhotosPage from "./PhotosPage";
 
 const Profile = () => {
   const user = useUser();
@@ -77,9 +78,7 @@ const Profile = () => {
               profile.data?.fullName
             )}
           </h1>
-          {user._id !== id && (
-            <FollowButton userId={id} />
-          )}
+          {user._id !== id && <FollowButton userId={id} />}
           {user._id === id && !user.details.bio && (
             <span
               className="text-fb font-bold mt-4 inline-block cursor-pointer"
@@ -121,7 +120,7 @@ const Profile = () => {
           />
         </Route>
         <Route path="/profile/:id/photos">
-          <ProfilePosts />
+          <PhotosPage />
         </Route>
       </Switch>
       <AnimatePresence>
