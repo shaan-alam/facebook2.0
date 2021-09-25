@@ -82,23 +82,19 @@ export const getUserFromDB = async (req: Request, res: Response) => {
  * @param res Express Response Object
  */
 export const googleAuthentication = async (req: Request, res: Response) => {
-  const { avatar, fullName, email, password, confirmPassword } = req.body;
-
+  const { avatar, fullName, email  } = req.body;
+  
+  let token;
   if (res.locals.user) {
-    return res
-      .status(400)
-      .json({ message: "A user already exists with that email!" });
+    token = await signToken(res.locals.user._id); // Sign a new JWT Token
+    return res.json({ user: omit(res.locals.user.toJSON(), "password"), token })  
   }
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: "The two password do not match! " });
-  }
-
+  
   try {
-    const newUser = await new User({ avatar, fullName, email, password });
+    const newUser = await new User({ email, fullName, avatar });
+    token = await signToken(newUser._id); // Sign a new JWT Token
     await newUser.save();
 
-    const token = await signToken(newUser._id); // Sign a new JWT Token
     res.json({ user: omit(newUser.toJSON(), "password"), token });
   } catch (err) {
     logger.error(err);

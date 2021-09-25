@@ -1,43 +1,41 @@
 import GoogleLogin from "react-google-login";
 import * as api from "../../api";
 import { useDispatch } from "react-redux";
-import { AUTH } from "../../constants";
+import { AUTH, GOOGLE_AUTH_SUCCESS } from "../../constants";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast, Flip } from "react-toastify";
+import google from "../../assets/svg/google.svg";
+import Button from "../Button";
+import {googleAuthentication} from '../../api'
+import { useMutation } from 'react-query'
+
+interface GoogleAuthObject {
+  email: string,
+  avatar: string,
+  fullName: string
+}
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const onGoogleSuccess = async (res: any) => {
-    const { email, name, imageUrl } = res?.profileObj;
-
-    try {
-      const { data } = await api.getUser(email);
-
-      // If a user is returned from the backend, that means user has
-      // already registered with that email, So Sign him in
-      if (data.user) {
-        const { user, token } = data;
-        dispatch({ type: AUTH, payload: { user, token } });
-
-        // Redirect to the Feed
-        history.push("/");
-      } else {
-        // Else, redirect him to the setup profile component, to
-        // finish his signup process
-        history.push("/auth/setup-profile", {
-          email,
-          name,
-          imageUrl,
-        });
+  const authMutation = useMutation((googleAuthObject: GoogleAuthObject) => googleAuthentication(googleAuthObject),
+    {
+      onSuccess: (result) => {
+        dispatch({ type: GOOGLE_AUTH_SUCCESS, payload: result.data })
+        history.push('/')
       }
-    } catch (err: any) {
-      toast.error(err.message, {
-        transition: Flip,
-      });
     }
-  };
+  );
+
+  const onGoogleSuccess = (res: any) => {
+    const googleData = {
+      email: res?.profileObj?.email,
+      fullName: res?.profileObj?.name,
+      avatar: res?.profileObj.imageUrl
+    }
+
+    authMutation.mutate(googleData);
+  }
 
   const onGoogleFailure = (err: any) => {
     toast.error(err, {
@@ -48,7 +46,17 @@ const GoogleAuth = () => {
   return (
     <div className="text-center">
       <GoogleLogin
-        theme="dark"
+        render={(props) => (
+          <Button
+            isLoading={authMutation.isLoading}
+            variant="default"
+            className="w-full md:w-3/4/ mx-auto py-4 px-8 bg-white shadow-md rounded-md font-medium flex items-center justify-evenly"
+            onClick={props.onClick}
+          >
+            <img src={google} alt="Google" className="mr-4" />
+            Login with Google
+          </Button>
+        )}
         buttonText="Sign in with Google"
         clientId={`${process.env.REACT_APP_CLIENT_ID}`}
         onSuccess={onGoogleSuccess}

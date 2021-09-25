@@ -41,12 +41,12 @@ export const signUp: SignUpType = async (formData) => {
 };
 
 export const googleAuthentication: GoogleAuthenticationType =
-  (formData, redirect) => async (dispatch: Function) => {
+  (token, redirect) => async (dispatch: Function) => {
     try {
-      const result = await api.googleAuthentication(formData);
+      // const result = await api.googleAuthentication(token);
 
-      const { user, token } = result.data;
-      dispatch({ type: GOOGLE_AUTH_SUCCESS, payload: { user, token } });
+      // const { user, token } = result.data;
+      // dispatch({ type: GOOGLE_AUTH_SUCCESS, payload: { user, token } });
 
       redirect(); // Redirect to the Feed Component after Authentication was successfull!
     } catch (err: any) {

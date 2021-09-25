@@ -69,7 +69,7 @@ const SetupProfile = () => {
 
       const redirect = () => history.push("/");
 
-      dispatch(googleAuthentication(formData, redirect));
+      // dispatch(googleAuthentication(formData, redirect));
     },
   });
 

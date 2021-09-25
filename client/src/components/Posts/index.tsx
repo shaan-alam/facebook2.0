@@ -22,7 +22,7 @@ const Posts = ({
       {posts?.isError && (
         <div className="flex  items-center bg-red-100 border-2 border-red-200 rounded-lg p-3 font-semibold text-red-600">
           <ExclamationIcon className="h-8 w-8" />
-          &nbsp; {posts.error}
+          {/* &nbsp; {posts.error} */}
         </div>
       )}
       {posts &&

@@ -49,9 +49,9 @@ const App = (): JSX.Element => {
             <Route path="/auth/setup-profile">
               <SetupProfile />
             </Route>
-            <Route path="/profile/:id">
+            <PrivateRoute path="/profile/:id">
               <Profile />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />

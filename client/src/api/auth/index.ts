@@ -22,7 +22,7 @@ export const signUp = (signUpData: SignUpDataType) =>
  * @description Function to make a backend request for Google Authentication
  * @param formData An object containing details required for Google Authentication
  */
-export const googleAuthentication = (formData: GoogleAuthentication) =>
+export const googleAuthentication = (googleAuthObject: { email: string, avatar: string, fullName: string}) =>
   API.post("/auth/googleAuth", {
-    ...formData,
+    ...googleAuthObject 
   });

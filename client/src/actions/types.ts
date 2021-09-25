@@ -23,12 +23,6 @@ export type SignUpType = (formData: {
 }) => Promise<void>;
 
 export type GoogleAuthenticationType = (
-  formData: {
-    fullName: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    avatar: string;
-  },
+  token: string,
   redirect: () => void
 ) => (dispatch: Dispatch<any>) => Promise<void>;

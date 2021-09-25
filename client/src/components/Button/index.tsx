@@ -17,7 +17,7 @@ const Button = ({
       "flex items-center justify-center outline-none focus:ring-4 focus:ring-blue-400 bg-fb w-full rounded-lg text-white hover:bg-blue-600",
     secondary:
       "flex justify-center items-center focus:ring-4 focus:ring-gray-400 bg-gray-200 hover:bg-gray-300 w-full rounded-lg outline-none",
-    default: "text-fb font-semibold hover:bg-gray-200",
+    default: "font-semibold hover:bg-gray-200",
   };
 
   const variantStyle = variant ? variants[variant] : "";

@@ -32,7 +32,6 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       min: 6,
-      required: true,
     },
     avatar: {
       type: String,
@@ -81,10 +80,12 @@ UserSchema.methods.comparePassword = async function (
 UserSchema.pre("save", async function (next: mongoose.HookNextFunction) {
   const user = this as UserDocument;
 
-  // Hash the password using bcrypt
-  const hashedPassword = await bcrypt.hash(user.password, 12);
+  if (user.password) {
+    // Hash the password using bcrypt
+    const hashedPassword = await bcrypt.hash(user.password, 12);
+    user.password = hashedPassword;
+  }
 
-  user.password = hashedPassword;
 
   next();
 });
