@@ -3,27 +3,28 @@ import * as api from "../../api";
 import { useDispatch } from "react-redux";
 import { AUTH, GOOGLE_AUTH_SUCCESS } from "../../constants";
 import { useHistory } from "react-router-dom";
-import { ToastContainer, toast, Flip } from "react-toastify";
 import google from "../../assets/svg/google.svg";
 import Button from "../Button";
-import {googleAuthentication} from '../../api'
-import { useMutation } from 'react-query'
+import { googleAuthentication } from "../../api";
+import { useMutation } from "react-query";
 
 interface GoogleAuthObject {
-  email: string,
-  avatar: string,
-  fullName: string
+  email: string;
+  avatar: string;
+  fullName: string;
 }
 
 const GoogleAuth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const authMutation = useMutation((googleAuthObject: GoogleAuthObject) => googleAuthentication(googleAuthObject),
+  const authMutation = useMutation(
+    (googleAuthObject: GoogleAuthObject) =>
+      googleAuthentication(googleAuthObject),
     {
       onSuccess: (result) => {
-        dispatch({ type: GOOGLE_AUTH_SUCCESS, payload: result.data })
-        history.push('/')
-      }
+        dispatch({ type: GOOGLE_AUTH_SUCCESS, payload: result.data });
+        history.push("/");
+      },
     }
   );
 
@@ -31,16 +32,14 @@ const GoogleAuth = () => {
     const googleData = {
       email: res?.profileObj?.email,
       fullName: res?.profileObj?.name,
-      avatar: res?.profileObj.imageUrl
-    }
+      avatar: res?.profileObj.imageUrl,
+    };
 
     authMutation.mutate(googleData);
-  }
+  };
 
   const onGoogleFailure = (err: any) => {
-    toast.error(err, {
-      transition: Flip,
-    });
+    console.log(err);
   };
 
   return (
@@ -62,7 +61,6 @@ const GoogleAuth = () => {
         onSuccess={onGoogleSuccess}
         onFailure={onGoogleFailure}
       />
-      <ToastContainer />
     </div>
   );
 };

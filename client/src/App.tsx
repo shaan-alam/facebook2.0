@@ -11,6 +11,7 @@ import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
 import Profile from "./pages/Profile";
 
+import "react-toastify/dist/ReactToastify.css";
 import { AUTH } from "./constants";
 
 import { QueryClientProvider, QueryClient } from "react-query";
