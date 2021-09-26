@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { signUp } from "../../actions/auth";
 import { useHistory } from "react-router-dom";
@@ -20,6 +20,7 @@ interface FormData {
 }
 
 const SignUp = () => {
+  const [signUpError, setSignUpError] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -30,9 +31,7 @@ const SignUp = () => {
       history.push("/");
     },
     onError: (err: any) => {
-      toast.error(err.response.data.message, {
-        transition: Flip,
-      });
+      setSignUpError(err.response.data.message);
       formik.resetForm();
     },
   });
@@ -83,6 +82,11 @@ const SignUp = () => {
           </p>
         </div>
         <div className="login w-full sm:w-3/4 bg-white p-4 sm:p-10 rounded-lg shadow-md">
+          {signUpError && (
+            <div className="text-red-500 font-semibold text-center my-4">
+              {signUpError}
+            </div>
+          )}
           <form onSubmit={formik.handleSubmit}>
             <FormInput
               as="normal"

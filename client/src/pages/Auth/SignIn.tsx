@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../actions/auth";
 import { useHistory } from "react-router-dom";
-import { toast, Flip } from "react-toastify";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput";
@@ -18,6 +17,7 @@ interface FormData {
 }
 
 const SignIn = () => {
+  const [loginError, setLoginError] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -28,9 +28,7 @@ const SignIn = () => {
       history.push("/");
     },
     onError: (err: any) => {
-      toast.error(err.response.data.err, {
-        transition: Flip,
-      });
+      setLoginError(err.response.data.err);
       formik.resetForm();
     },
   });
@@ -49,6 +47,7 @@ const SignIn = () => {
       password: yup.string().trim().required("Password is required!"),
     }),
     onSubmit: async (values, { setSubmitting }) => {
+      setLoginError(""); 
       await mutation.mutateAsync(values);
       setSubmitting(false);
     },
@@ -75,6 +74,7 @@ const SignIn = () => {
           </p>
         </div>
         <div className="login w-full sm:w-3/4 bg-white p-4 sm:p-10 rounded-lg shadow-md">
+          { loginError && <div className="text-red-500 font-semibold text-center my-4">{loginError}</div>}
           <form onSubmit={formik.handleSubmit}>
             <FormInput
               as="normal"
