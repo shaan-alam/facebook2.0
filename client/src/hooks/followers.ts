@@ -27,7 +27,12 @@ export const useRetrieveFollowers = (userId: string) => {
     try {
       const result: Response = await retrieveFollowers(userId, offset);
 
-      if (result.data.followerCount === result.data.followers.length) {
+      if (
+        result.data.followerCount === result.data.followers.length ||
+        result.data.followers.length === 0
+      ) {
+        // If no followers or the offset has reached it limit,
+        // stop showing the show more button!!
         setShowMoreButton(false);
       }
 
