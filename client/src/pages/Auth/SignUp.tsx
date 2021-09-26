@@ -8,7 +8,6 @@ import FormInput from "../../components/FormInput";
 import GoogleAuth from "../../components/GoogleAuth";
 import Button from "../../components/Button";
 import { useMutation } from "react-query";
-import { toast, Flip } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { AUTH } from "../../constants";
 
