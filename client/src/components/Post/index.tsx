@@ -125,7 +125,7 @@ const Post = ({ post }: { post: PostType }) => {
           </div>
         </form>
       </div>
-      {postModal && <PostModal closeModal={() => setPostModal(false)} comments={comments} />}
+      {postModal && <PostModal isOpen={postModal} setOpen={setPostModal} comments={comments} post={post}/>}
       <div className="comments">
         {comments.map((comment) => (
           <PostComment key={comment._id} comment={comment} />
