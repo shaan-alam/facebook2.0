@@ -31,7 +31,7 @@ export const useFollowUser = (userId: string, callback: Function) => {
 
   return useMutation(() => followUser(userId), {
     onSuccess: () => {
-      callback();
+      // callback();
       queryClient.refetchQueries(["profile", userId]);
       queryClient.refetchQueries(["profile", user._id]);
     },
@@ -48,7 +48,7 @@ export const useUnfollowUser = (userId: string, callback: Function) => {
 
   return useMutation(() => unfollowUser(userId), {
     onSuccess: () => {
-      callback();
+      // callback();
       queryClient.refetchQueries(["profile", userId]);
       queryClient.refetchQueries(["profile", user._id]);
     },

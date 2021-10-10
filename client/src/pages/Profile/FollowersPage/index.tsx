@@ -35,7 +35,7 @@ const Follower = ({ follower }: { follower: Follower }) => {
       </div>
       {follower._id !== currentUser._id && (
         <div className="follow-btn">
-          <FollowButton userId={follower._id} />
+          <FollowButton userId={follower._id} currentUserId={currentUser._id as string} />
         </div>
       )}
     </div>

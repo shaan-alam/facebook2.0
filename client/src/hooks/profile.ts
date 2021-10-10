@@ -38,10 +38,12 @@ export const useProfile = (userId: string) => {
 
       return result.data;
     } catch (err) {
-      // console.error("Error", err);
+      console.error("Error", err);
       // console.log("here is the error");
     }
   };
+
+  console.log("use", userId);
 
   return useQuery(["profile", userId], fetchProfile);
 };

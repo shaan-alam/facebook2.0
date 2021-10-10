@@ -4,24 +4,20 @@ import { useProfile } from "../../../hooks/profile";
 import { useUser, useFollowUser, useUnfollowUser } from "../../../hooks/user";
 import Skeleton from "react-loading-skeleton";
 import { useEffect } from "react";
+import { useLocalStorage } from "../../../hooks/localStorage";
 
 interface Props {
   userId: string;
+  currentUserId: string
 }
 
-const FollowButtonComponent = ({ userId }: Props) => {
-  const user = useUser();
+const FollowButtonComponent = ({ userId, currentUserId }: Props) => {
+  const user = useLocalStorage();
 
   const profileUser = useProfile(userId);
-  const currentUser = useProfile(user._id);
+  const currentUser = useProfile(user?._id);
 
-  const [isFollowingUser, setFollowingUser] = useState(
-    currentUser?.data?.following?.find(
-      (user) => user._id === profileUser?.data?._id
-    )
-      ? true
-      : false
-  );
+  const [isFollowingUser, setFollowingUser] = useState<boolean | null>(null);
 
   useEffect(() => {
     setFollowingUser(
@@ -31,7 +27,8 @@ const FollowButtonComponent = ({ userId }: Props) => {
         ? true
         : false
     );
-  }, [profileUser]);
+  }, []);
+
   const followMutation = useFollowUser(profileUser?.data?._id as string, () =>
     setFollowingUser(true)
   );
@@ -57,12 +54,11 @@ const FollowButtonComponent = ({ userId }: Props) => {
   };
 
   const onClick = () => {
+    setFollowingUser(!isFollowingUser);
     if (isFollowingUser) {
       unfollowMutation.mutate();
-      setFollowingUser(false);
     } else {
       followMutation.mutate();
-      setFollowingUser(true);
     }
   };
 
@@ -70,7 +66,7 @@ const FollowButtonComponent = ({ userId }: Props) => {
     <Button
       variant={isFollowingUser ? "secondary" : "primary"}
       className="p-2 my-3"
-      isLoading={followMutation.isLoading || unfollowMutation.isLoading}
+      // isLoading={followMutation.isLoading || unfollowMutation.isLoading}
       onClick={onClick}
     >
       {generateFollowButtonText()}

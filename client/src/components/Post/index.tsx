@@ -16,9 +16,11 @@ import Button from "../Button";
 import EmojiPicker from "../EmojiPicker";
 import loader from "../../assets/svg/loader-dark.svg";
 import { useFetchComments, useCreateComment } from "../../hooks/comments";
+import PostModal from "../Modal/PostModal";
 
 const Post = ({ post }: { post: PostType }) => {
   const user = useUser();
+  const [postModal, setPostModal] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
 
   const { refetch, isLoading, isFetching } = useFetchComments(
@@ -85,6 +87,7 @@ const Post = ({ post }: { post: PostType }) => {
         image={post?.imageURL}
         caption={post?.caption}
         filter={post?.filter}
+        onClick={() => setPostModal(true)}
       />
       <PostCaption caption={post?.caption} />
       <PostStats counters={counters} comments={post.commentCount} />
@@ -122,6 +125,7 @@ const Post = ({ post }: { post: PostType }) => {
           </div>
         </form>
       </div>
+      {postModal && <PostModal closeModal={() => setPostModal(false)} comments={comments} />}
       <div className="comments">
         {comments.map((comment) => (
           <PostComment key={comment._id} comment={comment} />

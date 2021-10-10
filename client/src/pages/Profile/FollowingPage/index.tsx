@@ -37,7 +37,10 @@ const Following = ({ following }: Props) => {
       </div>
       {following._id !== currentUser._id && (
         <div className="follow-btn">
-          <FollowButton userId={following?._id} />
+          <FollowButton
+            userId={following?._id}
+            currentUserId={currentUser._id as string}
+          />
         </div>
       )}
     </div>
