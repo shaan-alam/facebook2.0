@@ -7,6 +7,8 @@ import { AnimatePresence } from "framer-motion";
 import Icon from "../Icon";
 import { icons } from "../../utils/icons";
 import { IntroCardType } from "./types";
+import { useParams } from "react-router-dom";
+import { useUser } from "../../hooks/user";
 
 const IntroCard: IntroCardType = ({
   details,
@@ -14,6 +16,8 @@ const IntroCard: IntroCardType = ({
   following,
   createdAt,
 }) => {
+  const { id }: { id: string } = useParams();
+  const currentUser = useUser();
   const [userDetailsModal, setUserDetailsModal] = useState(false);
 
   return (
@@ -75,12 +79,14 @@ const IntroCard: IntroCardType = ({
           <Moment format="MMM YYYY">{new Date(createdAt!)}</Moment>
         </p>
       </div>
-      <Button
-        variant="secondary"
-        text="Edit Intro"
-        className="font-bold p-2"
-        onClick={() => setUserDetailsModal(true)}
-      />
+      {currentUser._id === id && (
+        <Button
+          variant="secondary"
+          text="Edit Intro"
+          className="font-bold p-2"
+          onClick={() => setUserDetailsModal(true)}
+        />
+      )}
       <AnimatePresence>
         {userDetailsModal && (
           <EditUserDetailsModal

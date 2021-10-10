@@ -1,6 +1,7 @@
 import React from "react";
 
 export interface Props {
+  
   details:
     | {
         lives_in_city: string;
