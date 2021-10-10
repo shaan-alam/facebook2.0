@@ -6,7 +6,7 @@
 
 # Description
 
-This project is a Open Source Facebook Clone built using MERN Stack. It is not just another clone, but it is a Social Media Application which has its features inspired from Facebook, Instagram etc.
+This project is a Open Source Facebook Clone built using MERN Stack. It is not just another clone, but it is a Social Media Application which has its features inspired from Facebook, Instagram, Slack, Twitter etc.
 
 `Note - This Project is currently in Development Phase 🤖️`
 
