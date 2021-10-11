@@ -23,19 +23,7 @@ const PostModal = ({ isOpen, setOpen, post, comments }: Props) => {
             name={post.author.fullName}
             className="h-10 w-10 rounded-full my-6"
           />
-          <p className="leading-7">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga enim
-            cupiditate magnam totam itaque fugiat accusantium quisquam, modi
-            libero eaque ad quas aspernatur laborum architecto doloribus facilis
-            soluta, tempore nostrum. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Fuga enim cupiditate magnam totam itaque fugiat
-            accusantium quisquam, modi libero eaque ad quas aspernatur laborum
-            architecto doloribus facilis soluta, tempore nostrum.Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Fuga enim cupiditate
-            magnam totam itaque fugiat accusantium quisquam, modi libero eaque
-            ad quas aspernatur laborum architecto doloribus facilis soluta,
-            tempore nostrum.
-          </p>
+          <p className="leading-7">{post.caption}</p>
           <h3 className="text-gray-600 font-medium my-6">
             {comments.length > 0 ? "Comments" : "No commnets"}
           </h3>

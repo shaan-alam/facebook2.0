@@ -6,12 +6,10 @@ const PostImage = ({
   image,
   caption,
   filter,
-  onClick,
 }: {
   image: string;
   caption: string;
   filter: string;
-  onClick: MouseEventHandler<HTMLImageElement>;
 }) => {
   const [isLoaded, setLoaded] = useState<boolean>(false); // To determine if the image is completely loaded!
 
@@ -28,7 +26,6 @@ const PostImage = ({
   return image != "" ? (
     <div className="post-image">
       <Image
-        onClick={onClick}
         isLoading={!isLoaded}
         skeletonHeight={400}
         src={image}
