@@ -77,7 +77,7 @@ const Post = ({ post }: { post: PostType }) => {
           className="h-7 w-7 rounded-full"
           name={post?.author?.fullName}
           withName
-          link={`/profile/${post?.author?._id}`}
+          link={`/profile/${post?.author?._id}/posts`}
         />
         {post.author._id === user._id && <PostDropdown post={post} />}
       </div>

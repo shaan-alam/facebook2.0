@@ -61,7 +61,7 @@ const Navbar = () => {
                 <Menu.Item>
                   {({ active }) => (
                     <Link
-                      to={`/profile/${user._id}`}
+                      to={`/profile/${user._id}/posts`}
                       className={`flex items-center ${
                         active && "bg-fb rounded-lg"
                       } p-2 ${
