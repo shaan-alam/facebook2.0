@@ -8,6 +8,8 @@ interface CommentType {
     avatar: string;
   };
   commentRepliesCount: number;
+  commentLikes: { _id: string; by: string }[];
+  postId: string;
 }
 
 type PostType = {

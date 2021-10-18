@@ -12,7 +12,7 @@ import {
   UseEditComment,
   UseFetchComments,
 } from "./types";
-import { deleteComment } from "../api";
+import { deleteComment, likeCommment } from "../api";
 import { useState } from "react";
 
 interface Comment {
@@ -36,6 +36,8 @@ export const useFetchComments: UseFetchComments = (postId, setComments) => {
       const { data } = await fetchComments(postId, offset);
 
       setOffset(offset + 5);
+
+      console.log("comments", data);
 
       setComments(data);
     } catch (err: any) {
@@ -105,6 +107,22 @@ export const useEditComment: UseEditComment = (onSuccess) => {
       onSuccess,
     }
   );
+
+  return mutation;
+};
+
+export const useLikeComment = (
+  postId: string,
+  commentId: string,
+  userId: string
+) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(() => likeCommment(commentId, userId), {
+    onSuccess: () => {
+      queryClient.refetchQueries(["comments", postId]);
+    },
+  });
 
   return mutation;
 };

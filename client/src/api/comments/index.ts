@@ -14,3 +14,6 @@ export const deleteComment = (id: string) => API.delete(`/post/comment/${id}`);
 
 export const editComment = (id: string, message: string) =>
   API.patch(`/post/comment/${id}`, { message });
+
+export const likeCommment = (commentId: string, userId: string) =>
+  API.patch(`/post/comment/${commentId}/like`, { commentId, userId });

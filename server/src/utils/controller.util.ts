@@ -198,6 +198,22 @@ export const fetchComments = async (postId: string, offset: string) => {
         },
       },
       {
+        $lookup: {
+          from: "commentlikes",
+          localField: "_id",
+          foreignField: "commentId",
+          as: "commentLikes",
+        },
+      },
+      {
+        $addFields: {
+          commentLikes: "$commentLikes.likes",
+        },
+      },
+      {
+        $unwind: "$commentLikes"
+      },
+      {
         $project: {
           _id: 1,
           message: 1,
@@ -206,6 +222,8 @@ export const fetchComments = async (postId: string, offset: string) => {
           "author.fullName": 1,
           date: 1,
           commentRepliesCount: 1,
+          commentLikes: 1,
+          postId: 1
         },
       },
     ]);

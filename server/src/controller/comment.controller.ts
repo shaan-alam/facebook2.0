@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Comment from "../models/comment.model";
+import CommentLikes from "../models/commentLikes.model";
 import logger from "../logger";
 import { fetchComments } from "../utils/controller.util";
 import { omit } from "lodash";
@@ -22,6 +23,12 @@ export const commentOnPost = async (req: Request, res: Response) => {
       author: comment.author,
     });
     await newComment.save();
+
+    const newCommentLikesDocument = await new CommentLikes({
+      commentId: newComment._id,
+      likes: [],
+    });
+    await newCommentLikesDocument.save();
 
     await Comment.populate(newComment, {
       path: "author",
@@ -90,6 +97,39 @@ export const editComment = async (req: Request, res: Response) => {
     );
 
     res.json({ comment: updatedComment });
+  } catch (err) {
+    logger.error(err);
+    res.status(500).json({ message: err });
+  }
+};
+
+export const likeComment = async (req: Request, res: Response) => {
+  const { commentId, likedBy } = req.body;
+
+  try {
+    const commentLikeDocument = await CommentLikes.findOne({ commentId });
+    console.log(commentLikeDocument);
+
+    let updatedCommentLike;
+
+    if (commentLikeDocument?.likes.find((like) => like.by == likedBy)) {
+      console.log("filtering !!");
+      updatedCommentLike = await CommentLikes.findOneAndUpdate(
+        { commentId },
+        {
+          $pull: { likes: { by: likedBy } },
+        },
+        { new: true }
+      );
+    } else {
+      updatedCommentLike = await CommentLikes.findOneAndUpdate(
+        { commentId },
+        { $push: { likes: { by: likedBy } } },
+        { new: true }
+      );
+    }
+
+    res.json({ updatedCommentLike });
   } catch (err) {
     logger.error(err);
     res.status(500).json({ message: err });

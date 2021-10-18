@@ -12,7 +12,11 @@ import Moment from "react-moment";
 import CommentDropdown from "./CommentDropdown";
 import { CommentReplyInterface } from "./types";
 import CommentEditForm from "./CommentEditForm";
-import { useDeleteComment, useEditComment } from "../../hooks/comments";
+import {
+  useDeleteComment,
+  useEditComment,
+  useLikeComment,
+} from "../../hooks/comments";
 import { useFetchCommentReplies } from "../../hooks/commentReply";
 
 const PostComment = ({ comment }: { comment: Comment }) => {
@@ -28,6 +32,8 @@ const PostComment = ({ comment }: { comment: Comment }) => {
 
   // For Deleting comment reply
   const mutation = useDeleteComment(comment._id);
+
+  const likeMutation = useLikeComment(comment.postId, comment._id, user._id);
 
   // For Fetching comment replies
   const { refetch, isLoading, isFetching } = useFetchCommentReplies(
@@ -109,8 +115,19 @@ const PostComment = ({ comment }: { comment: Comment }) => {
             </div>
             {!mutation.isLoading && (
               <div className="flex">
-                <span className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2">
-                  Like
+                {comment.commentLikes.length != 0 && (
+                  <span className="text-sm text-gray-600 cursor-pointer ml-3 mt-2">
+                    {comment.commentLikes.length}&nbsp;
+                    {comment.commentLikes.length > 1 ? "Likes" : "Like"}
+                  </span>
+                )}
+                <span
+                  className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2"
+                  onClick={() => likeMutation.mutate()}
+                >
+                  {comment.commentLikes.find((like) => like.by === user._id)
+                    ? "Unlike"
+                    : "Like"}
                 </span>
                 <span
                   className="text-sm text-gray-600 cursor-pointer hover:underline ml-3 mt-2"

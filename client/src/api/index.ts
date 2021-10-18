@@ -25,6 +25,7 @@ export {
   deleteComment,
   editComment,
   fetchComments,
+  likeCommment
 } from "./comments";
 export {
   createCommentReply,
